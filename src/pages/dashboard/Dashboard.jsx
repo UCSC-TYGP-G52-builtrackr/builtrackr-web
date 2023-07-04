@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes, Outlet } from 'react-router-dom';
-import Topbar from '../../components/Topbar';
+// import Topbar from '../../components/Topbar';
 import Sidebar from '../../components/Sidebar';
 import Analytics from './Analytics';
 import Employees from './Employees'
