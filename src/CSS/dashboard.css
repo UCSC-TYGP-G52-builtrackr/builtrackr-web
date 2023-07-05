@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Roboto:wght@300;400&family=Source+Sans+3:wght@300;400;600&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Roboto:wght@300;400&family=Source+Sans+3:wght@300;400;600&display=swap');
 
 *{
     margin:0;
@@ -16,7 +16,7 @@ h2{
     justify-content: center;
 }
 .container{
-    /* display:flex; */
+    display:flex;
 }
 main{
     width: 100%;
@@ -69,4 +69,4 @@ main{
 }
 .icon, .link_text{
     font-size: 16px;
-}
+} */
