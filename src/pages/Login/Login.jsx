@@ -47,7 +47,7 @@ export function Login() {
               <label>User Name</label>
               <input
                 type="email"
-                placeholder=" email@gmail.com"
+                placeholder=" name@email.com"
                 name="email"
                 id="email"
                 value={values.email}

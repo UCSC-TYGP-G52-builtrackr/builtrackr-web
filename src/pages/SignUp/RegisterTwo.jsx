@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Validation } from "../Login/validation";
+import axios from "axios";
 
 export const RegisterTwo = () => {
   const [values, setValues] = useState({
@@ -50,6 +51,121 @@ export const RegisterTwo = () => {
     console.log(line2);
     console.log(contactNo);
   };
+  let emailEle = document.querySelector('#email');
+  let verfEle = document.querySelector('.verification');
+  let successEle = document.querySelector('.success');
+  let errorEle = document.querySelector('.error');
+  let otp_inputs = document.querySelectorAll('.otp_num');
+  let emailpartialEle = document.querySelector('.emailpartial');
+  let regex = new RegExp('[a-zA-Z0-9]+@[a-z]+\.[a-z]{2,3}');
+  let otp_check = '';
+  let userEmail;
+  
+
+  otp_inputs.forEach(
+      (ip) => {
+          ip.addEventListener('keyup', moveNext)
+      }
+  )
+
+  function moveNext(event) {
+      // otp_num_4
+
+      let current = event.target;
+      let index = current.classList[1].slice(-1);
+      if (event.keyCode == 8 && index > 1) {
+          current.previousElementSibling.focus()
+      }
+      else if (index < 4) {
+          current.nextElementSibling.focus()
+
+      }
+      otp_check = '';
+      for (let ip of otp_inputs) {
+          otp_check += ip.value
+      }
+      if (otp_check.length == 4) {
+          verifyOTP()
+      }
+
+
+
+
+
+  }
+
+  function verifyOTP() {
+      fetch('http://localhost:4000/verify',
+          {
+              method: "POST",
+              body: JSON.stringify({
+                  "email": `${email}`,
+                  "otp": `${otp_check}`
+              }),
+              headers: { 'Content-Type': 'application/json' }
+
+
+          }
+      )
+          .then(
+              (res) => {
+                  console.log(res)
+                  if (res.status == 200) {
+                      verfEle.style.display = 'none';
+                      successEle.style.display = 'block';
+                      errorEle.style.display = 'none';
+
+                  }
+                  else {
+                      errorEle.style.display = 'block';
+                      errorEle.innerHTML = "Invalid OTP";
+                      successEle.style.display = 'none';
+
+                  }
+              }
+          )
+
+  }
+
+
+
+  function sendOTP() {
+    console.log(email);
+    userEmail = email;
+      if (regex.test(userEmail)) {
+          fetch('http://localhost:4000/api/user/sendotp', {
+              method: "POST",
+              body: JSON.stringify({
+                  "email": `${userEmail}`
+              }),
+              headers: { 'Content-Type': 'application/json' }
+          })
+              .then(
+                  (res) => {
+                      if (res.status === 200) {
+                          // verfEle.style.display = 'block';
+                          // emailpartialEle.innerHTML = userEmail
+                          console.log("OTP sent");
+                      }
+                      else {
+                          // errorEle.style.display = 'block';
+                          // errorEle.innerHTML = "Email not exist";
+                          // successEle.style.display = 'none';
+
+                      }
+                  }
+              )
+
+      }
+      else {
+          // errorEle.style.display = 'block';
+          // errorEle.innerHTML = "Invalid Email";
+          // successEle.style.display = 'none';
+
+      }
+
+  }
+
   return (
     //grid start
     <div className="grid-container">
@@ -77,6 +193,7 @@ export const RegisterTwo = () => {
               <label>Email Address</label>
               <input
                 type="email"
+                class="email"
                 placeholder={email}
                 name="email"
                 id="email"
@@ -84,7 +201,7 @@ export const RegisterTwo = () => {
                 onChange={handleInput}
               ></input>
               <br />
-              <button className="next_buttonOtp">Send OTP</button>
+              <button className="next_buttonOtp" onClick={sendOTP()}>Send OTP</button>
               <label>Enter OTP</label>
               <div className="otp-input-fields">
                 <input type="number" className="otp_num otp_num_1" maxlength="1"/>
