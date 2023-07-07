@@ -1,8 +1,10 @@
 import "../../CSS/register.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Validation } from "../Login/validation";
+import { toast } from 'react-toastify'
+import axios from 'axios';
 
 export const RegisterTwo = () => {
   const [values, setValues] = useState({
@@ -12,6 +14,7 @@ export const RegisterTwo = () => {
     password: "",
     cPassword: "",
   });
+  const navigate = useNavigate()
 
   const [errors, setErrors] = useState({ OTP:"",username: "",password: "", cPassword: ""});
   function handleInput(event) {
@@ -20,7 +23,7 @@ export const RegisterTwo = () => {
   }
 
 
-  function handleValidation(event) {
+  function handleInput(event) {
     console.log(values);
     event.preventDefault();
     console.log(errors);
@@ -40,8 +43,8 @@ export const RegisterTwo = () => {
     return <div>No form data found.</div>;
   }
   // Access the form values
-  const { email, name, regNo, line1, line2, contactNo } = formData;
-  const handleSubmit = (e) => {
+  const { email, name, regNo, line1, line2, contactNo, certificate} = formData;
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log(email);
     console.log(name);
@@ -49,6 +52,19 @@ export const RegisterTwo = () => {
     console.log(line1);
     console.log(line2);
     console.log(contactNo);
+    try {
+      await axios.post('http://localhost:8000/api/users/register', {email, name, regNo, line1, line2, contactNo,certificate,username,password})
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+      navigate('/login')
+    } catch (err) {
+      console.error(err.message); // "Request failed with status code 500"
+      //console.error(err)
+      toast.error(err?.data?.message || err.error)
+    }
+
   };
   return (
     //grid start
@@ -71,7 +87,7 @@ export const RegisterTwo = () => {
         </div>
         {/*right side grid form */}
         <div className="grid_right">
-          <form className="register_form" onSubmit={handleValidation}>
+          <form className="register_form" onSubmit={handleSubmit}>
             <h1>Complete Registration</h1>
             <div className="form-info">
               <label>Email Address</label>

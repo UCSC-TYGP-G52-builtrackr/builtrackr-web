@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { React, useState } from "react";
 import { Validation } from "./validation";
+import { toast } from 'react-toastify'
+import axios from 'axios';
 
 export function Login() {
   const [values, setValues] = useState({
@@ -9,16 +11,30 @@ export function Login() {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate()
+
   function handleInput(event) {
     const newObj = { ...values, [event.target.name]: event.target.value };
     setValues(newObj);
   }
 
-  function handleValidation(event) {
+  const handleValidation =async (event) => {
     console.log(values);
     event.preventDefault();
     setErrors(Validation(values));
     console.log(errors);
+    try {
+      await axios.post('http://localhost:8000/api/users/auth', values)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+      navigate('/home')
+    } catch (err) {
+      console.error(err.message); // "Request failed with status code 500"
+      //console.error(err)
+      toast.error(err?.data?.message || err.error)
+    }
   }
   return (
     <div className="grid-container">

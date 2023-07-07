@@ -44,6 +44,7 @@ export const Register = () => {
       line1,
       line2,
       contactNo,
+      certificate
     };
 
     if (name.trim().length !== 0 && contactNo.trim().length !== 0) {
@@ -113,7 +114,7 @@ export const Register = () => {
                 placeholder="upload PDF"
                 name="certificate"
                 value={certificate}
-                onChange={(e) => setCertificate(e.target.value)}
+                onChange={(e) => setCertificate(e.target.files[0])}
                 class="block w-full text-sm text-slate-500
       file:mr-4 file:py-2 file:px-4
       file:rounded-full file:border-0
