@@ -11,7 +11,7 @@ export const Register = () => {
   const [line1, setLine1] = useState("");
   const [line2, setLine2] = useState("");
   const [contactNo, setContactNo] = useState("");
-  const [certificate, setCertificate] = useState("");
+  const [certificate, setCertificate] = useState({});
   const [errors, setErrors] = useState({ name: "", contactNo: ""});
 
   const handleChange = (event) => {
@@ -40,6 +40,7 @@ export const Register = () => {
     const formData = {
       name,
       regNo,
+      certificate,
       email,
       line1,
       line2,
@@ -58,23 +59,29 @@ export const Register = () => {
       setContactNo("");
       setErrors({ name: "", contactNo: "" });
     } else {
+  
       setErrors({
-        name: name.trim().length === 0 ? "User Name required" : "",
+        name: name.trim().length === 0 ? "User Name Required" : "",
         contactNo:
-          contactNo.trim().length === 0 ? "Contact Number required" : "",
-        regNo: regNo.trim().length === 0 ? "Register Number required" : "",
-        email: email.trim().length === 0 ? "Email required" : "",
+          contactNo.trim().length === 0 ? "Fixed Number Required" : "",
+        regNo: regNo.trim().length === 0 ? "Register Number Required" : "",
+        line1: line1.trim().length === 0 ? "Address Required" : "",
+        email: email.trim().length === 0 ? "Email Required" : "",
+        certificate:!certificate.file ? "Certificate Required" : ""
+        
       });
+      
     }
   };
 
   return (
     <div className="grid-container">
       <div className="form_body">
-        <div className="grid_left">
+        <div className="grid_left" style ={{marginTop :"5%"}}>
           <form>
-            <h1>Sign Up To</h1>
-            <h2>Builtrackr</h2>
+          <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
+            Sign Up To</h1>
+            <h2 class="text-4xl font-extrabold dark:text-black" style={{color :"#ffcc00", marginBottom:"5%"}}>Builtrackr</h2>
             <span>
               If you already have an account{" "}
               <Link to="/Login">
@@ -87,7 +94,7 @@ export const Register = () => {
         </div>
         <div className="grid_right">
           <form className="register_form" onSubmit={handleSubmit}>
-            <h1>Sign Up</h1>
+          <h2 class="text-4xl font-extrabold dark:text-black" style={{ marginBottom:"5%"}}>Sign Up</h2>
             <div className="form-info">
               <label>Company Name</label>
               <input
@@ -112,9 +119,9 @@ export const Register = () => {
                 type="file"
                 placeholder="upload PDF"
                 name="certificate"
-                value={certificate}
-                onChange={(e) => setCertificate(e.target.value)}
-                class="block w-full text-sm text-slate-500
+              
+                onChange={(e) => setCertificate(e.target.files[0])}
+                className="block w-full text-sm text-slate-500
       file:mr-4 file:py-2 file:px-4
       file:rounded-full file:border-0
       file:text-sm file:font-semibold
@@ -122,6 +129,7 @@ export const Register = () => {
       hover:file:bg-orange-500 hover:file:text-white
     "
               />
+              {errors.certificate && <div className="error">{errors.certificate}</div>}
               <label>Email Address</label>
               <input
                 type="email"
@@ -139,6 +147,9 @@ export const Register = () => {
                 value={line1}
                 onChange={(e) => setLine1(e.target.value)}
               />
+               {errors.line1 && (
+                <div className="error">{errors.line1}</div>
+              )}
               <br />
               <input
                 type="text"

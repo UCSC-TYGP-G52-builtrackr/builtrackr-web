@@ -1,8 +1,10 @@
 import "../../CSS/register.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Validation } from "../Login/validation";
+import { ToastContainer,toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 
 export const RegisterTwo = () => {
@@ -13,6 +15,7 @@ export const RegisterTwo = () => {
     password: "",
     cPassword: "",
   });
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({ OTP:"",username: "",password: "", cPassword: ""});
   function handleInput(event) {
@@ -41,8 +44,8 @@ export const RegisterTwo = () => {
     return <div>No form data found.</div>;
   }
   // Access the form values
-  const { email, name, regNo, line1, line2, contactNo } = formData;
-  const handleSubmit = (e) => {
+  const { email, name, regNo, line1, line2, contactNo,certificate } = formData;
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log(email);
     console.log(name);
@@ -50,13 +53,29 @@ export const RegisterTwo = () => {
     console.log(line1);
     console.log(line2);
     console.log(contactNo);
+    try {
+      const username = values.username;
+      const password = values.password;
+      await axios.post('http://localhost:4000/api/user/register', {email, name, regNo, line1, line2, contactNo,certificate,username,password})
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+        toast.success('Registered Successfully')
+        setTimeout(() => {
+          navigate('/login')
+        }, 3000);
+        
+      })
+      
+    } catch (err) {
+      console.error(err.message); // "Request failed with status code 500"
+      //console.error(err)
+      toast.error(err?.data?.message || err.error)
+    }
   };
-  let emailEle = document.querySelector('#email');
-  let verfEle = document.querySelector('.verification');
-  let successEle = document.querySelector('.success');
-  let errorEle = document.querySelector('.error');
+ 
+
   let otp_inputs = document.querySelectorAll('.otp_num');
-  let emailpartialEle = document.querySelector('.emailpartial');
   let regex = new RegExp('[a-zA-Z0-9]+@[a-z]+\.[a-z]{2,3}');
   let otp_check = '';
   let userEmail;
@@ -111,15 +130,17 @@ export const RegisterTwo = () => {
               (res) => {
                   console.log(res)
                   if (res.status == 200) {
-                      verfEle.style.display = 'none';
-                      successEle.style.display = 'block';
-                      errorEle.style.display = 'none';
+                      // verfEle.style.display = 'none';
+                      // successEle.style.display = 'block';
+                      // errorEle.style.display = 'none';
+                       console.log("OTP verified");
 
                   }
                   else {
-                      errorEle.style.display = 'block';
-                      errorEle.innerHTML = "Invalid OTP";
-                      successEle.style.display = 'none';
+                      // errorEle.style.display = 'block';
+                      // errorEle.innerHTML = "Invalid OTP";
+                      // successEle.style.display = 'none';
+                      console.log("OTP not verified");
 
                   }
               }
@@ -129,8 +150,9 @@ export const RegisterTwo = () => {
 
 
 
-  function sendOTP() {
-    console.log(email);
+  function sendOTP(e) {
+    e.preventDefault();
+    // console.log(email);
     userEmail = email;
       if (regex.test(userEmail)) {
           fetch('http://localhost:4000/api/user/sendotp', {
@@ -168,7 +190,9 @@ export const RegisterTwo = () => {
 
   return (
     //grid start
+    
     <div className="grid-container">
+      <ToastContainer/>
       <div className="form_body">
         {/* left side grid image */}
         <div className="grid_left">
@@ -187,13 +211,13 @@ export const RegisterTwo = () => {
         </div>
         {/*right side grid form */}
         <div className="grid_right">
-          <form className="register_form" onSubmit={handleValidation}>
+          <div className="register_form" >
             <h1>Complete Registration</h1>
             <div className="form-info">
               <label>Email Address</label>
               <input
                 type="email"
-                class="email"
+                className="email"
                 placeholder={email}
                 name="email"
                 id="email"
@@ -201,13 +225,13 @@ export const RegisterTwo = () => {
                 onChange={handleInput}
               ></input>
               <br />
-              <button className="next_buttonOtp" onClick={sendOTP()}>Send OTP</button>
+              <button className="next_buttonOtp" onClick={event=>sendOTP(event)}>Send OTP</button>
               <label>Enter OTP</label>
               <div className="otp-input-fields">
-                <input type="number" className="otp_num otp_num_1" maxlength="1"/>
-                <input type="number" className="otp_num otp_num_2" maxlength="1"/>
-                <input type="number" className="otp_num otp_num_3" maxlength="1"/>
-                <input type="number" className="otp_num otp_num_4" maxlength="1"/>
+                <input type="number" className="otp_num otp_num_1" maxLength="1"/>
+                <input type="number" className="otp_num otp_num_2" maxLength="1"/>
+                <input type="number" className="otp_num otp_num_3" maxLength="1"/>
+                <input type="number" className="otp_num otp_num_4" maxLength="1"/>
             </div>
             {errors.OTP && (
                 <p style={{ color: "red" }}>{errors.OTP}</p>
@@ -217,6 +241,8 @@ export const RegisterTwo = () => {
                 type="text"
                 name="username"
                 id="uname"
+                value={values.username}
+                onChange={handleInput}
                 placeholder=" Enter User Name"
               ></input>
               {errors.username && (
@@ -248,11 +274,11 @@ export const RegisterTwo = () => {
               {errors.cPassword && (
                 <p style={{ color: "red" }}>{errors.cPassword}</p>
               )}
-              <button className="next_button" type="submit">
+              <button className="next_button" type="submit" onClick={e=>handleSubmit(e)}>
                 Register
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

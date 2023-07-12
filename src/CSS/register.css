@@ -1,3 +1,7 @@
+*{
+  font-size: 16px;
+}
+
 .grid_container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -39,8 +43,8 @@ img {
 
 .form-info input {
   background-color: #ffeb9a;
-  width: 300px;
-  height: 35px;
+  width: 400px;
+  height: 50px;
   border-radius: 8px;
   margin-bottom: 10px;
   border: none;
@@ -68,15 +72,17 @@ button {
   margin-top: 20px;
   background-color: #ffcc00;
   border-radius: 8px;
-  box-shadow: 4px 4px 62px rgba(77, 71, 195, 0.4);
+  box-shadow: 4px 4px 2px rgba(77, 71, 195, 0.4);
   font-weight: bold;
 }
 .next_button {
-  width: 300px;
+  width: 400px;
   color: #000000;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
+  background-color: #ffcc00;
+  
 }
 .next_buttonOtp {
   width: 150px;
@@ -146,8 +152,7 @@ button {
   appearance: none;
 }
 
-.success,
-.error {
+.success {
   display: none;
   text-align: center;
 }
