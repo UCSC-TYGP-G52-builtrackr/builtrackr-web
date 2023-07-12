@@ -1,7 +1,4 @@
 import React from 'react';
-// import Topbar from '../../../../builtrackr-web/src/components/Topbar';
-import Sidebar from '../../components/Sidebar';
-import '../../CSS/dashboard.css'
 
 const Sites = () => {
   return (
