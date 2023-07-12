@@ -80,6 +80,7 @@ function App() {
             <div>
               {themeSettings && (<ChatSpace />)}
 
+          {/* pages part */}
               <Routes>
                 {/* dashboard  */}
                 <Route path="/chiefEngineer" element={(<Sites />)} />
@@ -89,8 +90,8 @@ function App() {
                 {/* <Route path="/ecommerce" element={(<Ecommerce />)} /> */}
 
                 {/* pages  */}
-                <Route path="/chiefEngineer/sites" element={<Sites />} />
-                <Route path="/chiefEngineer/tasks" element={<Sites />} />
+                <Route path="/chiefEngineer/sites" element={(<Sites />)} />
+                <Route path="/chiefEngineer/tasks" element={(<Sites />)} />
                 {/* <Route path="/orders" element={<Orders />} />
                 <Route path="/employees" element={<Employees />} />
                 <Route path="/customers" element={<Customers />} /> */}

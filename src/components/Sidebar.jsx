@@ -2,9 +2,8 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
-// import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiLogOut } from 'react-icons/fi';
-
+import '../CSS/dashboard.css';
 import { links } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -45,7 +44,12 @@ const Sidebar = () => {
                 </p> */}
                 {item.links.map((link) => (
                   <NavLink
-                    to={`/${link.name}`}
+                    to={`/chiefEngineer/${link.name}`}
+                    isActive={(match, location) => {
+                      const { pathname } = location;
+                      return pathname === '/chiefEngineer' || pathname.startsWith('/chiefEngineer/sites');
+                    }}
+                    // to={`/${link.name}`}
                     key={link.name}
                     onClick={handleCloseSideBar}
                     style={({ isActive }) => ({
@@ -61,7 +65,7 @@ const Sidebar = () => {
               </div>
             ))}
 
-            <div className="flex items-center gap-5 pl-20 pt-3 pb-2.5 rounded-l-lg text-md mt-64 text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
+            <div className="flex items-center gap-5 pl-20 pt-3 pb-2.5 rounded-l-lg text-md custom-mt-percentage text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
           </div>
         </>
       )}
