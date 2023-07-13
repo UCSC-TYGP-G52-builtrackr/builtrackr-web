@@ -4,6 +4,7 @@ import { Validation } from "./validation";
 import { ToastContainer,toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 
 export function Login() {
@@ -26,8 +27,16 @@ export function Login() {
     try {
       await axios.post('http://localhost:4000/api/user/auth', values)
       .then(res => {
-        console.log(res);
-        console.log(res.data);
+        if(res.status === 201){
+          console.log(res.data);
+          toast.success("Login Successfull")
+          setTimeout(() => {
+            navigate('/siteManager')
+          }
+          , 2000);
+        }else{
+          toast.error("Login Failed")
+        }
       })
       // navigate('/home')
     } catch (err) {
@@ -84,6 +93,7 @@ export function Login() {
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
+              <a href="forgotPassword" >Forgot Password?</a> <br/>
               <button className="next_button" type="submit">
                 {" "}
                 Login
