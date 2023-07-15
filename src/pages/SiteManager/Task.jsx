@@ -12,7 +12,7 @@ const Task=()=>{
                 e.preventDefault();
             await axios.get('http://localhost:4000/api/task/viewtask')
                 .then(res => {
-                    if(res.status === 200){
+                    if(res.status === 200){ //request was succussful
                         console.log(res.data);
                         setTaskList(res.data);
                     }

@@ -5,7 +5,6 @@ import {Register} from './pages/SignUp/Register';
 import {RegisterTwo} from './pages/SignUp/RegisterTwo';
 // import {Login} from './Login';
 import {Routes , Route} from "react-router-dom";
-import Dashboard from './pages/CheefEngineer/Dashboard';
 import SMDashboard from './pages/SiteManager/Dashboard'
 import ForgotPassword from './pages/Login/Forgotpassword'
 import ResetPassword from './pages/Login/ResetPassword'
@@ -25,7 +24,6 @@ function App() {
         <Route path  = "/Register" element = {<Register /> } />
         <Route path  = "/RegisterTwo" element = {<RegisterTwo /> } />
         <Route path  = "/Login" element = {<Login /> } />
-        <Route path="/dashboard/*" element ={ <Dashboard/> } />
         <Route path="/home" element ={ <Home/> } />
         <Route path="/sitemanager" element ={<SMDashboard/>} />
         <Route path="/viewtask" element ={<Task/>} />
