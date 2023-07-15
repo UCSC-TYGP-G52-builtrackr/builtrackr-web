@@ -98,6 +98,7 @@ export const Register = () => {
             <div className="form-info">
               <label>Company Name</label>
               <input
+              className="p-2"
                 type="text"
                 placeholder="Company Name"
                 name="name"
@@ -107,6 +108,7 @@ export const Register = () => {
               {errors.name && <div className="error">{errors.name}</div>}
               <label>Company Register Number</label>
               <input
+              className="p-2"
                 type="text"
                 placeholder="PVXXXXX"
                 name="regNo"
@@ -119,6 +121,7 @@ export const Register = () => {
                 type="file"
                 placeholder="upload PDF"
                 name="certificate"
+                accept=".pdf"
               
                 onChange={(e) => setCertificate(e.target.files[0])}
                 className="block w-full text-sm text-slate-500
@@ -132,6 +135,7 @@ export const Register = () => {
               {errors.certificate && <div className="error">{errors.certificate}</div>}
               <label>Email Address</label>
               <input
+              className="p-2"
                 type="email"
                 placeholder="Company Email Address"
                 name="email"
@@ -141,6 +145,7 @@ export const Register = () => {
               {errors.email && <div className="error">{errors.email}</div>}
               <label>Company Address</label>
               <input
+              className="p-2"
                 type="text"
                 placeholder="Address Line 1"
                 name="line1"
@@ -152,6 +157,7 @@ export const Register = () => {
               )}
               <br />
               <input
+              className="p-2"
                 type="text"
                 placeholder="Address Line 2"
                 name="line2"
@@ -160,6 +166,8 @@ export const Register = () => {
               />
               <label>Fixed Line Number</label>
               <input
+              className="p-2"
+              placeholder="Fixed Line Number"
                 type="tel"
                 name="contactNo"
                 value={contactNo}

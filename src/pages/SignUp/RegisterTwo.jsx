@@ -15,6 +15,7 @@ export const RegisterTwo = () => {
     password: "",
     cPassword: "",
   });
+  const [otpVerify, setOtpVerify] = useState(false);
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({ OTP:"",username: "",password: "", cPassword: ""});
@@ -45,18 +46,19 @@ export const RegisterTwo = () => {
   }
   // Access the form values
   const { email, name, regNo, line1, line2, contactNo,certificate } = formData;
+  console.log(formData);
   const handleSubmit = async(e) => {
-    e.preventDefault();
-    console.log(email);
-    console.log(name);
-    console.log(regNo);
-    console.log(line1);
-    console.log(line2);
-    console.log(contactNo);
+    if(otpVerify===false){
+      toast.error('Please Verify OTP')
+      return
+    }
     try {
       const username = values.username;
       const password = values.password;
-      await axios.post('http://localhost:4000/api/user/register', {email, name, regNo, line1, line2, contactNo,certificate,username,password})
+
+      await axios.post('http://localhost:4000/api/user/register',{
+        username,email,password,regNo,line1,line2,contactNo,certificate,name
+      })
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -81,18 +83,12 @@ export const RegisterTwo = () => {
   let userEmail;
   
 
-  otp_inputs.forEach(
-      (ip) => {
-          ip.addEventListener('keyup', moveNext)
-      }
-  )
-
   function moveNext(event) {
       // otp_num_4
 
       let current = event.target;
       let index = current.classList[1].slice(-1);
-      if (event.keyCode == 8 && index > 1) {
+      if (event.keyCode === 8 && index > 1) {
           current.previousElementSibling.focus()
       }
       else if (index < 4) {
@@ -103,7 +99,7 @@ export const RegisterTwo = () => {
       for (let ip of otp_inputs) {
           otp_check += ip.value
       }
-      if (otp_check.length == 4) {
+      if (otp_check.length === 4) {
           verifyOTP()
       }
 
@@ -114,7 +110,7 @@ export const RegisterTwo = () => {
   }
 
   function verifyOTP() {
-      fetch('http://localhost:4000/verify',
+      fetch('http://localhost:4000/api/user/verifyotp',
           {
               method: "POST",
               body: JSON.stringify({
@@ -133,7 +129,7 @@ export const RegisterTwo = () => {
                       // verfEle.style.display = 'none';
                       // successEle.style.display = 'block';
                       // errorEle.style.display = 'none';
-                       console.log("OTP verified");
+                       setOtpVerify(true);
 
                   }
                   else {
@@ -228,13 +224,16 @@ export const RegisterTwo = () => {
               <button className="next_buttonOtp" onClick={event=>sendOTP(event)}>Send OTP</button>
               <label>Enter OTP</label>
               <div className="otp-input-fields">
-                <input type="number" className="otp_num otp_num_1" maxLength="1"/>
-                <input type="number" className="otp_num otp_num_2" maxLength="1"/>
-                <input type="number" className="otp_num otp_num_3" maxLength="1"/>
-                <input type="number" className="otp_num otp_num_4" maxLength="1"/>
+                <input type="number" className="otp_num otp_num_1" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
+                <input type="number" className="otp_num otp_num_2" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
+                <input type="number" className="otp_num otp_num_3" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
+                <input type="number" className="otp_num otp_num_4" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
             </div>
             {errors.OTP && (
                 <p style={{ color: "red" }}>{errors.OTP}</p>
+              )}
+              {otpVerify && (
+                <p className="text-green-600 font-bold text-center">OTP Verified</p>
               )}
               <label>User Name</label>
               <input
