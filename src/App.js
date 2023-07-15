@@ -11,6 +11,7 @@ import ResetPassword from './pages/Login/ResetPassword'
 import Task from './pages/SiteManager/Task'
 import Home from './pages/index'
 import { ChakraProvider } from '@chakra-ui/react'
+// import {SMSupervisor} from './pages/SiteManager/Supervisor'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/viewtask" element ={<Task/>} />
         <Route path="/forgotPassword" element ={<ForgotPassword/>} />
         <Route path="/resetPassword" element ={<ResetPassword/>} />
+        {/* <Route path="/sitemanager/supervisor" element ={<SMSupervisor/>} /> */}
         <Route path="*" element={<Home />} />
 
       </Routes>
