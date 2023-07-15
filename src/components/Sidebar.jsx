@@ -21,12 +21,13 @@ const Sidebar = () => {
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-l-lg text-md text-white dark:text-black dark:hover:text-black hover:bg-yellow-400';
 
   return (
-    <div className="h-screen pb-10 overflow-auto bg-black md:overflow-hidden md:hover:overflow-auto">
+    <div className="h-screen pb-10 overflow-auto bg-black md:overflow-hidden md:hover:overflow-auto mr-4">
       {activeMenu && (
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between ml-8">
             <Link to="/" onClick={handleCloseSideBar} className="flex items-center gap-3 mt-4 ml-3 text-xl font-extrabold tracking-tight text-white dark:text-white">
-              <img src='./bt.png' className='w-10 h-10'/> <span>builTrackr</span>
+            {/* <img src='./bt.png' className='w-10 h-10'/> */}
+               <span>builTrackr</span>
             </Link>
               <button
                 type="button"
@@ -37,7 +38,7 @@ const Sidebar = () => {
                 <MdOutlineCancel />
               </button>
           </div>
-          <div className="mt-16 ">
+          <div className="mt-16 text-center ml-10">
             {links.map((item) => (
               <div key={item.title}>
                 {/* <p className="m-3 mt-4 text-gray-400 uppercase dark:text-gray-400">
@@ -61,7 +62,7 @@ const Sidebar = () => {
               </div>
             ))}
 
-            <div className="flex items-center gap-5 pl-20 pt-3 pb-2.5 rounded-l-lg text-md mt-64 text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
+            <div className="flex items-center gap-2 pl-2  pt -35  rounded-l-lg text-md mt-64  text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
           </div>
         </>
       )}

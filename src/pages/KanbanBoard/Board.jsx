@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {KanbanBoard} from "./KanbanBoard";
 import '../../CSS/kanbanBoard.css';
-import { Editable } from '../components/Editable/Editable';
+import { Editable } from '../../components/Editable/Editable';
 import { FirstBoard } from './FirstBoard';
 import avatar from '../../data/avatar2.jpg';
 
@@ -116,16 +116,18 @@ export const Board = () => {
         <div className="board_outer">
         
 <div className="owner_info"> 
-       <div  className="flex items-end text-end gap-4 p-1 ">
-            <p>
-              <div><span className="ml-1 text-[16px] font-bold text-black text-end items-end">
-                Michael Scott
-              </span></div>
-              <span className='float-right text-sm'>Chief Engineer</span>
-            </p>
+       <div  className="name">
+            
+              <div><span className="ml-1 text-[16px]  text-black text-end items-end">
+              Project Owner
+              <br/><b>Michael Scott </b>
+              </span>
+    </div>
+            
+            
         
             <img
-              className="w-10 h-10 rounded-full"
+              className="w-12 h-12 rounded-full"
               src={avatar}
               alt="user-profile"
             />
