@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from "axios";
 import { useState,useEffect } from 'react';
+import TaskListCard from '../../components/SiteManager/TaskListComponenet';
+
 
 const Task=()=>{
 
@@ -21,36 +23,19 @@ const Task=()=>{
         ViewTask();
     }, [])
 
-    
 
+      
+        return (
+          <div>
+            <TaskListCard taskList={taskList} />
+            
+            {/* Add more TaskListCard components as needed */}
+          </div>
+        );
+ 
+      
+      
 
-
-    return(
-        <div>
-            <h2> Task List </h2>
-            <button >View Task</button>
-            {/* Task List */}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Task Name</th>
-                        <th>Special Information</th>
-                        <th>Due Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {taskList.map((task) => (
-                        <tr key={task.task_id}>
-                            <td>{task.taskname}</td>
-                            <td>{task.specialinformation}</td>
-                            <td>{task.duedate}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-        
-    );
 }
 
 

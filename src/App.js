@@ -6,6 +6,7 @@ import {RegisterTwo} from './pages/SignUp/RegisterTwo';
 // import {Login} from './Login';
 import {Routes , Route} from "react-router-dom";
 import SMDashboard from './pages/SiteManager/Dashboard'
+import SMSupervisor from './pages/SiteManager/Supervisor'
 import ForgotPassword from './pages/Login/Forgotpassword'
 import ResetPassword from './pages/Login/ResetPassword'
 import Task from './pages/SiteManager/Task'
@@ -30,7 +31,7 @@ function App() {
         <Route path="/viewtask" element ={<Task/>} />
         <Route path="/forgotPassword" element ={<ForgotPassword/>} />
         <Route path="/resetPassword" element ={<ResetPassword/>} />
-        {/* <Route path="/sitemanager/supervisor" element ={<SMSupervisor/>} /> */}
+        <Route path="/sitemanager/supervisor" element ={<SMSupervisor/>} />
         <Route path="*" element={<Home />} />
 
       </Routes>
