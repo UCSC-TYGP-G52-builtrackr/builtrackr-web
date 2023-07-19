@@ -19,7 +19,7 @@ background: #fff;
 
 
 export const ServicesWrapper = styled.div`
-max-width: 1000px;
+max-width: 1250px;
 margin: 0 auto;
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -27,11 +27,11 @@ align-items: center;
 grid-gap: 16px 26PX;
 padding: 0 50px;
 
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 1250px){
     grid-template-columns: 1fr 1fr; 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 600px){
     grid-template-columns: 1fr; 
     padding: 0 20px;
 }
@@ -59,8 +59,8 @@ cursor: pointer;
 
 
 export const ServicesIcon =styled.img`
-height: 300px;
-width: 250px;
+height: 350px;
+width: 300px;
 margin-bottom: 10px;
 
 `;
@@ -70,6 +70,7 @@ export const ServicesH1 = styled.h1`
 font-size: 2.5rem;
 color: #000;
 margin-bottom: 64px;
+font-weight: bold;
 
 @media screen and (max-width: 480px){
 font-size: 2rem;
@@ -80,6 +81,7 @@ font-size: 2rem;
 export const ServicesH2 = styled.h2`
 font-size: 1rem;
 margin-bottom: 10px;
+font-weight: bold;
 
 `;
 
