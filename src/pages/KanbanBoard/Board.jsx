@@ -4,9 +4,14 @@ import '../../CSS/kanbanBoard.css';
 import { Editable } from '../../components/Editable/Editable';
 import { FirstBoard } from './FirstBoard';
 import avatar from '../../data/avatar2.jpg';
-
-
+import { Todo } from './Todo';
+import Navbar from '../../components/Navbar';
+import { Sidebar } from '../../components/Sidebar';
+import { BsChatDots } from 'react-icons/bs';
+import { useStateContext } from '../../contexts/ContextProvider';
 export const Board = () => {
+  
+  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, themeSettings, setThemeSettings } = useStateContext();
   const [boards, setBoards] = useState(JSON.parse(localStorage.getItem('prac-kanban')) || []);
   const [targetCard, setTargetCard] = useState({
     bid: '',
@@ -111,33 +116,59 @@ export const Board = () => {
 
   return (
     <>
-      <div className="kanban"> 
-     
-        <div className="board_outer">
-        
-<div className="owner_info"> 
-       <div  className="name">
+     <div className="relative flex dark:bg-main-dark-bg w:100">
+
+{/* chatbot popup */}
+<div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
+    <button
+      type="button"
+      onClick={() => setThemeSettings(true)}
+      style={{ backgroundColor: 'yellow-400', borderRadius: '50%' }}
+      className="p-3 text-3xl text-white bg-yellow-400 hover:drop-shadow-xl"
+    >
+      <BsChatDots />
+    </button>
+</div>
+
+{activeMenu ? (
+  <div className="fixed bg-white w-72 sidebar dark:bg-secondary-dark-bg ">
+    <Sidebar />
+  </div>
+) : (
+  <div className="w-0 dark:bg-secondary-dark-bg">
+    <Sidebar />
+  </div>
+)}</div>
+<div className="fixed w:100% md:static bg-main-bg dark:bg-main-dark-bg navbar ">
+              <Navbar />
+            </div>
             
-              <div><span className="ml-1 text-[16px]  text-black text-end items-end">
+<div
+  className={
+    activeMenu
+      ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  '
+      : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 '
+  }
+>
+
+      <div className="kanban"> 
+
+        
+
+<div className="owner_info"> 
+    <div  className="name">
+              {/* <div><span className="ml-1 text-[16px]  text-black text-end items-end">
               Project Owner
               <br/><b>Michael Scott </b>
-              </span>
+              </span> */}
     </div>
-            
-            
-        
-            <img
-              className="w-12 h-12 rounded-full"
-              src={avatar}
-              alt="user-profile"
-            />
-          </div>
-
-
 </div>
+
+<div className="board_outer">
           <div className="boards"> 
             
             <FirstBoard/>
+            <Todo />
             {boards.map((item) => (
               <KanbanBoard
                 key={item.id}
@@ -162,8 +193,8 @@ export const Board = () => {
           </div>
         </div>
       </div>
-      
-    
+      </div>
+  
     </>
   );
 };

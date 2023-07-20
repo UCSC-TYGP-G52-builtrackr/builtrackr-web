@@ -42,8 +42,8 @@
 
 }
 
-.card_top_labels  labels {
-    height: 15px;
+.card_top_labels  label {
+ height: 16px;
  border-radius: 20px;
  padding: 4px 8px 0px 10px;
  background-color: gray;
@@ -77,4 +77,16 @@
   display:flex;
   gap:5px;
   align-items: center;
+}
+
+.card_top_more{
+    background-color:#eae9e400;
+    position: relative;
+    
+}
+
+.card_top_more p{
+    font-size:14px;
+    width: 130%;
+   
 }

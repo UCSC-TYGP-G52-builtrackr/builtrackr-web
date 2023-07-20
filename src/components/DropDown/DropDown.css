@@ -2,7 +2,7 @@
     position: absolute;
     right: 0;
     top: 100%;
-    background-color: #fff;
+    background-color:  #ffffff;
     border-radius: 3px;
     min-height: 40px;
     min-width: 80px;
@@ -10,6 +10,23 @@
     height: fit-content;
     max-width: 250px;
     max-height: 390px;
-    overflow-y: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    box-shadow: 1px 1px 10px 1px #0000001a;
     z-index: 5;
   }
+
+  .dropdown custom-scroll{
+    border-radius: 30px;
+    border:1px solid #ffffff;
+    background-color: #ffffff;
+    width: 5px;
+  }
+
+  .dropdown custom-scroll::-webkit-scrollbar-track{
+    border-radius: 30px;
+    border:1px solid #ffffff;
+    background-color: #ffffff;
+    width: 2px;
+    
+}

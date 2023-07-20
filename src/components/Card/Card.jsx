@@ -55,49 +55,43 @@ export const Card = (props) => {
   };
 
   const handleCardClick = () => {
-    setShowModal(true);
+    if (!showDropdown) {
+      setShowModal(true);
+    }
   };
 
   const handleDeleteCard = () => {
+    setShowDropdown(false); // Close the dropdown after delete
+    setShowModal(false); // Close the modal after delete
     props.removeCard(props.boardId, id);
   };
 
   return (
     <>
-      {showModal && (
-        <CardInfo
-          onClose={() => setShowModal(false)}
-          card={props.card}
-          boardId={props.boardId}
-          updateCard={props.updateCard}
-        />
-      )}
-
       <div
         className="card"
         draggable="true"
         onDragEnd={() => props.dragEnded(props.boardId, id)}
         onDragEnter={() => props.dragEntered(props.boardId, id)}
-        onClick={handleCardClick}
       >
         <div className="card_title">
           <div className="card_top_labels">
             {labels?.map((item, index) => (
-              <labels key={index} style={{ backgroundColor: item.color }}>
+              <label key={index} style={{ backgroundColor: item.color}}>
                 {item.text}
-              </labels>
+              </label>
             ))}
           </div>
-          <div className="card_top_more">
+          <div className="card_top_more" ref={dropdownRef}>
             <MoreHorizontal onClick={handleDropdownToggle} />
             {showDropdown && (
-              <Dropdown class="board_dropdown">
+              <Dropdown class="card_dropdown">
                 <p onClick={handleDeleteCard}>Delete Card</p>
               </Dropdown>
             )}
           </div>
         </div>
-        <div className="card_main_title">{title}</div>
+        <div className="card_main_title"    onClick={handleCardClick}>{title}</div>
         <div className="card_footer">
           {date && (
             <p className="card_footer_item">
@@ -113,6 +107,15 @@ export const Card = (props) => {
           )}
         </div>
       </div>
+      {showModal && (
+        <CardInfo
+          onClose={() => setShowModal(false)}
+          card={props.card}
+          boardId={props.boardId}
+          updateCard={props.updateCard}
+          key={props.id}
+        />
+      )}
     </>
   );
 };

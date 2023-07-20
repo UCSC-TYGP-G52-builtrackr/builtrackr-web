@@ -26,6 +26,7 @@ import product8 from './product8.jpg';
 import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import { FiLogOut } from 'react-icons/fi';
+import { Clipboard, Book,Bell,BarChart } from 'react-feather';
 
 
 export const gridOrderImage = (props) => (
@@ -487,16 +488,20 @@ export const links = [
     links: [
       
       {
-        name: 'sites',
-        icon: <RiContactsLine />,
+        name: 'Kanbanboard',
+        icon: <Clipboard />,
       },
       {
-        name: 'tasks',
-        icon: <RiContactsLine />,
+        name: 'Documents',
+        icon: <Book />,
       },
       {
-        name: 'analytics',
-        icon: <RiContactsLine />,
+        name: 'Analytics',
+        icon: <BarChart />,
+      },
+      {
+        name: 'Notifications',
+        icon: <Bell />,
       },
     ],
   },

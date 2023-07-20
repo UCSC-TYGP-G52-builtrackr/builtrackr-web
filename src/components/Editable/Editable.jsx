@@ -1,5 +1,5 @@
 import React from 'react'
-import {Plus, X} from "react-feather";
+import { X} from "react-feather";
 import { useState } from 'react';
 import "./editable.css";
 
@@ -45,7 +45,7 @@ export const Editable = (props)=> {
           }`}
           onClick={() => setIsEditable(true)}
         >
-           <span><b> + </b><span className='add_card'>{props.text || "Add card"}</span></span>
+           <span><span className='add_card'>{props.text || "Add card"}</span></span>
 
         </p>
       )}

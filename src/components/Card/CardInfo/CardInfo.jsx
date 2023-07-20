@@ -14,7 +14,7 @@ import {
 
 import { Modal } from "../../modal/Modal";
 import { Editable } from "../../Editable/Editable";
-
+import { Drop } from "../../DropDown/Drop";
 import "./CardInfo.css";
 
 export const CardInfo = (props) => {
@@ -76,19 +76,7 @@ export const CardInfo = (props) => {
     });
   };
 
-  const addLabor = (value) => {
-    const labor = {
-      id: Date.now() + Math.random(),
-      completed: false,
-      text: value,
-    };
-
-    setValues({
-      ...values,
-      labors: [...values.labors, labor],
-    });
-  };
-
+ 
   const addEquipment = (value) => {
     const equipment = {
       id: Date.now() + Math.random() * 2,
@@ -110,15 +98,7 @@ export const CardInfo = (props) => {
     });
   };
 
-  const removeLabor = (id) => {
-    const labors = [...values.labors];
-
-    const tempLabors = labors.filter((item) => item.id !== id);
-    setValues({
-      ...values,
-      labors: tempLabors,
-    });
-  };
+ 
 
   const removeEquipment = (id) => {
     const equipments = [...values.equipments];
@@ -144,19 +124,6 @@ export const CardInfo = (props) => {
     });
   };
 
-  const updateLabor = (id, value) => {
-    const labors = [...values.labors];
-
-    const index = labors.findIndex((item) => item.id === id);
-    if (index < 0) return;
-
-    labors[index].completed = value;
-
-    setValues({
-      ...values,
-      labors,
-    });
-  };
 
   const updateEquipment = (id, value) => {
     const equipments = [...values.equipments];
@@ -172,15 +139,7 @@ export const CardInfo = (props) => {
     });
   };
 
-  // const handleFeedbackChange = (event) => {
-  //   setFeedback(event.target.value);
-  // };
 
-  // const submitFeedback = () => {
-  //   // You can handle the submission logic here, e.g., send the feedback to the server
-  //   console.log("Feedback:", feedback);
-  //   setFeedback(""); // Clear the feedback input field after submission
-  // };
 
   const calculatePercent = () => {
     if (!values.tasks?.length) return 0;
@@ -199,7 +158,19 @@ export const CardInfo = (props) => {
 
   useEffect(() => {
     if (props.updateCard) props.updateCard(props.boardId, values.id, values);
-  }, [values]);
+  }, [values, props]);
+
+  const [selectedLabors, setSelectedLabors] = useState(() => {
+    // Load the selected employees from localStorage for the current card
+    const savedSelectedLabors = localStorage.getItem(`card_${values.id}_selectedLabors`);
+    return savedSelectedLabors ? JSON.parse(savedSelectedLabors) : [];
+  });
+
+
+  // Function to save the selected employees in localStorage
+  useEffect(() => {
+    localStorage.setItem(`card_${values.id}_selectedLabors`, JSON.stringify(selectedLabors));
+  }, [selectedLabors, values.id]);
 
   return (
     <Modal onClose={props.onClose}>
@@ -282,24 +253,12 @@ export const CardInfo = (props) => {
             <User />
             <p>Labors</p>
           </div>
-          {values.labors?.map((item) => (
-            <div key={item.id} className="cardinfo_box_task_checkbox">
-              <input
-                type="checkbox"
-                defaultChecked={item.completed}
-                onChange={(event) =>
-                  updateLabor(item.id, event.target.checked)
-                }
-              />
-              <p className={item.completed ? "completed" : ""}>{item.text}</p>
-              <Trash onClick={() => removeLabor(item.id)} />
-            </div>
-          ))}
-          <Editable
-            text={"Add a Labor"}
-            placeholder=""
-            onSubmit={addLabor}
+           <Drop
+            cardId={values.id}
+            selectedLabors={selectedLabors}
+            onSelect={(cardId, selected) => setSelectedLabors(selected,cardId)}
           />
+
         </div>
         <div className="cardinfo_box">
           <div className="cardinfo_box_title">
@@ -374,7 +333,7 @@ export const CardInfo = (props) => {
             <p>Feedback</p>
           </div>
           <div className="writer_info">
-            <p><span className ="user"><User/></span><p className= "name"><b>Mr.Gineth Karunanayake</b><br/>Site Manager<br/>just Now</p></p>
+            <p><span className ="user"><User/></span> <span className= "name">Mr.Gineth Karunanayake<br/>Site Manager <br/>just Now</span></p>
           </div>
           <div className="cardinfo_box_feedback">
             {/* <textarea

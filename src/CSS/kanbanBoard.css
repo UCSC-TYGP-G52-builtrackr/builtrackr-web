@@ -5,6 +5,7 @@
 
 body{
     overflow-y: hidden;
+    
 }
 .kanban{
     width: 100%;
@@ -49,6 +50,7 @@ background-color: #faf7f7;
     flex-direction:column;
     gap:20px;
     
+    
 }
 
 .board_outer{
@@ -71,6 +73,7 @@ background-color: #faf7f7;
     display: flex;
     gap: 30px;
     padding-left: 0;
+    overflow-x: auto;
 }
 
 
@@ -138,6 +141,7 @@ background-color: #faf7f7;
     font-weight: bold;
     align-content: end;
     text-align: end;
+    height:6%;
 }
 
 .name{

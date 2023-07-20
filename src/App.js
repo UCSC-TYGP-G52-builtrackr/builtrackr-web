@@ -3,15 +3,12 @@ import {Register} from './pages/SignUp/Register';
 import {RegisterTwo} from './pages/SignUp/RegisterTwo';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { BsChatDots } from 'react-icons/bs';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
 import ChatSpace from './components/ChatSpace';
 import Sites from './pages/chiefEngineer/Sites';
 import './App.css';
 import { Board } from './pages/KanbanBoard/Board';
-
 import { useStateContext } from './contexts/ContextProvider';
+import {Drop} from './components/DropDown/Drop';
 
 function App() {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, themeSettings, setThemeSettings } = useStateContext();
@@ -39,45 +36,10 @@ function App() {
     //       <Route path="tasks" element={<Tasks />} />
     //     </Route>
     //     </Routes>
-      
     // </div>
 
     <div className={currentMode === 'Dark' ? 'dark' : ''}>
       <BrowserRouter>
-        <div className="relative flex dark:bg-main-dark-bg">
-
-          {/* chatbot popup */}
-          <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
-              <button
-                type="button"
-                onClick={() => setThemeSettings(true)}
-                style={{ backgroundColor: 'yellow-400', borderRadius: '50%' }}
-                className="p-3 text-3xl text-white bg-yellow-400 hover:drop-shadow-xl"
-              >
-                <BsChatDots />
-              </button>
-          </div>
-          
-          {activeMenu ? (
-            <div className="fixed bg-white w-72 sidebar dark:bg-secondary-dark-bg ">
-              <Sidebar />
-            </div>
-          ) : (
-            <div className="w-0 dark:bg-secondary-dark-bg">
-              <Sidebar />
-            </div>
-          )}
-          <div
-            className={
-              activeMenu
-                ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  '
-                : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 '
-            }
-          >
-            <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
-              <Navbar />
-            </div>
-            <div>
               {themeSettings && (<ChatSpace />)}
 
               <Routes>
@@ -89,18 +51,20 @@ function App() {
                 <Route path  = "/KanbanBoard" element = {<Board /> } />
                 {/* <Route path="/ecommerce" element={(<Ecommerce />)} /> */}
 
+                <Route path="/dropdown" element={(<Drop />)} />
+
                 {/* pages  */}
                 <Route path="/chiefEngineer/sites" element={<Sites />} />
                 <Route path="/chiefEngineer/tasks" element={<Sites />} />
+
                 {/* <Route path="/orders" element={<Orders />} />
                 <Route path="/employees" element={<Employees />} />
                 <Route path="/customers" element={<Customers />} /> */}
               
               </Routes>
-            </div>
+
             {/* <Footer /> */}
-          </div>
-        </div>
+
       </BrowserRouter>
     </div>
   );

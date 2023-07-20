@@ -9,7 +9,7 @@ import Notification from './Notification';
 import UserProfile from './UserProfile';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
+ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
     <button
       type="button"
       onClick={() => customFunc()}
@@ -48,7 +48,7 @@ const Navbar = () => {
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
   return (
-    <div className="relative flex justify-end p-2 md:ml-6 md:mr-6">
+    <div className="relative flex gap-10 justify-end p-1.5 md:ml-10 md:mr-1">
 
       {/* <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} /> */}
       <div className="flex">

@@ -23,13 +23,14 @@ export const Dropdown = (props) => {
   }, );
 
   return (
-    <div
+    <p
       ref={dropdownRef}
       className={`dropdown custom-scroll ${
         props.class ? props.class : ""
       }`}
     >
-      {props.children}
-    </div>
+ {props.children}
+ 
+    </p>
   );
 };
