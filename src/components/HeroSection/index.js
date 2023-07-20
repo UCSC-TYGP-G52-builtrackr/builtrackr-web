@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
-import Video from '../../assets/videos/video.mp4'
+//import Video from '../../assets/videos/video.mp4'
+import BackgroundImage from '../../assets/images/background.png';
 import {Button} from '../ButtonElements'
-import { HeroContainer, HeroBg, VideoBg, HeroContent, HeroH1, HeroP, HeroBtnWrapper, ArrowForward, ArrowRight } from './HeroElements'
+import { HeroContainer, HeroBg, HeroContent, HeroH1, HeroP, HeroBtnWrapper, ArrowForward, ArrowRight } from './HeroElements'
 
 const HeroSection = () => {
 
@@ -14,7 +15,7 @@ const onHover = () => {
     return (
         <HeroContainer>
           <HeroBg>
-            <VideoBg autoPlay loop muted src={Video} type='video/mp4' />
+          <img src={BackgroundImage} alt="Background" />
           </HeroBg>
           <HeroContent>
             <HeroH1>builTrackr Made You Easy</HeroH1>
