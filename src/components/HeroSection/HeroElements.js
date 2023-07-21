@@ -57,6 +57,7 @@ align-items: center;
 export const HeroH1 = styled.h1`
 color: #000;
 font-size: 48px;
+font-weight: bold;
 text-align: center;
 
 @media screen and (max-width : 768px){
@@ -73,6 +74,8 @@ export const HeroP = styled.p`
 margin-top: 24px;
 color: #000;
 font-size: 24px;
+font-weight: semi-bold;
+
 text-align: center;
 max-width: 600px;
 
