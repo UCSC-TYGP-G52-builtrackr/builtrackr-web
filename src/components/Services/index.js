@@ -18,17 +18,17 @@ const Services = () => {
         <ServicesCard>
             <ServicesIcon src={Icon2}/>
             <ServicesH2>Allocate Manpower</ServicesH2>
-            <ServicesP>Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</ServicesP>
+            <ServicesP>Effortlessly manage your workforce with our innovative Allocate Manpower feature, ensuring the right people are in the right place at the right time, maximizing efficiency and productivity.</ServicesP>
         </ServicesCard>
         <ServicesCard>
             <ServicesIcon src={Icon3 }/>
             <ServicesH2>Inventory Management</ServicesH2>
-            <ServicesP>Can easily access and monitor your inventory levels, place orders, receive alerts, and generate reports.</ServicesP>
+            <ServicesP>Can easily access and monitor your inventory levels, place orders, receive alerts and generate reports.</ServicesP>
         </ServicesCard>
         <ServicesCard>
             <ServicesIcon src={Icon4 }/>
             <ServicesH2>Progress and Analytics Reports</ServicesH2>
-            <ServicesP>Helps to monitor the performance, quality, and efficiency of your projects with analytical reports.</ServicesP>
+            <ServicesP>Helps to monitor the performance, quality and efficiency of your projects with analytical reports.</ServicesP>
         </ServicesCard>
        
     </ServicesWrapper>
