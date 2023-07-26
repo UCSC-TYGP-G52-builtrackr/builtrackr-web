@@ -31,7 +31,7 @@ export function Login() {
           console.log(res.data);
           toast.success("Login Successfull")
           setTimeout(() => {
-            navigate('/siteManager')
+            navigate('/admin')
           }
           , 2000);
         }else{

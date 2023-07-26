@@ -3,9 +3,9 @@ import { MdOutlineCancel } from 'react-icons/md';
 
 // import { Button } from '.';
 import Button from './Button';
-import { userProfileData } from '../data/dummy';
-import { useStateContext } from '../contexts/ContextProvider';
-import avatar from '../data/avatar.jpg';
+import { userProfileData } from '../../data/dummy';
+import { useStateContext } from '../../contexts/ContextProvider';
+import avatar from '../../data/avatar.jpg';
 
 const UserProfile = () => {
   const { currentColor } = useStateContext();
