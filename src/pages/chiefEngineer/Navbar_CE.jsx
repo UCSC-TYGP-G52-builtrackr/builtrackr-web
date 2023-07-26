@@ -50,8 +50,11 @@ const Navbar = () => {
   return (
     <div className="relative flex justify-end p-2 md:ml-6 md:mr-6">
 
+      {/* <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} /> */}
       <div className="flex">
         <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('notification')} color={currentColor} icon={<RiNotification3Line style={{ color: 'black', fontSize: '28px' }}/>} />
+
+        {/* name and avatar image */}
           <div
             className="flex items-center gap-2 p-1 rounded-lg cursor-pointer hover:bg-light-gray"
             onClick={() => handleClick('userProfile')}
@@ -62,6 +65,8 @@ const Navbar = () => {
               </span></div>
               <span className='float-right text-sm'>Chief Engineer</span>
             </p>
+
+            {/* profile settings dropdown */}
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
             <img
               className="w-10 h-10 rounded-full"

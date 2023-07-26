@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { useParams } from 'react-router-dom';
 import { SiteData } from '../../data/SiteData';
 import Header from '../../components/Header';
 import RegForm from '../../components/RegForm';
@@ -21,6 +21,8 @@ const Sites = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const navigate = useNavigate();
   const { themeSettings, setThemeSettings } = useStateContext();
+  const { id } = useParams(); // Retrieve the site ID from the URL
+  const site = SiteData.find((site) => site.id === parseInt(id));
 
   return (
     <div className="">
@@ -43,41 +45,12 @@ const Sites = () => {
             </div>
             {themeSettings && (<ChatSpace />)}
             <div className="bg-yellow-400 md:pb-5 md:m-10 md:px-5 rounded-3xl">
-            <Header title="Sites" />
-
-            {/* sites grid */}
-            <div className='grid grid-cols-3 gap-x-20 gap-y-14'>
-            {SiteData.map((site) => {
-              return (
-                <div className='relative h-[250px] w-[250px]'>
-                <div className='absolute inset-0 bg-center bg-cover shadow-2xl' style={{ backgroundImage: `url(${site.image})` }}></div>
-                <div className='absolute inset-0 flex flex-col items-center justify-center bg-gray-300 bg-opacity-75'>
-                <div className='mt-12 text-3xl text-center'>{site.name}</div>
-
-                <nav>
-                  <Link to={`/chiefEngineer/sites/${site.id}`}>
-                    <div className='flex mx-16 mt-20 text-center border-black cursor-pointer border-1'>
-                      <span className='ml-3'>More Info</span>
-                      <span>
-                      <KeyboardDoubleArrowRightIcon/>
-                      </span>
-                    </div>
-                  </Link>
-                </nav>
+            <Header title="Site Name" />
+            <div>
+                <h1>{site.name}</h1>
                 
-                </div>
-              </div>
-              );
-            })}
-
-              {/* new site creation tile */}
-                <div className='bg-gray-300 h-[250px] w-[250px] flex justify-center items-center shadow-2xl'>
-                    <RegForm/>
-                </div>
-                
-            </div> 
-            {/* end of sites grid */}
-
+            {/* ... Other site details ... */}
+            </div>
           </div>
         
           </div>

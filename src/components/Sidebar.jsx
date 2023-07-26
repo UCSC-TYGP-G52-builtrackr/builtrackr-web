@@ -25,16 +25,16 @@ const Sidebar = () => {
         <>
           <div className="flex items-center justify-between">
             <Link to="/" onClick={handleCloseSideBar} className="flex items-center gap-3 mt-4 ml-3 text-xl font-extrabold tracking-tight text-white dark:text-white">
-              <img src='./bt.png' className='w-10 h-10'/> <span>builTrackr</span>
+              <img src='/bt.png' className='w-10 h-10'/> <span>builTrackr</span>
             </Link>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setActiveMenu(!activeMenu)}
                 style={{ color: 'yellow-400' }}
                 className="block p-3 mt-4 text-xl rounded-full hover:bg-light-gray md:hidden"
               >
                 <MdOutlineCancel />
-              </button>
+              </button> */}
           </div>
           <div className="mt-16 ">
             {links.map((item) => (
@@ -65,6 +65,7 @@ const Sidebar = () => {
               </div>
             ))}
 
+            {/* logout */}
             <div className="flex items-center gap-5 pl-20 pt-3 pb-2.5 rounded-l-lg text-md custom-mt-percentage text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
           </div>
         </>
