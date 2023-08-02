@@ -487,11 +487,11 @@ export const links = [
     links: [
       
       {
-        name: 'sites',
+        name: 'sitemanager',
         icon: <RiContactsLine />,
       },
       {
-        name: 'tasks',
+        name: 'document',
         icon: <RiContactsLine />,
       },
       {
