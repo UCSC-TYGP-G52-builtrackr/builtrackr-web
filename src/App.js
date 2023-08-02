@@ -11,6 +11,7 @@ import SMDocuments from './pages/SiteManager/Documents';
 import ForgotPassword from './pages/Login/Forgotpassword'
 import ResetPassword from './pages/Login/ResetPassword'
 import Task from './pages/SiteManager/Task'
+import Analytics from './pages/SiteManager/Analytics'
 import Home from './pages/index'
 import { ChakraProvider } from '@chakra-ui/react'
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
@@ -37,6 +38,7 @@ function App() {
         <Route path="/sitemanager/supervisor" element ={<SMSupervisor/>} />
         <Route path="/sitemanager/documents" element ={<SMDocuments/>} />
         <Route path="/paymentplan" element ={<PaymentPlan/>} />
+        <Route path='/sitemanager/analytics' element ={<Analytics/>} />
         <Route path="*" element={<Home />} />
 
       </Routes>

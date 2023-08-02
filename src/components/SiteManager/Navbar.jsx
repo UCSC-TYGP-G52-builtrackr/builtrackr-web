@@ -59,9 +59,9 @@ const Navbar = () => {
           >
             <p>
               <div><span className="ml-1 text-[16px] font-bold text-black">
-                Michael Scott
+                Gineth Karunanayake
               </span></div>
-              <span className='float-right text-sm'>Chief Engineer</span>
+              <span className='float-right text-sm'>Site Manager</span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
             <img
