@@ -20,6 +20,8 @@ module.exports = {
       '5xl': '3.052rem',
     }
   },
-  plugins: [],
+  plugins: [
+    
+  ],
 }
 
