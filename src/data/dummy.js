@@ -506,6 +506,42 @@ export const links = [
     ],
   },
   
+  
+];
+
+
+export const Links = [
+  {
+    title: 'Dashboard',
+    links: [
+      
+    ],
+  },
+
+  {
+    title: 'Pages',
+    links: [
+      
+      {
+        name: 'Equipments',
+        icon: <Clipboard />,
+      },
+      {
+        name: 'Raw Materials',
+        icon: <Book />,
+      },
+      {
+        name: 'Reports',
+        icon: <BarChart />,
+      },
+      {
+        name: 'Notifications',
+        icon: <Bell />,
+      },
+    ],
+  },
+  
+  
 ];
 
 export const cartData = [

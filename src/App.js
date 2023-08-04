@@ -9,6 +9,10 @@ import './App.css';
 import { Board } from './pages/KanbanBoard/Board';
 import { useStateContext } from './contexts/ContextProvider';
 import {Drop} from './components/DropDown/Drop';
+import { Test } from './components/Comment/test';
+import { DashboardW } from './pages/Warehouse/DashboardW';
+import ItemList from './pages/Warehouse/ItemList';
+
 
 function App() {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, themeSettings, setThemeSettings } = useStateContext();
@@ -49,18 +53,15 @@ function App() {
                 <Route path  = "/RegisterTwo" element = {<RegisterTwo /> } />
                 <Route path  = "/Login" element = {<Login /> } />
                 <Route path  = "/KanbanBoard" element = {<Board /> } />
-                {/* <Route path="/ecommerce" element={(<Ecommerce />)} /> */}
 
                 <Route path="/dropdown" element={(<Drop />)} />
-
+                <Route path="/test" element={(<Test />)} />
                 {/* pages  */}
                 <Route path="/chiefEngineer/sites" element={<Sites />} />
                 <Route path="/chiefEngineer/tasks" element={<Sites />} />
+                <Route path= "/Equipments" element={<DashboardW />} />
+                <Route path= "Equipments/List" element={<ItemList/>} />
 
-                {/* <Route path="/orders" element={<Orders />} />
-                <Route path="/employees" element={<Employees />} />
-                <Route path="/customers" element={<Customers />} /> */}
-              
               </Routes>
 
             {/* <Footer /> */}

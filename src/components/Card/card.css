@@ -90,3 +90,13 @@
     width: 130%;
    
 }
+
+button{
+    margin-top: 20px;
+    background-color:#FFCC00;
+    border-radius: 8px;
+    box-shadow: 4px 4px 62px rgba(77, 71, 195, 0.40);
+    font-weight: bold;
+    width: fit-content;
+    padding: 10px;
+  }

@@ -4,10 +4,10 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { BsChatLeft } from 'react-icons/bs';
 import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-import avatar from '../data/avatar.jpg';
-import Notification from './Notification';
-import UserProfile from './UserProfile';
-import { useStateContext } from '../contexts/ContextProvider';
+import avatar from '../../data/avatar.jpg';
+import Notification from '../../components/Notification';
+import UserProfile from '../../components/UserProfile';
+import { useStateContext } from '../../contexts/ContextProvider';
 
  const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
     <button
@@ -61,7 +61,7 @@ const Navbar = () => {
               <div><span className="ml-1 text-[16px] font-bold text-black">
                 Govindani Sahasrika
               </span></div>
-              <span className='float-right text-sm'>Site Supervisor</span>
+              <span className='float-right text-sm'>Warehouse Manager</span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
             <img

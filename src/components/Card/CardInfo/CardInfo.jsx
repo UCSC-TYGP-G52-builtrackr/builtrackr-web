@@ -34,7 +34,7 @@ export const CardInfo = (props) => {
     labors:[],
     equipments:[],
   });
-  const [feedback, setFeedback] = useState("");
+  // const [feedback, setFeedback] = useState("");
 
   const updateTitle = (value) => {
     setValues({ ...values, title: value });

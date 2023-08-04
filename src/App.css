@@ -1,3 +1,9 @@
+@media (min-width: 768px){
+  .md\:ml-10 {
+      margin-left: 6.5rem;
+  }
+  }
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Roboto:wght@100;300;400&family=Source+Sans+3:wght@300;400;600&display=swap');
 
 @tailwind base;
@@ -7,6 +13,11 @@
 /* .App {
   text-align: center;
 } */
+@media (min-width: 768px){
+.md\:ml-10 {
+    margin-left: 6.5rem;
+}
+}
 
 .App-logo {
   height: 40vmin;
