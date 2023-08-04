@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { SiteData } from '../../data/SiteData';
 import Header from '../../components/Header';
+import Dropdown from '../../components/Dropdown';
 import RegForm from '../../components/RegForm';
 
 // dashboard common components
@@ -42,8 +43,11 @@ const Sites = () => {
               <Navbar />
             </div>
             {themeSettings && (<ChatSpace />)}
-            <div className="bg-yellow-400 md:pb-5 md:m-10 md:px-5 rounded-3xl">
-            <Header title="Sites" />
+            <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
+              <div className="flex mb-8">
+                <Header title="Sites" category="gdfcgf"/>
+                <Dropdown/>
+              </div>
 
             {/* sites grid */}
             <div className='grid grid-cols-3 gap-x-20 gap-y-14'>

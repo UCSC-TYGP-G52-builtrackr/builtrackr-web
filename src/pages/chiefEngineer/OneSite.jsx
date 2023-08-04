@@ -2,20 +2,23 @@ import React from 'react';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useParams } from 'react-router-dom';
 import { SiteData } from '../../data/SiteData';
-import Header from '../../components/Header';
+import { SiteManagers } from '../../data/SiteManagers';
 import RegForm from '../../components/RegForm';
+import ProgressBar from '../../components/ProgressBar';
 
 // dashboard common components
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar';
 import ChatSpace from '../../components/ChatSpace';
+import Header from '../../components/Header';
 import { BsChatDots } from 'react-icons/bs';
 
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../App.css';
+import PopoverCE from '../../components/PopoverCE';
 
-const Sites = () => {
+const OneSite = () => {
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
   const editing = { allowDeleting: true, allowEditing: true };
@@ -23,6 +26,12 @@ const Sites = () => {
   const { themeSettings, setThemeSettings } = useStateContext();
   const { id } = useParams(); // Retrieve the site ID from the URL
   const site = SiteData.find((site) => site.id === parseInt(id));
+
+  const stats = [
+    { id: 1, name: 'Laborers At Work', value: '11' },
+    { id: 2, name: 'Tasks To Complete', value: '5' },
+    { id: 3, name: 'Days Spent', value: '16' },
+  ]
 
   return (
     <div className="">
@@ -44,19 +53,49 @@ const Sites = () => {
               <Navbar />
             </div>
             {themeSettings && (<ChatSpace />)}
-            <div className="bg-yellow-400 md:pb-5 md:m-10 md:px-5 rounded-3xl">
-            <Header title="Site Name" />
-            <div>
-                <h1>{site.name}</h1>
-                
-            {/* ... Other site details ... */}
-            </div>
+
+            {/* inside page content */}
+            <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
+              
+              {/* site name and type */}
+              <div className='mb-5'>
+              <Header title={`${site.name}`} />
+              <p className="text-lg text-gray-600">{site.type}</p>
+              </div>
+              <ProgressBar/>
+
+              {/* statistics */}
+              <div className="px-6 mx-auto mt-6 max-w-7xl lg:px-8">
+                <dl className="grid grid-cols-1 text-center gap-x-8 gap-y-16 lg:grid-cols-3">
+                  {stats.map((stat) => (
+                    <div key={stat.id} className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
+                      <dt className="text-base leading-7 text-gray-600">{stat.name}</dt>
+                      <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                        {stat.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              
+              <div className="flex min-w-0 mt-8 gap-x-4">
+                <p className="mt-2 text-lg font-semibold leading-10 text-gray-900">Site Manager</p>
+                <PopoverCE/>
+              </div>
+
+              <div className='mt-5'>
+                <p className="mt-2 text-lg font-semibold leading-10 text-gray-900">Site Description</p>
+                <p>{site.description}</p>
+              </div>
+            
+              
+
           </div>
         
-          </div>
+      </div>
     </div>
     
   );
 };
 
-export default Sites;
+export default OneSite;
