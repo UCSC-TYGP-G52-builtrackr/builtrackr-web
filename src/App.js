@@ -13,6 +13,8 @@ import OneSite from './pages/chiefEngineer/OneSite';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
+import SiteManagers from './pages/chiefEngineer/SiteManagers';
+import Analytics from './pages/chiefEngineer/Analytics';
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
         <div>
           <Routes>
             <Route path="/chiefEngineer/sites" element={(<Sites />)} />
+            <Route path="/chiefEngineer/site managers" element={(<SiteManagers />)} />
+            <Route path="/chiefEngineer/analytics" element={(<Analytics />)} />
             <Route path="/chiefEngineer/sites/:id" element={(<OneSite />)} />
             {/* <Route path="/chiefEngineer/siteInfo/:id" element={(<OneSite />)} /> */}
           </Routes>

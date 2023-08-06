@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../App.css';
 import PopoverCE from '../../components/PopoverCE';
+import SidebarCE from '../../components/SidebarCE';
 
 const OneSite = () => {
   const selectionsettings = { persistSelection: true };
@@ -46,7 +47,7 @@ const OneSite = () => {
               </button>
           </div>
       <div className="fixed bg-white w-72 sidebar dark:bg-secondary-dark-bg ">
-        <Sidebar />
+        <SidebarCE />
       </div>
       <div className='ml-72'>
             <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">

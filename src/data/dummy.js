@@ -1,5 +1,9 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
+import PeopleIcon from '@mui/icons-material/People';
+import ArticleIcon from '@mui/icons-material/Article';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
@@ -497,6 +501,72 @@ export const links = [
       {
         name: 'analytics',
         icon: <RiContactsLine />,
+      },
+    ],
+  },
+  
+];
+
+export const linksCE = [
+  {
+    title: 'Dashboard',
+    links: [
+      
+    ],
+  },
+
+  {
+    title: 'Pages',
+    links: [
+      
+      {
+        name: 'sites',
+        icon: <LocationCityIcon />,
+      },
+      {
+        name: 'site managers',
+        icon: <PeopleIcon />,
+      },
+      {
+        name: 'documents',
+        icon: <ArticleIcon />,
+      },
+      {
+        name: 'analytics',
+        icon: <AutoGraphIcon />,
+      },
+    ],
+  },
+  
+];
+
+export const linksHR = [
+  {
+    title: 'Dashboard',
+    links: [
+      
+    ],
+  },
+
+  {
+    title: 'Pages',
+    links: [
+      
+      {
+        name: 'Roles',
+        icon: <LocationCityIcon />,
+      },
+      {
+        name: 'HR Link 1',
+        icon: <PeopleIcon />,
+      },
+      {
+        name: 'HR Link 2',
+        icon: <ArticleIcon />,
+      },
+      {
+        name: 'HR Link 3',
+        icon: <AutoGraphIcon />,
       },
     ],
   },

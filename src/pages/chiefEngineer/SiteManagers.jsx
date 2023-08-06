@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { SiteData } from '../../data/SiteData';
+import { SiteManagers as SMs }  from '../../data/SiteManagers';
 import Header from '../../components/Header';
 import Dropdown from '../../components/Dropdown';
 import RegForm from '../../components/RegForm';
@@ -17,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../App.css';
 
-const Sites = () => {
+const SiteManagers = () => {
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
   const editing = { allowDeleting: true, allowEditing: true };
@@ -46,41 +47,35 @@ const Sites = () => {
             {themeSettings && (<ChatSpace />)}
             <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
               <div className="flex mb-8">
-                <Header title="Sites" category="gdfcgf"/>
-                <Dropdown/>
+                <Header title="Site Managers" category="gdfcgf"/>
               </div>
 
-            {/* sites grid */}
-            <div className='grid grid-cols-3 gap-x-20 gap-y-14'>
-            {SiteData.map((site) => {
-              return (
-                <div className='relative h-[250px] w-[250px]'>
-                <div className='absolute inset-0 bg-center bg-cover shadow-2xl' style={{ backgroundImage: `url(${site.image})` }}></div>
-                <div className='absolute inset-0 flex flex-col items-center justify-center bg-gray-300 bg-opacity-75'>
-                <div className='mt-12 text-3xl text-center'>{site.name}</div>
-
-                <nav>
-                  <Link to={`/chiefEngineer/sites/${site.id}`}>
-                    <div className='flex mx-16 mt-20 text-center border-black cursor-pointer border-1'>
-                      <span className='ml-3'>More Info</span>
-                      <span>
-                      <KeyboardDoubleArrowRightIcon/>
-                      </span>
+            {/* site managers grid */}
+            <div className='grid grid-cols-1 mt-6 gap-x-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
+                {SMs.map((sm) => (
+                  <div key={sm.id} className="relative flex flex-col items-center justify-center group">
+                    <div className="overflow-hidden bg-gray-200 rounded-full w-36 h-36 lg:aspect-none group-hover:opacity-75">
+                      <img
+                        src={sm.imageUrl}
+                        alt={sm.name}
+                        className="object-cover object-center rounded-full w-36 h-36 lg:h-36 lg:w-full"
+                      />
                     </div>
-                  </Link>
-                </nav>
-                
-                </div>
-              </div>
-              );
-            })}
-
-              {/* new site creation tile */}
-                <div className='bg-gray-300 h-[250px] w-[250px] flex justify-center items-center shadow-2xl'>
-                    <RegForm/>
-                </div>
-                
-            </div> 
+                    <div className="flex items-center justify-center mt-4">
+                      <div className="text-center">
+                        <p className="mt-1 text-sm text-gray-500">Status</p>
+                        <h3 className="text-sm text-gray-700">
+                          <a href={'#'}>
+                            <span aria-hidden="true" className="absolute inset-0" />
+                            {sm.name}
+                          </a>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+ 
             {/* end of sites grid */}
 
           </div>
@@ -91,4 +86,4 @@ const Sites = () => {
   );
 };
 
-export default Sites;
+export default SiteManagers;
