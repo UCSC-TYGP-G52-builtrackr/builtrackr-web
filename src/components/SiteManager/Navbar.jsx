@@ -48,7 +48,7 @@ const Navbar = () => {
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
   return (
-    <div className="relative flex justify-end p-2 md:ml-6 md:mr-6">
+    <div className="absolute top-0 left-0 w-screen flex justify-end px-4">
 
       {/* <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} /> */}
       <div className="flex">
