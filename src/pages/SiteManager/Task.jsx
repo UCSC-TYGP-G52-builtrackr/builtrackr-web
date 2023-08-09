@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import TaskListCard from "../../components/SiteManager/TaskListComponenet";
 import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
-import { ToastContainer,toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Task = () => {
   const [taskList, setTaskList] = useState([]);

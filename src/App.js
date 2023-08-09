@@ -1,10 +1,15 @@
+
+import AdminHome from "./pages/CompanyAdmin/AdminHome";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ChatSpace from "./components/CompanyAdmin/ChatSpace";
+import { useStateContext } from "./contexts/ContextProvider";
+import ProtectedRoutes from "./ProtectedRoutes";
+import Test from "./pages/CompanyAdmin/Test";
 import "./App.css";
-// import './CSS/dashboard.css'
 import { Login } from "./pages/Login/Login";
 import { Register } from "./pages/SignUp/Register";
 import { RegisterTwo } from "./pages/SignUp/RegisterTwo";
-// import {Login} from './Login';
-import { Routes, Route } from "react-router-dom";
 import SMDashboard from "./pages/SiteManager/Dashboard";
 import SMSupervisor from "./pages/SiteManager/Supervisor";
 import SMDocuments from "./pages/SiteManager/Documents";
@@ -19,11 +24,33 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import PaymentPlan from "./pages/SignUp/PaymentPlan";
 
+
 function App() {
+  const {
+    setCurrentColor,
+    setCurrentMode,
+    currentMode,
+    activeMenu,
+    themeSettings,
+    setThemeSettings,
+  } = useStateContext();
+
+  useEffect(() => {
+    const currentThemeColor = localStorage.getItem("colorMode");
+    const currentThemeMode = localStorage.getItem("themeMode");
+    if (currentThemeColor && currentThemeMode) {
+      setCurrentColor(currentThemeColor);
+      setCurrentMode(currentThemeMode);
+    }
+  }, []);
+
   return (
     <div className="App">
       <ChakraProvider>
         <Routes>
+       <Route element={<ProtectedRoutes type={1} />}>
+            <Route path="/admin" element={<AdminHome/>}/>
+          </Route>
           <Route path="/Register" element={<Register />} />
           <Route path="/RegisterTwo" element={<RegisterTwo />} />
           <Route path="/Login" element={<Login />} />
@@ -40,6 +67,7 @@ function App() {
           <Route path="*" element={<Home />} />
         </Routes>
       </ChakraProvider>
+
     </div>
   );
 }
