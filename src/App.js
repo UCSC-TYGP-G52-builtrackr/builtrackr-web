@@ -28,8 +28,8 @@ function App() {
           <Route path="/RegisterTwo" element={<RegisterTwo />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/sitemanager" element={<SMDashboard />} />
-          <Route path="/viewtask" element={<Task />} />
+          <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
+          <Route path="/sitemanager/viewtask" element={<Task />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />

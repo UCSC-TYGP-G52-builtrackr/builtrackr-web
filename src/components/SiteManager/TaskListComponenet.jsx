@@ -22,7 +22,6 @@ import { useState } from "react";
 import axios from "axios";
 import React from "react";
 
-
 const TaskListCard = ({ taskList }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +61,6 @@ const TaskListCard = ({ taskList }) => {
       </Text>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
-     
           style={{
             backgroundColor: "#ffcc00",
             border: "none",
@@ -74,14 +72,13 @@ const TaskListCard = ({ taskList }) => {
             cursor: "pointer",
             transition: "background-color 0.3s, box-shadow 0.3s",
             marginBottom: "20px",
-            
-          } }  
+          }}
           onClick={handleDashboardClick}
         >
           Add Task
         </Button>
       </div>
-      <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={4}>
+      <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={4} style={{width:"80%",marginLeft:"18%"}}>
         {taskList.map((task) => (
           <Box key={task.task_id} borderWidth="1px" borderRadius="md" p={4}>
             <Table variant="striped" mt={4}>
