@@ -1,28 +1,109 @@
-import React from 'react';
-import axios from "axios";
-import { useState,useEffect } from 'react';
+import React, { useCallback } from 'react';
+import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image } from '@chakra-ui/react';
+import { useDropzone } from 'react-dropzone';
+import { useEffect, useState } from 'react';
+import { pdfjs, Document, Page } from 'react-pdf';
+import Navbar from '../../components/SiteManager/Navbar';
+import Sidebar from '../../components/SiteManager/Sidebar';
+import axios from 'axios';
+
+const FileUpload = () => {
+    const [pdfUrls, setPdfUrls] = useState([]);
+    const viewPdf = (pdfUrl) => {
+      window.open(pdfUrl, '_blank'); // Open the PDF URL in a new tab or window
+    };
+  
+    useEffect(() => {
+
+      const fetchPdfUrls = async () => {
+        try {
+          const response = await axios.get('http://localhost:4000/api/upload/getpdfs');
+          console.log(response);
+          setPdfUrls(response.data);
+        } catch (error) {
+          console.error('Error fetching PDF URLs:', error);
+        }
+      };
+  
+      fetchPdfUrls();
+    }, []);
+   
+  const onDrop = useCallback(async (acceptedFiles) => {
+    try {
+      const formData = new FormData();
+      formData.append('document', acceptedFiles[0]);
+
+      await axios.post('http://localhost:4000/api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('File uploaded successfully.');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
 
 
-const Documents=()=>{
+  }, []);
 
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  return (
+    <>
+    <Navbar />
+    <div className='flex'>
+    <Sidebar/>
+    <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]">
+    <div className='ml-[300px] flex items-center justify-center'>
+    <div className='flex flex-col'>
+    <Box {...getRootProps()} cursor="pointer" className='max-w-lg '>
+      <input {...getInputProps()} />
+
+      <VStack p={10} spacing={4} borderWidth={8} borderRadius="md" borderStyle="dashed">
+        {isDragActive ? (
+          <Text>Drop the file here ...</Text>
+        ) : (
+          <Text>Drag 'n' drop a PDF file here, or click to select one</Text>
+        )}
+
+        <Button colorScheme="blue" style={{ backgroundColor: '#ffcc00',border: 'none',color: 'black',padding: '10px 20px',
+        fontSize: '16px',borderRadius: '4px',boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',cursor: 'pointer',
+        transition: 'background-color 0.3s, box-shadow 0.3s',
+      }}>Select PDF</Button>
+      </VStack>
+    </Box>
+    
+    <div className="p-4">
+        <SimpleGrid columns={3} spacing={4}>
+          {pdfUrls.map((pdfUrl, index) => (
+            <Card key={index} maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+              <Center height="150px">
+                <Image src="/path/to/your/pdf-thumbnail.png" alt="PDF Thumbnail" />
+              </Center>
+              <Box p="6">
+                <Text as="h3" fontSize="xl" fontWeight="semibold" isTruncated>
+                  {pdfUrl.name}
+                </Text>
+             
+                <Button mt={4} colorScheme="blue" onClick={() => viewPdf(pdfUrl.path)}>
+                  View Document
+                </Button>
+              </Box>
+            </Card>
+          ))}
+        </SimpleGrid>
+      </div>
+    </div>
+
+    </div>
+    </div>
+    </div>
 
 
-    return(
+</>
+  );
+};
 
-<div class="flex items-center justify-center w-full">
-    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-            </svg>
-            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-        </div>
-        <input id="dropzone-file" type="file" class="hidden" />
-    </label>
-</div> 
-
-
-    );
-}
+export default FileUpload;

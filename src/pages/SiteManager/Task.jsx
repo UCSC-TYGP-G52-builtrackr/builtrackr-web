@@ -1,9 +1,16 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import TaskListCard from "../../components/SiteManager/TaskListComponenet";
+import Navbar from "../../components/SiteManager/Navbar";
+import Sidebar from "../../components/SiteManager/Sidebar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Task = () => {
   const [taskList, setTaskList] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const ViewTask = async (e = null) => {
@@ -19,30 +26,28 @@ const Task = () => {
     ViewTask();
   }, []);
 
+  const handleViewTask = (task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div>
-      <h2> Task List </h2>
-      <button>View Task</button>
-      {/* Task List */}
-      <table>
-        <thead>
-          <tr>
-            <th>Task Name</th>
-            <th>Special Information</th>
-            <th>Due Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {taskList.map((task) => (
-            <tr key={task.task_id}>
-              <td>{task.taskname}</td>
-              <td>{task.specialinformation}</td>
-              <td>{task.duedate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <Navbar />
+      <div className="flex">
+        <Sidebar />
+        <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]">
+          <div className="mt-2 ml-10 flex flex-col w-full h-full justify-start ">
+            <TaskListCard taskList={taskList} />
+          </div>
+
+          {/* Add more TaskListCard components as needed */}
+        </div>
+      </div>
+    </>
   );
 };
 
