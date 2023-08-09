@@ -4,12 +4,12 @@ import { RegisterTwo } from "./pages/SignUp/RegisterTwo";
 import AdminHome from "./pages/CompanyAdmin/AdminHome";
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ChatSpace from "./components/tmpSiteManager/ChatSpace";
-import  UserRole  from './pages/CompanyAdmin/UserRole'
-// import Sites from './pages/chiefEngineer/Sites';
 import "./App.css";
-// import { Board } from './pages/KanbanBoard/Board';
+import ChatSpace from "./components/CompanyAdmin/ChatSpace";
+
 import { useStateContext } from "./contexts/ContextProvider";
+import ProtectedRoutes from "./ProtectedRoutes";
+import Test from "./pages/CompanyAdmin/Test";
 
 function App() {
   const {
@@ -56,8 +56,15 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/RegisterTwo" element={<RegisterTwo />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/Admin" element={<AdminHome />} />
-          <Route path="/userRole" element={<UserRole />} />
+
+          {/* Routes for Company admin 
+              All routes of admin should be inside
+          */}
+          <Route element={<ProtectedRoutes type={1} />}>
+            <Route path="/admin" element={<AdminHome/>}/>
+          </Route>
+
+          <Route path="/test" element={<Test />} />
 
 
           {/* <Route path  = "/KanbanBoard" element = {<Board /> } /> */}

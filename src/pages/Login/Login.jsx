@@ -1,11 +1,10 @@
-import { Link,useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { React, useState } from "react";
 import { Validation } from "./validation";
-import { ToastContainer,toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import { alignProperty } from "@mui/material/styles/cssUtils";
-
 
 export function Login() {
   const [values, setValues] = useState({
@@ -13,47 +12,112 @@ export function Login() {
     password: "",
   });
   const navigate = useNavigate();
+  const [name, setName] = useState("Nilshan");
   const [errors, setErrors] = useState({});
   function handleInput(event) {
     const newObj = { ...values, [event.target.name]: event.target.value };
     setValues(newObj);
   }
-  
+
   async function handleValidation(event) {
     console.log(values);
     event.preventDefault();
     setErrors(Validation(values));
     console.log(errors);
-    try {
-      await axios.post('http://localhost:4000/api/user/auth', values)
-      .then(res => {
-        if(res.status === 201){
-          console.log(res.data);
-          toast.success("Login Successfull")
-          setTimeout(() => {
-            navigate('/admin')
+    const type = "Employee";
+    if (Object.keys(errors).length > 0) {
+      return;
+    } else {
+      if (type === "Employee") {
+        console.log("ok1");
+
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/loginEmployee",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+              body: JSON.stringify({
+                email: values.email,
+                password: values.password,
+              }),
+            }
+          );
+          console.log(data);
+          if (data.status === 201) {
+            const jsonData = await data.json();
+            console.log(jsonData);
+
+            localStorage.setItem("user_type", JSON.stringify(jsonData.type.toString()));
+            localStorage.setItem("name", JSON.stringify(jsonData.name));
+            localStorage.setItem("company_id", JSON.stringify(jsonData.company_id.toString()));
+            localStorage.setItem("no", JSON.stringify(jsonData.employee_id.toString()));
+
+            if (jsonData.type === 1) {
+              localStorage.setItem("home_page", JSON.stringify("Admin"));
+              setName(jsonData.name);
+              navigate("/admin", { state: { name: jsonData.name } });
+              toast.success("Login Successfull");
+            }
           }
-          , 2000);
-        }else{
-          toast.error("Login Failed")
+        } catch (err) {
+          console.error(err.message);
         }
-      })
-      // navigate('/home')
-    } catch (err) {
-      console.log(err.response.data.message); // "Request failed with status code 500"
-      toast.error(err.response.data.message)
-      
+      } else {
+        console.log("Ok2");
+        try {
+          await axios
+            .post("http://localhost:4000/api/user/auth", values)
+            .then((res) => {
+              if (res.status === 201) {
+                const adminType = 0;
+                console.log(res.data.name);
+                toast.success("Login Successfull");
+                localStorage.setItem(
+                  "user_type",
+                  JSON.stringify(adminType.toString())
+                );
+                localStorage.setItem("name", JSON.stringify(res.data.name));
+                localStorage.setItem(
+                  "company_id",
+                  JSON.stringify(res.data.id.toString())
+                );
+                localStorage.setItem("home_page", JSON.stringify("Admin"));
+
+                setTimeout(() => {
+                  navigate("/admin", { state: { name: res.data.name } });
+                }, 2000);
+              } else {
+                toast.error("Login Failed");
+              }
+            });
+          // navigate('/home')
+        } catch (err) {
+          console.log(err); // "Request failed with status code 500"
+          toast.error(err.response.data.message);
+        }
+      }
     }
   }
   return (
     <div className="grid-container">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="form_body">
         {/* left side grid image */}
-        <div className="grid_left" style ={{marginTop :"5%"}}>
+        <div className="grid_left" style={{ marginTop: "5%" }}>
           <form>
-          <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">Login To</h1>
-          <h2 class="text-4xl font-extrabold dark:text-black" style={{color :"#ffcc00", marginBottom:"5%"}}>BuilTrackr</h2>
+            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
+              Login To
+            </h1>
+            <h2
+              className="text-4xl font-extrabold dark:text-black"
+              style={{ color: "#ffcc00", marginBottom: "5%" }}
+            >
+              BuilTrackr
+            </h2>
             <span>
               If you don't have an account you can{" "}
               <Link to="/Register">
@@ -68,7 +132,12 @@ export function Login() {
         {/*right side grid form */}
         <div className="grid_right">
           <form className="register_form" onSubmit={handleValidation}>
-          <h2 class="text-4xl font-extrabold dark:text-black" style={{ marginBottom:"6%"}}>Log In</h2>
+            <h2
+              className="text-4xl font-extrabold dark:text-black"
+              style={{ marginBottom: "6%" }}
+            >
+              Log In
+            </h2>
             <div className="form-info">
               <label>User Name</label>
               <input
@@ -93,7 +162,7 @@ export function Login() {
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
-              <a href="forgotPassword" >Forgot Password?</a> <br/>
+              <a href="forgotPassword">Forgot Password?</a> <br />
               <button className="next_button" type="submit">
                 {" "}
                 Login

@@ -1,8 +1,9 @@
 import react from "react";
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Navbar from "../../components/tmpSiteManager/Navbar";
-import SideBar from "./Components/SideBar";
+import { useLocation } from "react-router-dom";
+import Navbar from "../../components/CompanyAdmin/NavBar";
+import SideBar from "../../components/CompanyAdmin/SideBar";
+import ChatSpace from "../../components/CompanyAdmin/ChatSpace";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { BsChatDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
@@ -14,6 +15,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { Snackbar, Alert } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
 
 import Modal from "@mui/material/Modal";
@@ -21,24 +24,47 @@ import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
 
 const list1 = [
-  "Create Tasks",
-  "Decline Tasks",
-  "Acept Tasks",
-  "Decline Tasks",
-  "Assign Labourars to Tasks",
-  "Review Task",
+  "Create Employee Profiles",
+  "Manage Employee Status",
+  "Manage Employee Recor",
 ];
 
 const list2 = [
-  "Create Sites",
-  "Add Site Engineers",
-  "Add documents",
-  "Review Tasks",
-  "View Inventory Request",
+  "Manage Categories",
+  "Manage Sub-Categories",
+  "Mange Items",
+  "Track the Quantity and Availability of Inventory",
+];
+const list3 = [
+  " Create Construction Sites",
+  "Assign Property Owners",
+  "Assign Site Manager and Tasks",
+  "View Progress and Analytics",
+  "Upload Design Documents",
+];
+const list4 = [
+  "Select a Supervisor ",
+  "Assign Tasks to a Supervisor",
+  "Add Guidelines Documents",
+  "View Progress and Analytics",
+  "Review Completed Tasks",
+  "Upload Photos for Clients",
+  "Review Declined Tasks",
+  "Manage Inventory Records",
+  "Generate Customized Reports",
+];
+const list5 = [
+  "Assign Labourers",
+  "View Progress and Analytics",
+  "Unassign Labourers",
+  "Generate Customized Reports",
+  "Decline Task",
+  "View and Filter Tasks by Status",
+  "Update Completed Task Status",
 ];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const nicRegex1 = /^[1]+[0-9]{8}[vVxX]$/;
+const nicRegex1 = /^[2-9]+[0-9]{8}[vVxX]$/;
 const nicRegex2 = /^[1-2]+[0-9]{11}$/;
 const phoneRegex = /^[0]+[0-9]{9}$/;
 
@@ -64,37 +90,16 @@ const AdminHome = () => {
     setThemeSettings,
   } = useStateContext();
 
+  const location = useLocation();
+  const { name } = location.state || "";
+
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
   const [emplyeeAddForm, setEmployeeAddForm] = useState(false);
 
   const handleOpenEmployeeForm = () => setEmployeeAddForm(true);
-  const handleCloseEmployeeForm = () => {
-    setEmployeeAddForm(false);
-    setFName("");
-    setFNameErr("");
-    setLName("");
-    setLNameErr("");
-    setNic("");
-    setNicErr("");
-    setPhone("");
-    setPhoneErr("");
-    setId("");
-    setIdErr("");
-    setEmail("");
-    setEmailErr("");
-    setAddress("");
-    setAddressErr("");
-    setPassword("");
-    setPasswordErr("");
-    SetConfirmPassword("");
-    SetConfirmPasswordErr("");
-    setDob("");
-    setDobErr("");
-    setRegisterDate("");
-    setRegisterDateErr("");
-  };
+
   const idToSend = 1;
 
   // User role add
@@ -105,9 +110,11 @@ const AdminHome = () => {
   const [roleNameErr, setRoleNameErr] = useState("");
 
   const [selectedList, setSelectedList] = useState(0);
+  const [selctedListErr, setSelectedListErr] = useState("");
 
   const selectPrivilegeList = (no) => {
     setSelectedList(no);
+    setSelectedListErr("");
   };
 
   // Empolyee add from
@@ -141,8 +148,8 @@ const AdminHome = () => {
   const [password, setPassword] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
 
-  const [confirmPassword, SetConfirmPassword] = useState("");
-  const [confirmPasswordErr, SetConfirmPasswordErr] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
 
   const [confirmationModal1, setConfirmationModal1] = useState(false);
 
@@ -160,12 +167,39 @@ const AdminHome = () => {
   const closeConfirmationModal2 = () => {
     setConfirmationModal2(false);
   };
-
-  const [alertBox, setAlertBox] = useState(false);
-
-  const closeAlertBox = () => {
-    setAlertBox(false);
+  const handleCloseEmployeeForm = () => {
+    setEmployeeAddForm(false);
+    setFName("");
+    setFNameErr("");
+    setLName("");
+    setLNameErr("");
+    setNic("");
+    setNicErr("");
+    setPhone("");
+    setPhoneErr("");
+    setId("");
+    setIdErr("");
+    setEmail("");
+    setEmailErr("");
+    setAddress("");
+    setAddressErr("");
+    setPassword("");
+    setPasswordErr("");
+    setConfirmPassword("");
+    setConfirmPasswordErr("");
+    setDob("");
+    setDobErr("");
+    setRegisterDate("");
+    setRegisterDateErr("");
   };
+
+  const [selectedRole, setSelectedRole] = useState(0);
+
+  const displayRole = (type) => {
+    setSelectedRole(type);
+  };
+
+  const [selectedEmployee, setSelectedEmployee] = useState({});
 
   const style = {
     position: "absolute",
@@ -179,7 +213,7 @@ const AdminHome = () => {
     borderRadius: "10px",
     p: 4,
   };
-
+  const company_id = 1;
   const closeRoleAddForm = () => {
     setDisplayForm(false);
     setSelectedList(0);
@@ -187,6 +221,7 @@ const AdminHome = () => {
     setRoleNameErr("");
     setRoleImage("");
     setRoleImageErr("");
+    setSelectedListErr("");
   };
 
   useEffect(() => {
@@ -199,11 +234,12 @@ const AdminHome = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id: idToSend }),
+            body: JSON.stringify({ id: company_id }),
           }
         );
         if (data.status === 200) {
           const jsonData = await data.json();
+          console.log(jsonData);
           setUserRoles(jsonData);
         } else {
           console.log(data.status);
@@ -215,48 +251,84 @@ const AdminHome = () => {
     viewUserRoles();
   }, [displayForm]);
 
+  useEffect(() => {
+    const viewEmployees = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/employee/getEmployees",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: company_id, type: selectedRole }),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          console.log(jsonData);
+          setSelectedEmployee(jsonData);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    viewEmployees();
+  }, [selectedRole]);
+console.log(selectedEmployee)
   const handelSubmitRoleAdd = async (e) => {
     e.preventDefault();
+    let hasErrors = false;
     setRoleNameErr("");
 
     if (roleName === "") {
-      setConfirmationModal2(false);
       setRoleNameErr("Enter User Role Name");
+      hasErrors = true;
+    }
+    if (selectedList === 0) {
+      setSelectedListErr("Please select a privilege list");
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      setConfirmationModal2(false);
       return;
-    }
-    try {
-      const data = await fetch("http://localhost:4000/api/user/addUserRole", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: roleName,
-          roles: selectedPrivileges,
-        }),
-      });
+    } else {
+      console.log(roleNameErr);
+      try {
+        const data = await fetch("http://localhost:4000/api/user/addUserRole", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: roleName,
+            type: selectedList,
+            company_id: 1,
+          }),
+        });
 
-      if (data.status === 200) {
-        const jsonData = await data.json();
-        console.log(jsonData);
-      } else {
-        console.log(data.status);
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          console.log(jsonData);
+          toast.success(`${roleName} user role created suuessfuly`);
+        }
+      } catch (err) {
+        console.log("3");
+        console.error(err.message);
       }
-    } catch (err) {
-      console.log("3");
-      console.error(err.message);
+      setDisplayForm(false);
+      setSelectedPrivileges([]);
+      setRoleName("");
+      setRoleImage("");
+      setConfirmationModal2(false);
+      setRoleNameErr("");
+      setRoleImageErr("");
     }
-    setDisplayForm(false);
-    setSelectedPrivileges([]);
-    setRoleName("");
-    setRoleImage("");
-    setConfirmationModal2(false);
-    setRoleNameErr("");
-    setRoleImageErr("");
   };
 
   const handelSubmitEmployyeAdd = async (e) => {
     e.preventDefault();
+    let hasErrors = false;
 
     setFNameErr("");
     setLNameErr("");
@@ -266,64 +338,60 @@ const AdminHome = () => {
     setPhoneErr("");
     setAddressErr("");
     setPasswordErr("");
-    SetConfirmPasswordErr("");
+    setConfirmPasswordErr("");
 
-    if (fName === "") {
+    if (fName.length === 0) {
       setFNameErr("Enter Employee First Name");
+      hasErrors = true;
     }
-    if (lName === "") {
+    if (lName.length === 0) {
       setLNameErr("Enter Employee last Name");
+      hasErrors = true;
     }
-    if (email === "") {
+    if (email.length === 0) {
       setEmailErr("Enter email");
+      hasErrors = true;
     } else if (!emailRegex.test(email)) {
       setEmailErr("Invalid email type");
+      hasErrors = true;
     }
-    if (nic === "") {
+    if (nic.length === 0) {
       setNicErr("Enter NIC no");
+      hasErrors = true;
     } else if (nic.length !== 10 && nic.length !== 12) {
       setNicErr("Invalid Nic no1");
+      hasErrors = true;
     } else if (!nicRegex1.test(nic) && !nicRegex2.test(nic)) {
       setNicErr("Invalid Nic no2");
+      hasErrors = true;
     }
-    if (id === "") {
+    if (id.length === 0) {
       setIdErr("Enter employee Id");
+      hasErrors = true;
     }
-    if (phone === "") {
+    if (phone.length === 0) {
       setPhoneErr("Enter mobile number");
+      hasErrors = true;
     } else if (!phoneRegex.test(phone)) {
-      setPhoneErr("Invalis mobile number");
+      setPhoneErr("Invalid mobile number");
+      hasErrors = true;
     }
-    if (address === "") {
+    if (address.length === 0) {
       setAddressErr("Enter address");
+      hasErrors = true;
     }
-    if (password === "") {
+    if (password.length === 0) {
       setPasswordErr("Enter password");
+      hasErrors = true;
     }
-    if (confirmPassword === "") {
-      SetConfirmPasswordErr("Confirm password");
+    if (confirmPassword.length === 0) {
+      setConfirmPasswordErr("Confirm password");
+      hasErrors = true;
     } else if (password !== confirmPassword) {
-      SetConfirmPasswordErr("Passowrds not matched");
+      setConfirmPasswordErr("Passowrds not matched");
     }
-    console.log(lNameErr);
-    console.log(fName);
 
-    if (
-      fNameErr !== "" ||
-      lNameErr !== "" ||
-      nicErr !== "" ||
-      phoneErr !== "" ||
-      idErr !== "" ||
-      emailErr !== "" ||
-      addressErr !== "" ||
-      passwordErr !== "" ||
-      confirmPasswordErr !== ""
-    ) {
-      console.log("Hiiiiiii");
-      setConfirmationModal1(false);
-      return;
-    }
-    else {
+    if (!hasErrors) {
       const formData = {
         fName: fName,
         lName: lName,
@@ -338,7 +406,9 @@ const AdminHome = () => {
         company_id: 1,
         type: 1,
       };
-      console.log("HEellllooo");
+      console.log(lNameErr);
+      console.log(fNameErr);
+      console.log(nicErr);
       try {
         const data = await fetch(
           "http://localhost:4000/api/employee/registerEmployee",
@@ -354,14 +424,19 @@ const AdminHome = () => {
         if (data.status === 200) {
           const jsonData = await data.json();
           console.log(jsonData);
-          setAlertBox(true);
+          toast.success("HR Manager registed successfuly");
         }
       } catch (err) {
         console.error(err.message);
       }
-      setConfirmationModal1(false);
+      closeConfirmationModal1(false);
       handleCloseEmployeeForm();
+    } else {
+      console.log("Hiiiiiii");
+      setConfirmationModal1(false);
+      return;
     }
+    console.log(selectedRole);
   };
 
   return (
@@ -376,37 +451,94 @@ const AdminHome = () => {
           <BsChatDots />
         </button>
       </div>
-      {activeMenu ? (
-        <div className="fixed bg-white w-72 sidebar dark:bg-secondary-dark-bg ">
-          <SideBar />
-        </div>
-      ) : (
-        <div className="w-0 dark:bg-secondary-dark-bg">
-          <SideBar />
-        </div>
-      )}
-      <div
-        className="fixed w:100%  bg-main-bg dark:bg-main-dark-bg navbar "
-        style={{ position: "fixed", right: "0" }}
-      >
-        <Navbar />
+      <div className="fixed bg-white w-72 sidebar dark:bg-secondary-dark-bg ">
+        <SideBar />
       </div>
-      <div
-        className={
-          activeMenu
-            ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen  w-full  "
-            : "bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 "
-        }
-      >
+      <div className="ml-72">
+        <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
+          <Navbar name={name} />
+        </div>
+        {themeSettings && <ChatSpace />}
         <div
           className="rest"
           style={{
-            paddingTop: "100Px",
-            marginLeft: "300Px",
-            width: "calc(100% - 300px)",
+            paddingTop: "80Px",
           }}
         >
-          {!displayForm && (
+          <ToastContainer />
+          {selectedRole !== 0 && (
+            <div
+              className="main"
+              style={{
+                height: "fit-content",
+              }}
+            >
+              <div className="role-privileges">
+                {selectedRole === 1 && <h1>HR Manager's all privileges</h1>}
+                {selectedRole === 2 && (
+                  <h1>Inventory Manager's all privileges</h1>
+                )}
+                {selectedRole === 3 && <h1>Chief Engineer's all privileges</h1>}
+                {selectedRole === 4 && <h1>Site Manager's all privileges</h1>}
+                {selectedRole === 5 && (
+                  <h1>Site Supervisors's all privileges</h1>
+                )}
+
+                <div className="privileges-box">
+                  {selectedRole === 1 &&
+                    list1.map((element, i) => (
+                      <OnePrivilege key={i} privilege={element} />
+                    ))}
+                  {selectedRole === 2 &&
+                    list2.map((element, i) => (
+                      <OnePrivilege key={i} privilege={element} />
+                    ))}
+                  {selectedRole === 3 &&
+                    list3.map((element, i) => (
+                      <OnePrivilege key={i} privilege={element} />
+                    ))}
+                  {selectedRole === 4 &&
+                    list4.map((element, i) => (
+                      <OnePrivilege key={i} privilege={element} />
+                    ))}
+                  {selectedRole === 5 &&
+                    list5.map((element, i) => (
+                      <OnePrivilege key={i} privilege={element} />
+                    ))}
+                </div>
+              </div>
+
+              {selectedRole !== 0 && (
+                <>
+                  <div>
+                    <table className="employee-table">
+                      <thead>
+                        <tr>
+                          <td>Name</td>
+                          <td>Employee No</td>
+                          <td>Register date</td>
+                          <td>Action</td>
+                          <td>Status</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedEmployee.map((element) => (
+                          <tr>
+                            <td>{element.f_name}</td>
+                            <td>{element.id}</td>
+                            <td>{element.register_date}</td>
+                            <td>Edit Privileges</td>
+                            <td>Working</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+          {selectedRole === 0 && (
             <div className="button">
               <button
                 className="add-button"
@@ -416,11 +548,16 @@ const AdminHome = () => {
               </button>
             </div>
           )}
-          {!displayForm && (
+          {selectedRole === 0 && (
             <div className="user-roles">
               <div className="hr-role">
                 <UserRole
-                  role={{ photo_path: "HR.jpeg", role_name: "HR Manager" }}
+                  role={{
+                    photo_path: "HR.jpeg",
+                    role_name: "HR Manager",
+                    type: 1,
+                  }}
+                  selectRole={displayRole}
                 />
                 <span className="link " onClick={handleOpenEmployeeForm}>
                   Click here to add an employee
@@ -428,7 +565,11 @@ const AdminHome = () => {
               </div>
 
               {userRoles.map((element, i) => (
-                <UserRole role={element} key={element.role_id} />
+                <UserRole
+                  role={element}
+                  key={element.role_id}
+                  selectRole={displayRole}
+                />
               ))}
             </div>
           )}
@@ -489,6 +630,24 @@ const AdminHome = () => {
                             click={selectPrivilegeList}
                           />
                         )}
+                        {selectedList === 3 && (
+                          <SelectPlivilege
+                            privilegesList={list3}
+                            click={selectPrivilegeList}
+                          />
+                        )}
+                        {selectedList === 4 && (
+                          <SelectPlivilege
+                            privilegesList={list4}
+                            click={selectPrivilegeList}
+                          />
+                        )}
+                        {selectedList === 5 && (
+                          <SelectPlivilege
+                            privilegesList={list5}
+                            click={selectPrivilegeList}
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -499,20 +658,51 @@ const AdminHome = () => {
                         >
                           Select Role Privilege List
                         </label>
-                        <div className="all-privileges-set">
+                        <div
+                          className="all-privileges-set"
+                          id={selctedListErr && "selected-list-error"}
+                        >
                           <PrivilegeSet
                             privileges={list1}
                             no={1}
+                            key={1}
                             click={selectPrivilegeList}
                             selectList={selectedList}
                           />
                           <PrivilegeSet
                             privileges={list2}
                             no={2}
+                            key={2}
+                            click={selectPrivilegeList}
+                            selectList={selectedList}
+                          />
+                          <PrivilegeSet
+                            privileges={list3}
+                            no={3}
+                            key={3}
+                            click={selectPrivilegeList}
+                            selectList={selectedList}
+                          />
+                          <PrivilegeSet
+                            privileges={list4}
+                            no={4}
+                            key={4}
+                            click={selectPrivilegeList}
+                            selectList={selectedList}
+                          />
+                          <PrivilegeSet
+                            privileges={list5}
+                            no={5}
+                            key={5}
                             click={selectPrivilegeList}
                             selectList={selectedList}
                           />
                         </div>
+                        {selctedListErr && (
+                          <span className="selecte-list-err">
+                            {selctedListErr}
+                          </span>
+                        )}
                       </>
                     )}
 
@@ -631,7 +821,6 @@ const AdminHome = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                          error
                           label="Date of Birth"
                           slotProps={{ textField: { size: "small" } }}
                           value={dob}
@@ -681,7 +870,177 @@ const AdminHome = () => {
                       sx={{ width: "50%" }}
                       type={"password"}
                       value={confirmPassword}
-                      onChange={(e) => SetConfirmPassword(e.target.value)}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      error={confirmPasswordErr !== "" && true}
+                      helperText={
+                        confirmPasswordErr !== "" && confirmPasswordErr
+                      }
+                    />
+                  </div>
+                  <div className="two-btns">
+                    <Buttons
+                      type={"button"}
+                      color={"red"}
+                      text={"Cancel"}
+                      onClick={handleCloseEmployeeForm}
+                    />
+                    <Buttons
+                      type={"button"}
+                      color={"green"}
+                      text={"Create"}
+                      onClick={displayConfirmationModal1}
+                    />
+                  </div>
+                </form>
+              </Box>
+            </Modal>
+          </div>
+        )}
+        <ConfirmationdModal
+          confirmModal={confirmationModal1}
+          text={`Are you sure want add ${fName} as a HR Manager`}
+          closeConfirmationModal={closeConfirmationModal1}
+          submit={handelSubmitEmployyeAdd}
+        />
+
+        {emplyeeAddForm && (
+          <div className="employye-add-form">
+            <Modal
+              open={emplyeeAddForm}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style} style={{ width: "550px" }}>
+                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+                  Add employee details
+                </h2>
+                <form>
+                  <div className="two-inputs">
+                    <TextField
+                      error={fNameErr !== "" && true}
+                      className="outlined-basic"
+                      label="First Name"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      value={fName}
+                      onChange={(e) => setFName(e.target.value)}
+                      helperText={fNameErr !== "" && fNameErr}
+                    />
+                    <TextField
+                      error={lNameErr !== "" && true}
+                      className="outlined-basic"
+                      label="Last Name"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      value={lName}
+                      onChange={(e) => setLName(e.target.value)}
+                      helperText={lNameErr !== "" && lNameErr}
+                    />
+                  </div>
+                  <div className="two-inputs">
+                    <TextField
+                      className="outlined-basic"
+                      label="NIC"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      value={nic}
+                      onChange={(e) => setNic(e.target.value)}
+                      error={nicErr !== "" && true}
+                      helperText={nicErr !== "" && nicErr}
+                    />
+                    <TextField
+                      className="outlined-basic"
+                      label="Contact No"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      error={phoneErr !== "" && true}
+                      helperText={phoneErr !== "" && phoneErr}
+                    />
+                  </div>
+                  <div className="two-inputs">
+                    <TextField
+                      className="outlined-basic"
+                      label="Employee Id"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      value={id}
+                      onChange={(e) => setId(e.target.value)}
+                      error={idErr !== "" && true}
+                      helperText={idErr !== "" && idErr}
+                    />
+                    <TextField
+                      className="outlined-basic"
+                      label="Email"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      error={emailErr !== "" && true}
+                      helperText={emailErr !== "" && emailErr}
+                    />
+                  </div>
+                  <div className="two">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                        <DatePicker
+                          label="Date of Birth"
+                          slotProps={{ textField: { size: "small" } }}
+                          value={dob}
+                          onChange={(newValue) => setDob(newValue)}
+                          disableFuture
+                        />
+                        <DatePicker
+                          label="Registered Date"
+                          slotProps={{ textField: { size: "small" } }}
+                          value={registerDate}
+                          onChange={(newValue) => setRegisterDate(newValue)}
+                          disableFuture
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                  <TextField
+                    className="outlined-basic"
+                    label="Address"
+                    variant="outlined"
+                    size="small"
+                    style={{ margin: "20px 0" }}
+                    sx={{ width: "100%" }}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    error={addressErr !== "" && true}
+                    helperText={addressErr !== "" && addressErr}
+                  />
+                  <div className="two-inputs">
+                    <TextField
+                      className="outlined-basic"
+                      label="Paasowrd"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      type={"password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      error={passwordErr !== "" && true}
+                      helperText={passwordErr !== "" && passwordErr}
+                    />
+                    <TextField
+                      className="outlined-basic"
+                      label="Password Confirm"
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "50%" }}
+                      type={"password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       error={confirmPasswordErr !== "" && true}
                       helperText={
                         confirmPasswordErr !== "" && confirmPasswordErr
@@ -714,11 +1073,6 @@ const AdminHome = () => {
           submit={handelSubmitEmployyeAdd}
         />
       </div>
-      <Snackbar open={alertBox} autoHideDuration={3000} onClose={closeAlertBox}>
-        <Alert onClose={closeAlertBox} severity="success">
-          Employee Added successfuly !
-        </Alert>
-      </Snackbar>
     </>
   );
 };
@@ -779,15 +1133,15 @@ function Buttons({ type, color, text, onClick }) {
   );
 }
 
-function UserRole({ role }) {
+function UserRole({ role, selectRole }) {
   return (
     <div className="user-role">
-      <Link to="/userRole" state={role}>
-        <img
-          src={`http://localhost:4000/UserRoles/${role.photo_path}`}
-          alt="cheif engineer"
-        />
-      </Link>
+      <img
+        src={`http://localhost:4000/UserRoles/${role.photo_path}`}
+        alt="cheif engineer"
+        onClick={() => selectRole(role.type)}
+        style={{ cursor: "pointer" }}
+      />
       <span>{role.role_name} </span>
     </div>
   );
@@ -841,6 +1195,14 @@ function ConfirmationdModal({
         </Modal>
       </div>
     </>
+  );
+}
+
+function OnePrivilege({ privilege }) {
+  return (
+    <div className="privilege">
+      <h3>{privilege}</h3>
+    </div>
   );
 }
 
