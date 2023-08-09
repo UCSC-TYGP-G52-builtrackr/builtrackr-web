@@ -54,10 +54,40 @@ function App() {
           <Route path="/paymentplan" element={<PaymentPlan />} />
           <Route path="*" element={<Home />} />
 
+
+
+          {/* Compnay Admin  */}
           <Route element={<ProtectedRoutes type={0} />}>
             <Route path="/admin" element={<AdminHome />} />
-          </Route>
 
+          </Route>
+          
+          {/* HR Manager */}
+          <Route element={<ProtectedRoutes type={1} />}>
+
+
+
+
+
+
+          </Route>
+          {/* Inventory Manager */}
+          <Route element={<ProtectedRoutes type={2} />}></Route>
+
+
+
+
+
+
+          {/* Cheif Engineer */}
+          <Route element={<ProtectedRoutes type={3} />}>
+
+
+
+
+
+          </Route>
+          {/* Site Manager */}
           <Route element={<ProtectedRoutes type={4} />}>
             <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
             <Route path="/sitemanager/viewtask" element={<Task />} />
@@ -65,6 +95,23 @@ function App() {
             <Route path="/sitemanager/documents" element={<SMDocuments />} />
             <Route path="/sitemanager/sites" element={<SiteDashboard />} />
             <Route path="/sitemanager/analytics" element={<Analytics />} />
+
+
+          </Route>
+
+
+          {/* Site Supervisor */}
+          <Route element={<ProtectedRoutes type={5} />}>
+
+
+
+
+
+
+
+
+
+
           </Route>
         </Routes>
       </ChakraProvider>

@@ -62,6 +62,12 @@ export function Login() {
               navigate("/admin", { state: { name: jsonData.name } });
               toast.success("Login Successfull");
             }
+            else if(jsonData.type===4){
+              localStorage.setItem("home_page", JSON.stringify("sitemanager/dashboard"));
+              setName(jsonData.name);
+              navigate("/sitemanager/dashboard", { state: { name: jsonData.name } });
+              toast.success("Login Successfull");
+            }
           }
         } catch (err) {
           console.error(err.message);
