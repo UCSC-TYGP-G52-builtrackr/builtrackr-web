@@ -1,4 +1,3 @@
-
 import AdminHome from "./pages/CompanyAdmin/AdminHome";
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -21,9 +20,7 @@ import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
 import { ChakraProvider } from "@chakra-ui/react";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
-import React from "react";
 import PaymentPlan from "./pages/SignUp/PaymentPlan";
-
 
 function App() {
   const {
@@ -48,26 +45,29 @@ function App() {
     <div className="App">
       <ChakraProvider>
         <Routes>
-       <Route element={<ProtectedRoutes type={1} />}>
-            <Route path="/admin" element={<AdminHome/>}/>
-          </Route>
+          <Route path="/home" element={<Home />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/RegisterTwo" element={<RegisterTwo />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
-          <Route path="/sitemanager/viewtask" element={<Task />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />
-          <Route path="/sitemanager/documents" element={<SMDocuments />} />
-          <Route path="/sitemanager/sites" element={<SiteDashboard />} />
           <Route path="/paymentplan" element={<PaymentPlan />} />
-          <Route path="/sitemanager/analytics" element={<Analytics />} />
           <Route path="*" element={<Home />} />
+
+          <Route element={<ProtectedRoutes type={0} />}>
+            <Route path="/admin" element={<AdminHome />} />
+          </Route>
+
+          <Route element={<ProtectedRoutes type={4} />}>
+            <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
+            <Route path="/sitemanager/viewtask" element={<Task />} />
+            <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />
+            <Route path="/sitemanager/documents" element={<SMDocuments />} />
+            <Route path="/sitemanager/sites" element={<SiteDashboard />} />
+            <Route path="/sitemanager/analytics" element={<Analytics />} />
+          </Route>
         </Routes>
       </ChakraProvider>
-
     </div>
   );
 }
