@@ -48,7 +48,7 @@ const Navbar = () => {
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
   return (
-    <div className="relative flex justify-end p-2 md:ml-6 md:mr-6">
+    <div className="absolute top-0 left-0 w-screen flex justify-end px-4">
 
       {/* <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} /> */}
       <div className="flex">
@@ -59,9 +59,9 @@ const Navbar = () => {
           >
             <p>
               <div><span className="ml-1 text-[16px] font-bold text-black">
-                Michael Scott
+                Gineth Karunanayake
               </span></div>
-              <span className='float-right text-sm'>Chief Engineer</span>
+              <span className='float-right text-sm'>Site Manager</span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
             <img

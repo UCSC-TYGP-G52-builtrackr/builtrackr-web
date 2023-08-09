@@ -25,9 +25,10 @@ const PaymentPlan = () => {
       id: 'premium',
       name: 'Premium',
       price: '200000 LKR/Year',
-      description1: '⊛ 5 Contruction Site.',
+      description1: '⊛ Unlimited Contruction Site.',
       description2: '⊛ Create User Roles.',
       description3: '⊛ 24/7 Support.',
+      
     },
   ];
 
