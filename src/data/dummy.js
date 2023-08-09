@@ -5697,7 +5697,7 @@ export const SiteManagerLinks = [
       {
         name: "Dashboard",
         icon: <Home />,
-        redirect: "sitemanager",
+        redirect: "sitemanager/dashboard",
       },
     ],
   },
@@ -5708,7 +5708,7 @@ export const SiteManagerLinks = [
       {
         name: "Tasks",
         icon: <Clipboard />,
-        redirect: "viewtask",
+        redirect: "sitemanager/viewtask",
       },
       {
         name: "Sites",

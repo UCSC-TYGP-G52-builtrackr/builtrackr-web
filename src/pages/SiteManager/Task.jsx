@@ -40,7 +40,7 @@ const Task = () => {
       <div className="flex">
         <Sidebar />
         <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]">
-          <div className="mt-2 flex flex-col w-full h-full justify-start ">
+          <div className="mt-2 ml-10 flex flex-col w-full h-full justify-start ">
             <TaskListCard taskList={taskList} />
           </div>
 

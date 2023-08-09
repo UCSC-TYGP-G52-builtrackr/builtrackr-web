@@ -57,6 +57,7 @@ const FileUpload = () => {
     <Sidebar/>
     <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]">
     <div className='ml-[300px] flex items-center justify-center'>
+    <div className='flex flex-col'>
     <Box {...getRootProps()} cursor="pointer" className='max-w-lg '>
       <input {...getInputProps()} />
 
@@ -94,6 +95,7 @@ const FileUpload = () => {
           ))}
         </SimpleGrid>
       </div>
+    </div>
 
     </div>
     </div>

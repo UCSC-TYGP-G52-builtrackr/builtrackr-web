@@ -21,13 +21,13 @@ export const Sidebar = () => {
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb -6 mb-8 rounded-l-lg text-md text-white dark:text-white dark:hover:text-black hover:bg-yellow-400';
 
   return (
-    <div className="h-screen pb-10 overflow-auto bg-black md:overflow-hidden md:hover:overflow-auto mr-2 max-w-[300px] min-w-[300px]">
+    <div className="h-screen pb-10 overflow-auto bg-black md:overflow-hidden md:hover:overflow-auto mr-2 max-w-[300px] min-w-[300px] fixed">
       {activeMenu && (
         <>
           <div className="flex items-center justify-between ml-8 ">
             <Link to="/" onClick={handleCloseSideBar} className="flex items-center gap-3 mt-4 ml-3 text-xl font-extrabold tracking-tight text-white dark:text-white">
-            {/* <img src='../../public/bt.png' className='w-100 h-10'/> */}
-               <span>builTrackr</span>
+            <img src='/bt_logo.png' className='w-36 h-24'/>
+             
             </Link>
               <button
                 type="button"
