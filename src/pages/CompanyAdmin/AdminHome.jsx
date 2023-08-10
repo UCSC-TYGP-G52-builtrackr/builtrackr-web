@@ -7,6 +7,7 @@ import ChatSpace from "../../components/CompanyAdmin/ChatSpace";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { BsChatDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
+import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -18,10 +19,11 @@ import { Snackbar, Alert } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
-import Modal from "@mui/material/Modal";
 import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
+import { SelectField } from "@chakra-ui/react";
 
 const list1 = [
   "Create Employee Profiles",
@@ -93,14 +95,14 @@ const AdminHome = () => {
   const location = useLocation();
   const { name } = location.state || "";
 
+  const company_id = parseInt(JSON.parse(localStorage.getItem("company_id")));
+
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
   const [emplyeeAddForm, setEmployeeAddForm] = useState(false);
 
   const handleOpenEmployeeForm = () => setEmployeeAddForm(true);
-
-  const idToSend = 1;
 
   // User role add
   const [roleImage, setRoleImage] = useState("");
@@ -137,7 +139,7 @@ const AdminHome = () => {
   const [phoneErr, setPhoneErr] = useState("");
 
   const [registerDate, setRegisterDate] = useState({});
-  const [registerDateErr, setRegisterDateErr] = useState({});
+  const [registerDateErr, setRegisterDateErr] = useState("");
 
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
@@ -195,12 +197,18 @@ const AdminHome = () => {
 
   const [selectedRole, setSelectedRole] = useState(0);
 
+  console.log(selectedRole)
+
   const displayRole = (type) => {
+    console.log(type)
     setSelectedRole(type);
   };
 
-  const [selectedEmployee, setSelectedEmployee] = useState({});
-
+  const [selectedEmployee, setSelectedEmployee] = useState([]);
+  const selectUserRoleDetails = userRoles.filter(
+    (item) => item.type === selectedRole
+  );
+  console.log(selectUserRoleDetails)
   const style = {
     position: "absolute",
     marginLeft: "150px",
@@ -213,7 +221,6 @@ const AdminHome = () => {
     borderRadius: "10px",
     p: 4,
   };
-  const company_id = 1;
   const closeRoleAddForm = () => {
     setDisplayForm(false);
     setSelectedList(0);
@@ -275,7 +282,7 @@ const AdminHome = () => {
     };
     viewEmployees();
   }, [selectedRole]);
-console.log(selectedEmployee)
+
   const handelSubmitRoleAdd = async (e) => {
     e.preventDefault();
     let hasErrors = false;
@@ -436,7 +443,6 @@ console.log(selectedEmployee)
       setConfirmationModal1(false);
       return;
     }
-    console.log(selectedRole);
   };
 
   return (
@@ -475,14 +481,7 @@ console.log(selectedEmployee)
             >
               <div className="role-privileges">
                 {selectedRole === 1 && <h1>HR Manager's all privileges</h1>}
-                {selectedRole === 2 && (
-                  <h1>Inventory Manager's all privileges</h1>
-                )}
-                {selectedRole === 3 && <h1>Chief Engineer's all privileges</h1>}
-                {selectedRole === 4 && <h1>Site Manager's all privileges</h1>}
-                {selectedRole === 5 && (
-                  <h1>Site Supervisors's all privileges</h1>
-                )}
+                {selectUserRoleDetails.filter( (element) => element.type !== 1).map((el) => <h1>{`${el.role_name}'s all privileges`}</h1> )}
 
                 <div className="privileges-box">
                   {selectedRole === 1 &&
@@ -507,8 +506,9 @@ console.log(selectedEmployee)
                     ))}
                 </div>
               </div>
+              {console.log(selectedEmployee)}
 
-              {selectedRole !== 0 && (
+              {selectedEmployee.length !== 0 ? (
                 <>
                   <div>
                     <table className="employee-table">
@@ -535,6 +535,8 @@ console.log(selectedEmployee)
                     </table>
                   </div>
                 </>
+              ) : (
+                <h1>No emplyees</h1>
               )}
             </div>
           )}
@@ -582,146 +584,148 @@ console.log(selectedEmployee)
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <Box sx={style} style={{ width: "550px" }}>
-                  <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
-                    Add user roles
-                  </h2>
-                  <form>
-                    <TextField
-                      error={roleNameErr !== "" && true}
-                      className="outlined-basic"
-                      label="Role Name"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "100%", marginBottom: "20px" }}
-                      value={roleName}
-                      onChange={(e) => setRoleName(e.target.value)}
-                      helperText={roleNameErr !== "" && roleNameErr}
-                    />
-                    <div style={{ display: "flex" }}>
-                      <div className="image-button">
-                        <input
-                          id="file-upload"
-                          type="file"
-                          hidden
-                          onChange={(e) => setRoleImage(e.target.files[0])}
-                        />
-                        <label htmlFor="file-upload" className="image-upload">
-                          {" "}
-                          Select Image <InsertPhotoIcon />
-                        </label>
-                      </div>
-                      <span style={{ marginTop: "6px", paddingLeft: "20px" }}>
-                        {roleImage.name}
-                      </span>
-                    </div>
-
-                    <div className="select-privilages-box">
-                      <div className="select-privilages">
-                        {selectedList === 1 && (
-                          <SelectPlivilege
-                            privilegesList={list1}
-                            click={selectPrivilegeList}
+                <div>
+                  <Box sx={style} style={{ width: "550px" }}>
+                    <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
+                      Add user roles
+                    </h2>
+                    <form>
+                      <TextField
+                        error={roleNameErr !== "" && true}
+                        className="outlined-basic"
+                        label="Role Name"
+                        variant="outlined"
+                        size="small"
+                        sx={{ width: "100%", marginBottom: "20px" }}
+                        value={roleName}
+                        onChange={(e) => setRoleName(e.target.value)}
+                        helperText={roleNameErr !== "" && roleNameErr}
+                      />
+                      <div style={{ display: "flex" }}>
+                        <div className="image-button">
+                          <input
+                            id="file-upload"
+                            type="file"
+                            hidden
+                            onChange={(e) => setRoleImage(e.target.files[0])}
                           />
-                        )}
-                        {selectedList === 2 && (
-                          <SelectPlivilege
-                            privilegesList={list2}
-                            click={selectPrivilegeList}
-                          />
-                        )}
-                        {selectedList === 3 && (
-                          <SelectPlivilege
-                            privilegesList={list3}
-                            click={selectPrivilegeList}
-                          />
-                        )}
-                        {selectedList === 4 && (
-                          <SelectPlivilege
-                            privilegesList={list4}
-                            click={selectPrivilegeList}
-                          />
-                        )}
-                        {selectedList === 5 && (
-                          <SelectPlivilege
-                            privilegesList={list5}
-                            click={selectPrivilegeList}
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {selectedList === 0 && (
-                      <>
-                        <label
-                          style={{ marginBottom: "20px", paddingTop: "20px" }}
-                        >
-                          Select Role Privilege List
-                        </label>
-                        <div
-                          className="all-privileges-set"
-                          id={selctedListErr && "selected-list-error"}
-                        >
-                          <PrivilegeSet
-                            privileges={list1}
-                            no={1}
-                            key={1}
-                            click={selectPrivilegeList}
-                            selectList={selectedList}
-                          />
-                          <PrivilegeSet
-                            privileges={list2}
-                            no={2}
-                            key={2}
-                            click={selectPrivilegeList}
-                            selectList={selectedList}
-                          />
-                          <PrivilegeSet
-                            privileges={list3}
-                            no={3}
-                            key={3}
-                            click={selectPrivilegeList}
-                            selectList={selectedList}
-                          />
-                          <PrivilegeSet
-                            privileges={list4}
-                            no={4}
-                            key={4}
-                            click={selectPrivilegeList}
-                            selectList={selectedList}
-                          />
-                          <PrivilegeSet
-                            privileges={list5}
-                            no={5}
-                            key={5}
-                            click={selectPrivilegeList}
-                            selectList={selectedList}
-                          />
+                          <label htmlFor="file-upload" className="image-upload">
+                            {" "}
+                            Select Image <InsertPhotoIcon />
+                          </label>
                         </div>
-                        {selctedListErr && (
-                          <span className="selecte-list-err">
-                            {selctedListErr}
-                          </span>
-                        )}
-                      </>
-                    )}
+                        <span style={{ marginTop: "6px", paddingLeft: "20px" }}>
+                          {roleImage.name}
+                        </span>
+                      </div>
 
-                    <div className="two-btns">
-                      <Buttons
-                        type={"button"}
-                        color={"red"}
-                        text={"Cancel"}
-                        onClick={closeRoleAddForm}
-                      />
-                      <Buttons
-                        type={"button"}
-                        color={"green"}
-                        text={"Create"}
-                        onClick={displayConfirmationModal2}
-                      />
-                    </div>
-                  </form>
-                </Box>
+                      <div className="select-privilages-box">
+                        <div className="select-privilages">
+                          {selectedList === 1 && (
+                            <SelectPlivilege
+                              privilegesList={list1}
+                              click={selectPrivilegeList}
+                            />
+                          )}
+                          {selectedList === 2 && (
+                            <SelectPlivilege
+                              privilegesList={list2}
+                              click={selectPrivilegeList}
+                            />
+                          )}
+                          {selectedList === 3 && (
+                            <SelectPlivilege
+                              privilegesList={list3}
+                              click={selectPrivilegeList}
+                            />
+                          )}
+                          {selectedList === 4 && (
+                            <SelectPlivilege
+                              privilegesList={list4}
+                              click={selectPrivilegeList}
+                            />
+                          )}
+                          {selectedList === 5 && (
+                            <SelectPlivilege
+                              privilegesList={list5}
+                              click={selectPrivilegeList}
+                            />
+                          )}
+                        </div>
+                      </div>
+
+                      {selectedList === 0 && (
+                        <>
+                          <label
+                            style={{ marginBottom: "20px", paddingTop: "20px" }}
+                          >
+                            Select Role Privilege List
+                          </label>
+                          <div
+                            className="all-privileges-set"
+                            id={selctedListErr && "selected-list-error"}
+                          >
+                            <PrivilegeSet
+                              privileges={list1}
+                              no={1}
+                              key={1}
+                              click={selectPrivilegeList}
+                              selectList={selectedList}
+                            />
+                            <PrivilegeSet
+                              privileges={list2}
+                              no={2}
+                              key={2}
+                              click={selectPrivilegeList}
+                              selectList={selectedList}
+                            />
+                            <PrivilegeSet
+                              privileges={list3}
+                              no={3}
+                              key={3}
+                              click={selectPrivilegeList}
+                              selectList={selectedList}
+                            />
+                            <PrivilegeSet
+                              privileges={list4}
+                              no={4}
+                              key={4}
+                              click={selectPrivilegeList}
+                              selectList={selectedList}
+                            />
+                            <PrivilegeSet
+                              privileges={list5}
+                              no={5}
+                              key={5}
+                              click={selectPrivilegeList}
+                              selectList={selectedList}
+                            />
+                          </div>
+                          {selctedListErr && (
+                            <span className="selecte-list-err">
+                              {selctedListErr}
+                            </span>
+                          )}
+                        </>
+                      )}
+
+                      <div className="two-btns">
+                        <Buttons
+                          type={"button"}
+                          color={"red"}
+                          text={"Cancel"}
+                          onClick={closeRoleAddForm}
+                        />
+                        <Buttons
+                          type={"button"}
+                          color={"green"}
+                          text={"Create"}
+                          onClick={displayConfirmationModal2}
+                        />
+                      </div>
+                    </form>
+                  </Box>
+                </div>
               </Modal>
             </div>
             <ConfirmationdModal

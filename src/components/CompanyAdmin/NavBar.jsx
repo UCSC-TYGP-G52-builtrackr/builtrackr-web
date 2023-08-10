@@ -24,7 +24,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 //     </button>
 // );
 
-const NavBar = ({ name }) => {
+const NavBar = () => {
   const {
     currentColor,
     activeMenu,
@@ -34,6 +34,8 @@ const NavBar = ({ name }) => {
     setScreenSize,
     screenSize,
   } = useStateContext();
+  const name = JSON.parse(localStorage.getItem("name"));
+
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);

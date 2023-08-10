@@ -6,6 +6,9 @@ import { FiLogOut } from "react-icons/fi";
 import "../../CSS/dashboard.css";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { CiHome } from "react-icons/ci";
+import { BiSolidCreditCard } from "react-icons/bi";
+
+
 import logo from "../../assets/images/BuilTracker.png";
 
 const links = [
@@ -23,7 +26,7 @@ const links = [
     links: [
       {
         name: "subscription",
-        icon: <CiHome />,
+        icon: <BiSolidCreditCard />,
       },
     ],
   },
@@ -48,7 +51,7 @@ const SideBar = () => {
   const activeLink =
     "flex items-center gap-5 pl-4 ml-8 pt-3 pb-2.5 text-black bg-yellow-400 rounded-l-lg text-md";
   const normalLink =
-    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-l-lg text-md text-white  dark:hover:text-black hover:bg-yellow-400";
+    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-l-lg text-md text-white dark:text-white dark:hover:text-black hover:bg-yellow-400";
 
   return (
     <div className="h-screen pb-10 overflow-auto bg-black md:overflow-hidden md:hover:overflow-auto">
@@ -60,7 +63,7 @@ const SideBar = () => {
               onClick={handleCloseSideBar}
               className="flex items-center gap-3 mt-4 text-xl font-extrabold tracking-tight text-white dark:text-white"
             >
-              <img src={logo} className="w-32" />
+              <img src={logo} className="w-36 h-24" />
             </Link>
             {/* <button
                 type="button"
@@ -71,7 +74,7 @@ const SideBar = () => {
                 <MdOutlineCancel />
               </button> */}
           </div>
-          <div className="flex flex-col justify-center flex-grow mt-10">
+          <div className="flex flex-col justify-center flex-grow mt-6">
             {links.map((item) => (
               <div key={item.title}>
                 {/* <p className="m-3 mt-4 text-gray-400 uppercase dark:text-gray-400">
