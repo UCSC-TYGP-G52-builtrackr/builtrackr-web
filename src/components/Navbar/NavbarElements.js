@@ -126,5 +126,3 @@ box-shadow: 4px 4px 62px rgba(77, 71, 195, 0.40);
 
 
 `;
-
-
