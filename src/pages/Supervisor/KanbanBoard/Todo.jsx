@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import "../../CSS/kanbanBoard.css";
-import { TodoCard } from '../../components/Card/TodoCard';
+import "../../../CSS/kanbanBoard.css";
+import { TodoCard } from '../../../components/Card/TodoCard';
 
 export const Todo = (props) =>{
     const [cards, setCards] = useState([]);

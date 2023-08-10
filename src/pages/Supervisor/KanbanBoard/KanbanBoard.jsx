@@ -1,10 +1,10 @@
 // File: KanbanBoard.js
 import React, { useState, useEffect, useRef } from "react";
-import "../../CSS/kanbanBoard.css";
+import "../../../CSS/kanbanBoard.css";
 import { MoreHorizontal } from "react-feather";
-import { Card } from "../../components/Card/Card";
-import {Dropdown} from "../../components/DropDown/DropDown"
-import {Editable} from "../../components/Editable/Editable"
+import { Card } from "../../../components/Card/Card";
+import {Dropdown} from "../../../components/DropDown/DropDown"
+import {Editable} from "../../../components/Editable/Editable"
 
 export const KanbanBoard = (props) => {
   const [showDropdown, setShowDropdown] = useState(false);

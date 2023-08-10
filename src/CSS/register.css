@@ -61,7 +61,14 @@ button{
   box-shadow: 4px 4px 62px rgba(77, 71, 195, 0.40);
   font-weight: bold;
 }
-  
+  .delete button{
+    margin-top: 20px;
+    background-color:#ff0000;
+    border-radius: 8px;
+    box-shadow: 4px 4px 62px rgba(77, 71, 195, 0.40);
+    font-weight: bold;
+    color: white;
+  }
   .next_button {
     
     width: 300px;

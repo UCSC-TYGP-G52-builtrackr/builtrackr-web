@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import { Edit2, Trash2 } from 'react-feather';
-import { Modal, Input,InputLabel, FormControl } from '@mui/material';
+import { Modal } from '@mui/material';
 import Box from '@mui/material/Box';
 import '../../CSS/kanbanBoard.css';
 import {Link} from "react-router-dom";
@@ -31,7 +31,7 @@ const style = {
 };
 
 
-export const DashboardW = () => {
+export const Material = () => {
 
   const {activeMenu, setThemeSettings } = useStateContext();
 
@@ -183,14 +183,14 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }  }   />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '100px', marginLeft: '20%' }}>
-              <img src="./drill.png" alt="drill" width="15px" height="15px" />
+              <img src="./bricks.jpg" alt="bricks" width="15px" height="15px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List"> Drills</Link>
+          <Link to = "/Materials/List"> Bricks</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
-            Available Quantity: 10
+            Available Quantity: 100 cubes
           </Typography>
           <CardActions className="gap-20">
             <div className="flex justify-between">
@@ -210,15 +210,15 @@ export const DashboardW = () => {
         <div className="card" style={{  width: '18%' }}>
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
-            <div className="image_drill" style={{ width: '100px', marginLeft: '25%' }}>
-              <img src="./OIP.jpg" alt="drill" width="15px" height="15px" />
+            <div className="image_drill" style={{ width: '180px', marginLeft: '-5%' }}>
+              <img src="./cement.jpg" alt="cement" width="15px" height="25px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List"> Grinder</Link>
+          <Link to = "/Materials/List"> Cement</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
-            Available Quantity: 10
+            Available Quantity: 100 cubes
           </Typography>
           <CardActions className="gap-20">
             <div className="flex justify-between">
@@ -238,15 +238,15 @@ export const DashboardW = () => {
         <div className="card" style={{  width: '18%' }}>
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
-            <div className="image_drill" style={{ width: '120px', marginLeft: '25%' }}>
-              <img src="./mixture.webp" alt="drill" width="20px" height="20px" />
+            <div className="image_drill" style={{ width: '110px', marginLeft: '20%' }}>
+              <img src="./gray gravel.jpg" alt="gravel" width="20px" height="20px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List"> Mixture</Link>
+          <Link to = "/Materials/List">Gray Gravel</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
-            Available Quantity: 2
+            Available Quantity: 100 cubes
           </Typography>
           <CardActions className="gap-20">
             <div className="flex justify-between">
@@ -266,15 +266,15 @@ export const DashboardW = () => {
         <div className="card" style={{  width: '18%' }}>
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
-            <div className="image_drill" style={{ width: '90px', marginLeft: '10%' }}>
-              <img src="./saw.jpg" alt="drill" width="15px" height="15px" />
+            <div className="image_drill" style={{ width: '165px', marginLeft: '0%' }}>
+              <img src="./sand.jpg" alt="sand" width="15px" height="25px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List"> Handsaw</Link>
+          <Link to = "/Materials/List"> Sand</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
-            Available Quantity: 15
+            Available Quantity: 300 cubes
           </Typography>
           <CardActions className="gap-20">
             <div className="flex justify-between">
@@ -295,14 +295,14 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '140px', marginLeft: '10%' }}>
-              <img src="./spirit.jpg" alt="drill" width="15px" height="15px" />
+              <img src="./Blocks.jpg" alt="drill" width="15px" height="15px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List">Spirit Level</Link>
+          <Link to = "/Materials/List">Blocks</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
-            Available Quantity: 20
+            Available Quantity: 200 cubes
           </Typography>
           <CardActions className="gap-20">
             <div className="flex justify-between">
@@ -318,33 +318,7 @@ export const DashboardW = () => {
           </CardActions>
         </div>
 
-      {/* 6th card */}
-        <div className="card" style={{  width: '18%' }}>
-          <Card style={{ width: 100 }} />
-          <CardContent style={{ backgroundColor: 'lightgrey' }}>
-            <div className="image_drill" style={{ width: '100px', marginLeft: '20%' }}>
-              <img src="./rollers.webp" alt="drill" width="15px" height="15px" />
-            </div>
-          </CardContent>
-          <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List"> Paint Rollers</Link>
-          </Typography>
-          <Typography color="textSecondary" gutterBottom>
-            Available Quantity: 20
-          </Typography>
-          <CardActions className="gap-20">
-            <div className="flex justify-between">
-              <button>
-                <Edit2 />
-              </button>
-            </div>
-            <div className="flex justify-between">
-              <button onClick={() => setOpen(true)} >
-                <Trash2 />
-              </button>
-            </div>
-          </CardActions>
-        </div>
+     
   </div>
 
         {/*  Create a modal for adding a category */}
@@ -356,42 +330,34 @@ export const DashboardW = () => {
             >
                <Box sx={{ ...style, width: 500 }}>
             <div className="modal-content">
-             <h2 class = "text-xl font-extrabold dark:text-black">Add A category</h2>
-              <FormControl>
-                <InputLabel>Category</InputLabel>
-              <Input
+              <h2>Add a Category</h2>
+              <input
                 type="text"
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
                 placeholder="Enter category name"
-              /></FormControl><br/>
-              <FormControl>
-               <InputLabel>Description</InputLabel>
-               <Input
+              />
+              <h2>Add a Description</h2>
+               <input
                 type="text"
                 value={categoryDescription}
                 onChange={(e) => setCategoryName(e.target.value)}
                 placeholder="Enter Description"
-              /></FormControl><br/><br/>
-           <FormControl>
-            <InputLabel>Quantity</InputLabel>
-              <Input
+              />
+              <h2>Add a Quantity</h2>
+              <input
                 type="Number"
                 value={categoryQuantity}
                 onChange={(e) => setCategoryName(e.target.value)}
                 placeholder="Enter Quantity"
               />
-             </FormControl><br/><br/>
-             <FormControl>
-              <Input
+
+              <input
                 type="file"
                 onChange={(e) => setCategoryImage(e.target.files[0].name)}
                 accept=".jpg, .png, .jpeg"
               />
-              </FormControl><br/>
-              <FormControl>
               <button onClick={handleSubmitModal}>Create Card</button>
-              </FormControl>
             </div>
             </Box>
             </Modal>

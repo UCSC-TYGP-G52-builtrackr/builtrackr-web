@@ -527,7 +527,7 @@ export const Links = [
         icon: <Clipboard />,
       },
       {
-        name: 'Raw Materials',
+        name: 'Materials',
         icon: <Book />,
       },
       {

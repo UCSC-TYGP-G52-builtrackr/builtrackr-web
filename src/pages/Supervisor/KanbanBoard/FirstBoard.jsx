@@ -1,7 +1,7 @@
 // File: KanbanBoard.js
 import React from "react";
-import "../../CSS/kanbanBoard.css";
-import {CardFirst} from "../../components/Card/Card_pro/Card_pro"
+import "../../../CSS/kanbanBoard.css";
+import {CardFirst} from "../../../components/Card/Card_pro/Card_pro"
 
 
 

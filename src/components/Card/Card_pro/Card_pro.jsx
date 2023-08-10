@@ -13,6 +13,10 @@ import Grid from '@mui/material/Grid';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import PaidIcon from '@mui/icons-material/Paid';
+import { FormControl, FormLabel, Input } from '@mui/material';
+import { Textarea } from '@chakra-ui/react';
+import ListItemButton from '@mui/material/ListItemButton';
+import EastIcon from '@mui/icons-material/East';
 
 const style = {
   position: 'absolute',
@@ -23,7 +27,7 @@ const style = {
   bgcolor: 'background.paper',
   border: 'background.paper',
   boxShadow: 24,
-  p: 20,
+  p: 14,
 };
 
 
@@ -43,6 +47,7 @@ export const CardFirst = () => {
       setOpen(false);
     };
   
+    
     return (
       <React.Fragment>
         <button onClick={handleOpen}>{modalContent?.request}</button>
@@ -52,12 +57,23 @@ export const CardFirst = () => {
           aria-labelledby="child-modal-title"
           aria-describedby="child-modal-description"
         >
-          <Box sx={{ ...style, width: 600 } } >
-            {/* <h2 id="child-modal-title"></h2> */}
-            <p id="child-modal-description">
-             <input type="text" placeholder={modalContent?.request} />
-            </p>
-            <button onClick={handleClose}>Send</button>
+          <Box sx={{ ...style, width: 500 , padding:10} } >
+            <h2 class="text-xl font-extrabold dark:text-black">{modalContent?.request}</h2><br></br>
+           <FormControl mt={4}>
+            <FormLabel>Note</FormLabel>
+            <Textarea placeholder='Enter the description'  w='250px'/>
+            </FormControl><br />
+            <FormControl  style  ={{width:"250px"}}>
+            <FormLabel>Enter the category</FormLabel>
+            <Input  placeholder='Name' />
+            </FormControl><br/><br/>
+            <FormControl  style  ={{width:"250px"}}>
+            <FormLabel>Enter the number</FormLabel>
+           <Input type = "number"  placeholder='Name'  min = '0' />
+            </FormControl><br/><br/>
+            <FormControl mt={4}>
+              <button class = 'ml-40'>Send</button>
+            </FormControl>
           </Box>
         </Modal>
       </React.Fragment>
@@ -81,6 +97,10 @@ export const CardFirst = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   
   function handleForm(){
 return(
@@ -92,6 +112,9 @@ return(
 
 }
 
+const equipmetArray=[ 'Drills', 'Concreate Mixture' , 'Spirit Level'];
+const equipmentCounts = [10, 2, 8];
+const labourArray=[ 'Mason', 'Carpenter' , 'Painter'];
 
   return (
     <>
@@ -102,9 +125,27 @@ return(
   aria-describedby="parent-modal-description"
 >
   <Box sx={{ ...style, width: 500 }}>
-    <h2 id="parent-modal-title">Text in a modal</h2>
+    <h2 class = "text-2xl font-extrabold dark:text-black" style  ={{marginTop:"-18%"}}>{modalContent?.title}</h2>
+
     <p id="parent-modal-description">
-    </p>
+      
+    <List
+      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+
+    >
+      <ListItemButton onClick={handleClick}>
+       <EastIcon />  <ListItemText primary={modalContent?.data[0]}/>
+     </ListItemButton>
+     <ListItemButton onClick={handleClick}>
+     <EastIcon />  <ListItemText primary={modalContent?.data[1]}/>
+     </ListItemButton>
+     <ListItemButton onClick={handleClick}>
+     <EastIcon /> <ListItemText primary= {modalContent?.data[2]}/>
+     </ListItemButton>
+     </List>
+</p>
     <ChildModal />
   </Box>
 </Modal>
@@ -116,7 +157,8 @@ return(
   aria-describedby="parent-modal-description"
 >
   <Box sx={{ ...style,width: 800 }}>
-    <h1  class="text-3xl font-extrabold dark:text-black" id="parent-modal-title"  style = {{marginTop:"-18%"}}>{modal?.title}</h1><br />
+    <br/>
+    <h1  class="text-3xl font-extrabold dark:text-black" id="parent-modal-title"  style = {{marginTop:"-16%"}}>{modal?.title}</h1><br />
     <p id="parent-modal-description">
       <h3 class="text-xl font-bold dark:text-black" >Description</h3>
      <br />
@@ -179,17 +221,17 @@ return(
   </Box>
 </Modal>
 
-
+ 
 
       <div className="card_1" onClick={() =>Open({ title: "Project Information", description: "Content for Project Information" })}>
         <h4>Project Information</h4>
       </div>
-      <div className="card_1" onClick={() => handleOpen({ title: "Allocated Equipments", description: "Content for Allocated Equipments", 
-      des:"my content"  , request:"Request Equipments"}, handleForm())}>
+      <div className="card_1" onClick={() => handleOpen({ title: "Allocated Equipments", description: "",  data:equipmetArray, count:equipmentCounts
+    ,request:"Request Equipments"}, handleForm())}>
         <h4>Allocated Equipments</h4>
       </div>
-      <div className="card_1" onClick={() => handleOpen({ title: "Workers of the day", description: "Content for Workers of the day", 
-       request:"Request Labourers", 
+      <div className="card_1" onClick={() => handleOpen({ title: "Workers of the day", description: "Content for Workers of the day",  data:labourArray, count:equipmentCounts
+       ,request:"Request Labourers", 
     }, handleForm())}>
         <h4>Workers of the day</h4>
       </div>

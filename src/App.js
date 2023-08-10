@@ -6,12 +6,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ChatSpace from './components/ChatSpace';
 import Sites from './pages/chiefEngineer/Sites';
 import './App.css';
-import { Board } from './pages/KanbanBoard/Board';
+import { Board } from './pages/Supervisor/KanbanBoard/Board';
 import { useStateContext } from './contexts/ContextProvider';
 import {Drop} from './components/DropDown/Drop';
 import { Test } from './components/Comment/test';
 import { DashboardW } from './pages/Warehouse/DashboardW';
 import ItemList from './pages/Warehouse/ItemList';
+import { Material } from './pages/Warehouse/Material';
+import  FileUpload  from './pages/Supervisor/Documents/Documents';
+import Analytics from './pages/Supervisor/Analytics/Analytics';
 
 
 function App() {
@@ -52,7 +55,7 @@ function App() {
                 <Route path  = "/Register" element = {<Register /> } />
                 <Route path  = "/RegisterTwo" element = {<RegisterTwo /> } />
                 <Route path  = "/Login" element = {<Login /> } />
-                <Route path  = "/KanbanBoard" element = {<Board /> } />
+                <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
 
                 <Route path="/dropdown" element={(<Drop />)} />
                 <Route path="/test" element={(<Test />)} />
@@ -61,7 +64,10 @@ function App() {
                 <Route path="/chiefEngineer/tasks" element={<Sites />} />
                 <Route path= "/Equipments" element={<DashboardW />} />
                 <Route path= "Equipments/List" element={<ItemList/>} />
-
+                <Route path= "/Materials" element={<Material />} />
+                <Route path= "Materials/List" element={<ItemList/>} />
+                <Route path = '/Supervisor/Documents' element = {<FileUpload/>} />
+                <Route path = '/Supervisor/Analytics' element = {<Analytics/>} />
               </Routes>
 
             {/* <Footer /> */}

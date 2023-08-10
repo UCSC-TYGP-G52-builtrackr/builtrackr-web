@@ -25,7 +25,7 @@ export const Sidebar = () => {
       {activeMenu && (
         <>
           <div className="flex items-center justify-between ml-8 ">
-            <Link to="/" onClick={handleCloseSideBar} className="flex items-center gap-3 mt-4 ml-3 text-xl font-extrabold tracking-tight text-white dark:text-white">
+            <Link to="/Supervisor" onClick={handleCloseSideBar} className="flex items-center gap-3 mt-4 ml-3 text-xl font-extrabold tracking-tight text-white dark:text-white">
             {/* <img src='./bt.png' className='w-10 h-10'/> */}
                <span>builTrackr</span>
             </Link>
@@ -46,7 +46,7 @@ export const Sidebar = () => {
                 </p> */}
                 {item.links.map((link) => (
                   <NavLink
-                    to={`/${link.name}`}
+                    to={`/Supervisor/${link.name}`}
                     key={link.name}
                     onClick={handleCloseSideBar}
                     style={({ isActive }) => ({

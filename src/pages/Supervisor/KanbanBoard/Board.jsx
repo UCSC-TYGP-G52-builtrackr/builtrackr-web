@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {KanbanBoard} from "./KanbanBoard";
-import '../../CSS/kanbanBoard.css';
-import { Editable } from '../../components/Editable/Editable';
+import '../../../CSS/kanbanBoard.css';
+import { Editable } from '../../../components/Editable/Editable';
 import { FirstBoard } from './FirstBoard';
-import avatar from '../../data/avatar2.jpg';
+import avatar from '../../../data/avatar2.jpg';
 import { Todo } from './Todo';
-import Navbar from '../../components/Navbar';
-import { Sidebar } from '../../components/Sidebar';
+import Navbar from '../../../components/Navbar';
+import { Sidebar } from '../../../components/Sidebar';
 import { BsChatDots } from 'react-icons/bs';
-import { useStateContext } from '../../contexts/ContextProvider';
+import { useStateContext } from '../../../contexts/ContextProvider';
+
+
 export const Board = () => {
-  
-  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, themeSettings, setThemeSettings } = useStateContext();
+  const { activeMenu, setThemeSettings } = useStateContext();
   const [boards, setBoards] = useState(JSON.parse(localStorage.getItem('prac-kanban')) || []);
   const [targetCard, setTargetCard] = useState({
     bid: '',
