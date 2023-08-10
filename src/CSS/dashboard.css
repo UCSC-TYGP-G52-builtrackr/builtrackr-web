@@ -15,9 +15,8 @@ h2{
     align-items: center;
     justify-content: center;
 }
-.container{
-    /* display:flex; */
-}
+
+
 main{
     width: 100%;
     padding: 20px;
@@ -28,7 +27,9 @@ main{
     height: 100vh;
     width: 200px;
     transition: all 0.5s;
+
 }
+
 .top_section{
     display: flex;
     align-items:center;
@@ -41,7 +42,9 @@ main{
     display: flex;
     font-size: 25px;
     margin-left: 50px;
+
 }
+
 .link{
     display: flex;
     color: #fff;
@@ -58,7 +61,7 @@ main{
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
     margin-left: 8px;
-}
+  
 .active{
     background: #FFCC00;
     color: #000;
@@ -69,6 +72,11 @@ main{
 }
 .icon, .link_text{
     font-size: 16px;
+
 }
 
+.custom-mt-percentage {
+    margin-top: 95%;
+}
 
+}

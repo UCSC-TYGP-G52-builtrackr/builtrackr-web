@@ -1,22 +1,19 @@
-@media (min-width: 768px){
-  .md\:ml-10 {
-      margin-left: 6.5rem;
-  }
-  }
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Roboto:wght@100;300;400&family=Source+Sans+3:wght@300;400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* .App {
-  text-align: center;
-} */
+
 @media (min-width: 768px){
 .md\:ml-10 {
     margin-left: 6.5rem;
 }
+
+.App {
+  text-align: center;
+  height: 100vh;
+
 }
 
 .App-logo {
@@ -30,21 +27,6 @@
   }
 }
 
-/* .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-} */
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -53,6 +35,7 @@
     transform: rotate(360deg);
   }
 }
+
 
 .sidebar {
   box-shadow: rgb(113 122 131 / 11%) 0px 7px 30px 0px;
@@ -98,4 +81,6 @@
 
 .e-input-group:not(.e-float-icon-left), .e-input-group.e-success:not(.e-float-icon-left), .e-input-group.e-warning:not(.e-float-icon-left), .e-input-group.e-error:not(.e-float-icon-left), .e-input-group.e-control-wrapper:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-success:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-warning:not(.e-float-icon-left), .e-input-group.e-control-wrapper.e-error:not(.e-float-icon-left){
   border: none;
+}
+
 }
