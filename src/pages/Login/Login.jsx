@@ -24,7 +24,7 @@ export function Login() {
     event.preventDefault();
     setErrors(Validation(values));
     console.log(errors);
-    const type = "Employe";
+    const type = "Employee";
     if (Object.keys(errors).length > 0) {
       return;
     } else {
@@ -51,34 +51,21 @@ export function Login() {
             const jsonData = await data.json();
             console.log(jsonData);
 
-            localStorage.setItem(
-              "user_type",
-              JSON.stringify(jsonData.type.toString())
-            );
+            localStorage.setItem("user_type", JSON.stringify(jsonData.type.toString()));
             localStorage.setItem("name", JSON.stringify(jsonData.name));
-            localStorage.setItem(
-              "company_id",
-              JSON.stringify(jsonData.company_id.toString())
-            );
-            localStorage.setItem(
-              "no",
-              JSON.stringify(jsonData.employee_id.toString())
-            );
+            localStorage.setItem("company_id", JSON.stringify(jsonData.company_id.toString()));
+            localStorage.setItem("no", JSON.stringify(jsonData.employee_id.toString()));
 
             if (jsonData.type === 1) {
-              localStorage.setItem("home_page", JSON.stringify("admin"));
+              localStorage.setItem("home_page", JSON.stringify("Admin"));
               setName(jsonData.name);
-              navigate("/admin");
+              navigate("/admin", { state: { name: jsonData.name } });
               toast.success("Login Successfull");
-            } else if (jsonData.type === 4) {
-              localStorage.setItem(
-                "home_page",
-                JSON.stringify("sitemanager/dashboard")
-              );
+            }
+            else if(jsonData.type===4){
+              localStorage.setItem("home_page", JSON.stringify("sitemanager/dashboard"));
               setName(jsonData.name);
-              navigate("/sitemanager/dashboard", {
-                state: { name: jsonData.name },
-              });
+              navigate("/sitemanager/dashboard", { state: { name: jsonData.name } });
               toast.success("Login Successfull");
             }
           }
@@ -107,7 +94,7 @@ export function Login() {
                 localStorage.setItem("home_page", JSON.stringify("Admin"));
 
                 setTimeout(() => {
-                  navigate("/admin");
+                  navigate("/admin", { state: { name: res.data.name } });
                 }, 2000);
               } else {
                 toast.error("Login Failed");

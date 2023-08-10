@@ -15,12 +15,22 @@ import SMDocuments from "./pages/SiteManager/Documents";
 import ForgotPassword from "./pages/Login/Forgotpassword";
 import ResetPassword from "./pages/Login/ResetPassword";
 import Task from "./pages/SiteManager/Task";
-import Analytics from "./pages/SiteManager/Analytics";
+// import Analytics from "./pages/SiteManager/Analytics";
 import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
 import { ChakraProvider } from "@chakra-ui/react";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
 import PaymentPlan from "./pages/SignUp/PaymentPlan";
+import ChatSpace from './components/ChatSpace';
+import Sites from './pages/chiefEngineer/Sites';
+import { Board } from './pages/Supervisor/KanbanBoard/Board';
+import {Drop} from './components/DropDown/Drop';
+import { Test } from './components/Comment/test';
+import { DashboardW } from './pages/Warehouse/DashboardW';
+import ItemList from './pages/Warehouse/ItemList';
+import { Material } from './pages/Warehouse/Material';
+import  FileUpload  from './pages/Supervisor/Documents/Documents';
+import Analytics from './pages/Supervisor/Analytics/Analytics';
 
 function App() {
   const {
@@ -35,6 +45,7 @@ function App() {
   useEffect(() => {
     const currentThemeColor = localStorage.getItem("colorMode");
     const currentThemeMode = localStorage.getItem("themeMode");
+
     if (currentThemeColor && currentThemeMode) {
       setCurrentColor(currentThemeColor);
       setCurrentMode(currentThemeMode);
@@ -42,6 +53,8 @@ function App() {
   }, []);
 
   return (
+
+ 
     <div className="App">
       <Routes>
         <Route path="/home" element={<Home />} />
@@ -71,14 +84,30 @@ function App() {
           <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />
           <Route path="/sitemanager/documents" element={<SMDocuments />} />
           <Route path="/sitemanager/sites" element={<SiteDashboard />} />
-          <Route path="/sitemanager/analytics" element={<Analytics />} />
+//           <Route path="/sitemanager/analytics" element={<Analytics />} />
         </Route>
 
         {/* Site Supervisor */}
-        <Route element={<ProtectedRoutes type={5} />}></Route>
+        <Route element={<ProtectedRoutes type={5} />}>
+          <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
+
+                <Route path="/dropdown" element={(<Drop />)} />
+                <Route path="/test" element={(<Test />)} />
+           
+                <Route path="/chiefEngineer/sites" element={<Sites />} />
+                <Route path="/chiefEngineer/tasks" element={<Sites />} />
+                <Route path= "/Equipments" element={<DashboardW />} />
+                <Route path= "Equipments/List" element={<ItemList/>} />
+                <Route path= "/Materials" element={<Material />} />
+                <Route path= "Materials/List" element={<ItemList/>} />
+                <Route path = '/Supervisor/Documents' element = {<FileUpload/>} />
+                <Route path = '/Supervisor/Analytics' element = {<Analytics/>} />
+          </Route>
       </Routes>
+
     </div>
   );
 }
 
 export default App;
+
