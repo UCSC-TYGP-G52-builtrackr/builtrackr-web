@@ -1,19 +1,9 @@
 import React from 'react';
 import { Fragment, useState } from 'react'
-<<<<<<< HEAD
-
-
-const Header = ({ category, title }) => {
-  return (
-    <div>
-      <p className="flex-grow text-3xl font-extrabold tracking-tight text-slate-900">
-        {title}
-      </p>
-      {/* <p className="text-lg text-gray-400">{category}</p> */}
-    </div>
-=======
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import CheckIcon from '@mui/icons-material/Check';
+// import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
 const people = [
   { name: 'Ongoing' },
@@ -22,25 +12,17 @@ const people = [
 
 ]
 
-const Header = ({ category, title }) => {
+const Dropdown = () => {
   const [selected, setSelected] = useState(people[0]);
 
   return (
-    <div className="flex mb-8">
-     {/* <p className="text-lg text-gray-400">{category}</p> */}
-    <p className="flex-grow text-3xl font-extrabold tracking-tight text-slate-900">
-     {title}
-   </p>
-    
-
-  {/* dropdown */}
-  <div className="relative w-64 ml-72">
+  <div className="relative w-64 ml-auto">
   <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border-yellow-400 rounded-lg shadow-md cursor-default border-1 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate">{selected.name}</span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-              <ChevronUpDownIcon
+              <UnfoldLessIcon
                 className="w-5 h-5 text-gray-400"
                 aria-hidden="true"
               />
@@ -85,11 +67,9 @@ const Header = ({ category, title }) => {
           </Transition>
         </div>
       </Listbox>
-      </div>
-  </div>
->>>>>>> dev
+    </div>
   );
 };
 
-export default Header;
+export default Dropdown;
 

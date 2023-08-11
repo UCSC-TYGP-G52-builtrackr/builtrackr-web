@@ -2,7 +2,7 @@ import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
-import { BiColorFill } from 'react-icons/bi';
+import { BiColorFill } from'react-icons/bi';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { IoMdContacts } from 'react-icons/io';
 import { RiContactsLine, RiStockLine } from 'react-icons/ri';
@@ -432,7 +432,7 @@ export const customersGrid = [
     format: 'yMd',
     textAlign: 'Center' },
 
-  { field: 'Location',
+  { 'Location',
     headerText: 'Location',
     width: '150',
     textAlign: 'Center' },
@@ -495,6 +495,18 @@ export const links = [
     links: [
       
       {
+        name: 'sites',
+        icon: <RiContactsLine />,
+      },
+      {
+        name: 'tasks',
+        icon: <RiContactsLine />,
+      },
+      {
+        name: 'analytics',
+        icon: <RiContactsLine />},
+
+          {
         name: 'Kanbanboard',
         icon: <Clipboard />,
       },
@@ -579,8 +591,7 @@ export const links1 = [
 
 export const cartData = [
   {
-
-    image:
+      image:
       product5,
     name: 'butterscotch ice-cream',
     category: 'Milk product',
@@ -604,7 +615,6 @@ export const cartData = [
 
 export const chatData = [
   {
-
     image:
       avatar,
     message: 'Site #4 has no site manager',
@@ -631,14 +641,12 @@ export const chatData = [
     message: 'Derek uploaded photos',
     desc: 'Review ',
     time: '1:12 AM',
-
   },
 ];
 
 export const earningData = [
   {
     icon: <MdOutlineSupervisorAccount />,
-
     amount: '39,354',
     percentage: '-4%',
     title: 'Customers',
@@ -680,7 +688,6 @@ export const earningData = [
 export const recentTransactions = [
   {
     icon: <BsCurrencyDollar />,
-
     amount: '+$350',
     title: 'Paypal Transfer',
     desc: 'Money Added',
@@ -717,6 +724,16 @@ export const recentTransactions = [
     iconBg: 'rgb(255, 244, 229)',
     pcColor: 'green-600',
   },
+  {
+    icon: <BsCurrencyDollar />,
+    amount: '-$50',
+    percentage: '+38%',
+    title: 'Refund',
+    desc: 'Payment Sent',
+    iconColor: '#03C9D7',
+    iconBg: '#E5FAFB',
+    pcColor: 'red-600',
+  },
 
 ];
 
@@ -745,13 +762,11 @@ export const weeklyStats = [
     desc: 'Ample Admin',
     iconBg: '#00C292',
     pcColor: 'green-600',
-
   },
 ];
 
 export const productsPerformance = [
   {
-
     image:
       product5,
     title: 'Is it good butterscotch ice-cream?',
@@ -840,14 +855,12 @@ export const medicalproBranding = {
     {
       image:
         avatar,
-
     },
   ],
 };
 
 export const themeColors = [
   {
-
     name: 'blue-theme',
     color: '#1A97F5',
   },
