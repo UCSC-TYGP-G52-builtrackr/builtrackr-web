@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatSpace from "./components/CompanyAdmin/ChatSpace";
 import { useStateContext } from "./contexts/ContextProvider";
 import ProtectedRoutes from "./ProtectedRoutes";
-import Test from "./pages/CompanyAdmin/Test";
+// import Test from "./pages/CompanyAdmin/Test";
 import "./App.css";
 import { Login } from "./pages/Login/Login";
 import { Register } from "./pages/SignUp/Register";
@@ -21,7 +21,6 @@ import SiteDashboard from "./pages/SiteManager/Sites";
 import { ChakraProvider } from "@chakra-ui/react";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
 import PaymentPlan from "./pages/SignUp/PaymentPlan";
-import ChatSpace from './components/ChatSpace';
 import Sites from './pages/chiefEngineer/Sites';
 import { Board } from './pages/Supervisor/KanbanBoard/Board';
 import {Drop} from './components/DropDown/Drop';
@@ -84,7 +83,7 @@ function App() {
           <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />
           <Route path="/sitemanager/documents" element={<SMDocuments />} />
           <Route path="/sitemanager/sites" element={<SiteDashboard />} />
-//           <Route path="/sitemanager/analytics" element={<Analytics />} />
+          <Route path="/sitemanager/analytics" element={<Analytics />} />
         </Route>
 
         {/* Site Supervisor */}
@@ -97,9 +96,9 @@ function App() {
                 <Route path="/chiefEngineer/sites" element={<Sites />} />
                 <Route path="/chiefEngineer/tasks" element={<Sites />} />
                 <Route path= "/Equipments" element={<DashboardW />} />
-                <Route path= "Equipments/List" element={<ItemList/>} />
+                <Route path= "/Equipments/List" element={<ItemList/>} />
                 <Route path= "/Materials" element={<Material />} />
-                <Route path= "Materials/List" element={<ItemList/>} />
+                <Route path= "/Materials/List" element={<ItemList/>} />
                 <Route path = '/Supervisor/Documents' element = {<FileUpload/>} />
                 <Route path = '/Supervisor/Analytics' element = {<Analytics/>} />
           </Route>
