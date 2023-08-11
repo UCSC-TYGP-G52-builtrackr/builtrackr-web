@@ -1,9 +1,12 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
+<<<<<<< HEAD
 import PeopleIcon from '@mui/icons-material/People';
 import ArticleIcon from '@mui/icons-material/Article';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
+=======
+>>>>>>> dev
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
@@ -30,6 +33,10 @@ import product8 from './product8.jpg';
 import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import { FiLogOut } from 'react-icons/fi';
+<<<<<<< HEAD
+=======
+import { Clipboard, Book, Bell, BarChart, Home, Folder } from "react-feather";
+>>>>>>> dev
 
 
 export const gridOrderImage = (props) => (
@@ -53,6 +60,10 @@ export const gridOrderStatus = (props) => (
 );
 
 export const kanbanGrid = [
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   { headerText: 'To Do',
     keyField: 'Open',
     allowToggle: true },
@@ -69,6 +80,23 @@ export const kanbanGrid = [
   { headerText: 'Done',
     keyField: 'Close',
     allowToggle: true },
+<<<<<<< HEAD
+=======
+
+  { headerText: "To Do", keyField: "Open", allowToggle: true },
+
+  { headerText: "In Progress", keyField: "InProgress", allowToggle: true },
+
+  {
+    headerText: "Testing",
+    keyField: "Testing",
+    allowToggle: true,
+    isExpanded: false,
+  },
+
+  { headerText: "Done", keyField: "Close", allowToggle: true },
+
+>>>>>>> dev
 ];
 const gridEmployeeProfile = (props) => (
   <div className="flex items-center gap-2">
@@ -90,6 +118,7 @@ const gridEmployeeCountry = (props) => (
 export const EditorData = () => (
   <div>
     <h3>
+<<<<<<< HEAD
       Try React
       React has been designed from the start for gradual adoption, and you can use as little or as much React as you need. Whether you want to get a taste of React, add some interactivity to a simple HTML page, or start a complex React-powered app, the links in this section will help you get started.
 
@@ -126,6 +155,9 @@ export const EditorData = () => (
       The React documentation assumes some familiarity with programming in the JavaScript language. You don’t have to be an expert, but it’s harder to learn both React and JavaScript at the same time.
 
       We recommend going through this JavaScript overview to check your knowledge level. It will take you between 30 minutes and an hour but you will feel more confident learning React.
+=======
+
+>>>>>>> dev
     </h3>
   </div>
 );
@@ -145,11 +177,24 @@ const customerGridImage = (props) => (
 
 const customerGridStatus = (props) => (
   <div className="flex items-center justify-center gap-2 text-gray-700 capitalize">
+<<<<<<< HEAD
     <p style={{ background: props.StatusBg }} className="w-3 h-3 rounded-full" />
+=======
+
+    <p
+      style={{ background: props.StatusBg }}
+      className="w-3 h-3 rounded-full"
+    />
+
+>>>>>>> dev
     <p>{props.Status}</p>
   </div>
 );
 export const areaPrimaryXAxis = {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   valueType: 'DateTime',
   labelFormat: 'y',
   majorGridLines: { width: 0 },
@@ -160,11 +205,22 @@ export const areaPrimaryXAxis = {
 
 export const areaPrimaryYAxis = {
   labelFormat: '{value}%',
+<<<<<<< HEAD
   lineStyle: { width: 0 },
+=======
+  valueType: "DateTime",
+  labelFormat: "y",
+  majorGridLines: { width: 0 },
+  intervalType: "Years",
+  edgeLabelPlacement: "Shift",
+  labelStyle: { color: "gray" },
+    lineStyle: { width: 0 },
+>>>>>>> dev
   maximum: 4,
   interval: 1,
   majorTickLines: { width: 0 },
   minorTickLines: { width: 0 },
+<<<<<<< HEAD
   labelStyle: { color: 'gray' },
 
 };
@@ -172,6 +228,15 @@ export const barPrimaryXAxis = {
   valueType: 'Category',
   interval: 1,
   majorGridLines: { width: 0 },
+=======
+};
+
+export const barPrimaryXAxis = {
+  valueType: "Category",
+  interval: 1,
+  majorGridLines: { width: 0 },
+  labelStyle: { color: "gray" },
+>>>>>>> dev
 };
 export const barPrimaryYAxis = {
   majorGridLines: { width: 0 },
@@ -221,6 +286,10 @@ const areaChartData = [
 export const areaCustomSeries = [
   {
     dataSource: areaChartData[0],
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     xName: 'x',
     yName: 'y',
     name: 'USA',
@@ -246,11 +315,19 @@ export const areaCustomSeries = [
     opacity: '0.8',
     type: 'SplineArea',
     width: '2',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   },
 ];
 
 export const barChartData = [
   [
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     { x: 'USA', y: 46 },
     { x: 'GBR', y: 27 },
     { x: 'CHN', y: 26 },
@@ -265,11 +342,19 @@ export const barChartData = [
     { x: 'GBR', y: 17 },
     { x: 'CHN', y: 26 },
   ],
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 ];
 
 export const barCustomSeries = [
   {
     dataSource: barChartData[0],
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     xName: 'x',
     yName: 'y',
     name: 'Gold',
@@ -279,11 +364,19 @@ export const barCustomSeries = [
         visible: true,
         position: 'Top',
         font: { fontWeight: '600', color: '#ffffff' },
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
       },
     },
   },
   {
     dataSource: barChartData[1],
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     xName: 'x',
     yName: 'y',
     name: 'Silver',
@@ -293,11 +386,19 @@ export const barCustomSeries = [
         visible: true,
         position: 'Top',
         font: { fontWeight: '600', color: '#ffffff' },
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
       },
     },
   },
   {
     dataSource: barChartData[2],
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     xName: 'x',
     yName: 'y',
     name: 'Bronze',
@@ -307,12 +408,20 @@ export const barCustomSeries = [
         visible: true,
         position: 'Top',
         font: { fontWeight: '600', color: '#ffffff' },
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
       },
     },
   },
 ];
 export const colorMappingData = [
   [
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     { x: 'Jan', y: 6.96 },
     { x: 'Feb', y: 8.9 },
     { x: 'Mar', y: 12 },
@@ -349,12 +458,15 @@ export const rangeColorMapping = [
 
 ];
 
+<<<<<<< HEAD
 export const ColorMappingPrimaryXAxis = {
   valueType: 'Category',
   majorGridLines: { width: 0 },
   title: 'Months',
 };
 
+=======
+>>>>>>> dev
 export const ColorMappingPrimaryYAxis = {
   lineStyle: { width: 0 },
   majorTickLines: { width: 0 },
@@ -367,12 +479,21 @@ export const FinancialPrimaryXAxis = {
   valueType: 'DateTime',
   minimum: new Date('2016, 12, 31'),
   maximum: new Date('2017, 9, 30'),
+<<<<<<< HEAD
+=======
+  labelFormat: "{value}°C",
+  title: "Temperature",
+>>>>>>> dev
   crosshairTooltip: { enable: true },
   majorGridLines: { width: 0 },
 };
 
 export const FinancialPrimaryYAxis = {
+<<<<<<< HEAD
   title: 'Price',
+=======
+  title: "Price",
+>>>>>>> dev
   minimum: 100,
   maximum: 180,
   interval: 20,
@@ -381,6 +502,10 @@ export const FinancialPrimaryYAxis = {
 };
 
 export const LinePrimaryXAxis = {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   valueType: 'DateTime',
   labelFormat: 'y',
   intervalType: 'Years',
@@ -392,6 +517,15 @@ export const LinePrimaryXAxis = {
 export const LinePrimaryYAxis = {
   labelFormat: '{value}%',
   rangePadding: 'None',
+<<<<<<< HEAD
+=======
+  valueType: "DateTime",
+  labelFormat: "y",
+  intervalType: "Years",
+  edgeLabelPlacement: "Shift",
+  majorGridLines: { width: 0 },
+  background: "white",
+>>>>>>> dev
   minimum: 0,
   maximum: 100,
   interval: 20,
@@ -401,6 +535,10 @@ export const LinePrimaryYAxis = {
 };
 
 export const customersGrid = [
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   { type: 'checkbox', width: '50' },
   { headerText: 'Name',
     width: '150',
@@ -491,6 +629,7 @@ export const links = [
     links: [
       
       {
+<<<<<<< HEAD
         name: 'sites',
         icon: <RiContactsLine />,
       },
@@ -501,13 +640,37 @@ export const links = [
       {
         name: 'analytics',
         icon: <RiContactsLine />,
+=======
+        name: 'Kanbanboard',
+        icon: <Clipboard />,
+      },
+      {
+        name: 'Documents',
+        icon: <Book />,
+      },
+      {
+        name: 'Analytics',
+        icon: <BarChart />,
+      },
+      {
+        name: 'Notifications',
+        icon: <Bell />,
+>>>>>>> dev
       },
     ],
   },
   
+<<<<<<< HEAD
 ];
 
 export const linksCE = [
+=======
+  
+];
+
+
+export const Links = [
+>>>>>>> dev
   {
     title: 'Dashboard',
     links: [
@@ -520,6 +683,7 @@ export const linksCE = [
     links: [
       
       {
+<<<<<<< HEAD
         name: 'sites',
         icon: <LocationCityIcon />,
       },
@@ -534,12 +698,29 @@ export const linksCE = [
       {
         name: 'analytics',
         icon: <AutoGraphIcon />,
+=======
+        name: 'Equipments',
+        icon: <Clipboard />,
+      },
+      {
+        name: 'Materials',
+        icon: <Book />,
+      },
+      {
+        name: 'Reports',
+        icon: <BarChart />,
+      },
+      {
+        name: 'Notifications',
+        icon: <Bell />,
+>>>>>>> dev
       },
     ],
   },
   
 ];
 
+<<<<<<< HEAD
 export const linksHR = [
   {
     title: 'Dashboard',
@@ -571,10 +752,41 @@ export const linksHR = [
     ],
   },
   
+=======
+
+export const links = [
+  {
+    title: "Dashboard",
+    links: [],
+  },
+
+  {
+    title: "Pages",
+    links: [
+      {
+        name: "sitemanager",
+        icon: <RiContactsLine />,
+      },
+      {
+        name: "document",
+        icon: <RiContactsLine />,
+      },
+      {
+        name: "analytics",
+        icon: <RiContactsLine />,
+      },
+    ],
+  },
+
+>>>>>>> dev
 ];
 
 export const cartData = [
   {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     image:
       product5,
     name: 'butterscotch ice-cream',
@@ -599,6 +811,10 @@ export const cartData = [
 
 export const chatData = [
   {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     image:
       avatar,
     message: 'Site #4 has no site manager',
@@ -625,12 +841,20 @@ export const chatData = [
     message: 'Derek uploaded photos',
     desc: 'Review ',
     time: '1:12 AM',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   },
 ];
 
 export const earningData = [
   {
     icon: <MdOutlineSupervisorAccount />,
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     amount: '39,354',
     percentage: '-4%',
     title: 'Customers',
@@ -665,12 +889,20 @@ export const earningData = [
     iconColor: 'rgb(0, 194, 146)',
     iconBg: 'rgb(235, 250, 242)',
     pcColor: 'red-600',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   },
 ];
 
 export const recentTransactions = [
   {
     icon: <BsCurrencyDollar />,
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     amount: '+$350',
     title: 'Paypal Transfer',
     desc: 'Money Added',
@@ -707,6 +939,7 @@ export const recentTransactions = [
     iconBg: 'rgb(255, 244, 229)',
     pcColor: 'green-600',
   },
+<<<<<<< HEAD
   {
     icon: <BsCurrencyDollar />,
     amount: '-$50',
@@ -717,11 +950,18 @@ export const recentTransactions = [
     iconBg: '#E5FAFB',
     pcColor: 'red-600',
   },
+=======
+
+>>>>>>> dev
 ];
 
 export const weeklyStats = [
   {
     icon: <FiShoppingCart />,
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     amount: '-$560',
     title: 'Top Sales',
     desc: 'Johnathan Doe',
@@ -743,11 +983,19 @@ export const weeklyStats = [
     desc: 'Ample Admin',
     iconBg: '#00C292',
     pcColor: 'green-600',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   },
 ];
 
 export const productsPerformance = [
   {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     image:
       product5,
     title: 'Is it good butterscotch ice-cream?',
@@ -782,12 +1030,20 @@ export const productsPerformance = [
     rating: 'Poor',
     itemSold: '23%',
     earningAmount: '$123,000',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   },
 ];
 
 export const medicalproBranding = {
   data: [
     {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
       title: 'Due Date',
       desc: 'Oct 23, 2021',
     },
@@ -798,20 +1054,36 @@ export const medicalproBranding = {
     {
       title: 'Expense',
       desc: '$63,000',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     },
   ],
   teams: [
     {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
       name: 'Bootstrap',
       color: 'orange',
     },
     {
       name: 'Angular',
       color: '#FB9678',
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     },
   ],
   leaders: [
     {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
       image:
         avatar2,
     },
@@ -830,12 +1102,20 @@ export const medicalproBranding = {
     {
       image:
         avatar,
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     },
   ],
 };
 
 export const themeColors = [
   {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     name: 'blue-theme',
     color: '#1A97F5',
   },
@@ -885,6 +1165,7 @@ export const userProfileData = [
   },
 ];
 
+<<<<<<< HEAD
 export const ordersGrid = [
   {
     headerText: 'Image',
@@ -1492,10 +1773,49 @@ export const customersData = [
     Weeks: '34',
     Budget: '$16.5k',
     Location: 'USA',
+=======
+export const SiteManagerLinks = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "Dashboard",
+        icon: <Home />,
+        redirect: "sitemanager/dashboard",
+      },
+    ],
+  },
+
+  {
+    title: "Pages",
+    links: [
+      {
+        name: "Tasks",
+        icon: <Clipboard />,
+        redirect: "sitemanager/viewtask",
+      },
+      {
+        name: "Sites",
+        icon: <Book />,
+        redirect: "sitemanager/sites",
+      },
+      {
+        name: "Analytics",
+        icon: <BarChart />,
+        redirect: "sitemanager/analytics",
+      },
+      {
+        name: "Documents",
+        icon: <Folder />,
+        redirect: "sitemanager/documents",
+      },
+    ],
+>>>>>>> dev
   },
 
 ];
 
+<<<<<<< HEAD
 export const employeesData = [
   {
     EmployeeID: 1,
@@ -5886,3 +6206,5 @@ export const PyramidData = [
   { x: 'Fruits', y: 520, text: '520 cal' },
   { x: 'Bread, Rice, Pasta', y: 930, text: '930 cal' },
 ];
+=======
+>>>>>>> dev
