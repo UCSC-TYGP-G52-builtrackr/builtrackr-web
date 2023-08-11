@@ -1,17 +1,7 @@
 import React from 'react';
 import { Fragment, useState } from 'react'
-<<<<<<< HEAD
 
 
-const Header = ({ category, title }) => {
-  return (
-    <div>
-      <p className="flex-grow text-3xl font-extrabold tracking-tight text-slate-900">
-        {title}
-      </p>
-      {/* <p className="text-lg text-gray-400">{category}</p> */}
-    </div>
-=======
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
@@ -87,7 +77,6 @@ const Header = ({ category, title }) => {
       </Listbox>
       </div>
   </div>
->>>>>>> dev
   );
 };
 

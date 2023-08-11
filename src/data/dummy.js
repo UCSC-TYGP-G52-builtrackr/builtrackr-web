@@ -141,20 +141,7 @@ export const areaPrimaryXAxis = {
   labelStyle: { color: 'gray' },
 };
 
-export const areaPrimaryYAxis = {
-  labelFormat: '{value}%',
-  valueType: "DateTime",
-  labelFormat: "y",
-  majorGridLines: { width: 0 },
-  intervalType: "Years",
-  edgeLabelPlacement: "Shift",
-  labelStyle: { color: "gray" },
-    lineStyle: { width: 0 },
-  maximum: 4,
-  interval: 1,
-  majorTickLines: { width: 0 },
-  minorTickLines: { width: 0 },
-};
+
 
 export const barPrimaryXAxis = {
   valueType: "Category",
@@ -386,65 +373,8 @@ export const LinePrimaryXAxis = {
   background: 'white',
 };
 
-export const LinePrimaryYAxis = {
-  labelFormat: '{value}%',
-  rangePadding: 'None',
-  valueType: "DateTime",
-  labelFormat: "y",
-  intervalType: "Years",
-  edgeLabelPlacement: "Shift",
-  majorGridLines: { width: 0 },
-  background: "white",
-  minimum: 0,
-  maximum: 100,
-  interval: 20,
-  lineStyle: { width: 0 },
-  majorTickLines: { width: 0 },
-  minorTickLines: { width: 0 },
-};
 
-export const customersGrid = [
 
-  { type: 'checkbox', width: '50' },
-  { headerText: 'Name',
-    width: '150',
-    template: customerGridImage,
-    textAlign: 'Center' },
-  { field: 'ProjectName',
-    headerText: 'Project Name',
-    width: '150',
-    textAlign: 'Center' },
-  { field: 'Status',
-    headerText: 'Status',
-    width: '130',
-    format: 'yMd',
-    textAlign: 'Center',
-    template: customerGridStatus },
-  {
-    field: 'Weeks',
-    headerText: 'Weeks',
-    width: '100',
-    format: 'C2',
-    textAlign: 'Center' },
-  { field: 'Budget',
-    headerText: 'Budget',
-    width: '100',
-    format: 'yMd',
-    textAlign: 'Center' },
-
-  { 'Location',
-    headerText: 'Location',
-    width: '150',
-    textAlign: 'Center' },
-
-  { field: 'CustomerID',
-    headerText: 'Customer ID',
-    width: '120',
-    textAlign: 'Center',
-    isPrimaryKey: true,
-  },
-
-];
 
 export const employeesGrid = [
   { headerText: 'Employee',
@@ -588,7 +518,8 @@ export const links1 = [
   },
 
 ];
-
+export const linksCE = [
+];
 export const cartData = [
   {
       image:

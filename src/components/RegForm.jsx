@@ -1,13 +1,7 @@
 // site creation form component
-<<<<<<< HEAD
-// import * as React from 'react';
-import React, {useState} from 'react';
-import axios from 'axios';
-=======
 
 // import * as React from 'react';
 import React, {useState} from 'react';
->>>>>>> dev
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -40,7 +34,6 @@ export default function RegForm() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-<<<<<<< HEAD
   const [siteType, setSiteType] = useState('');
   const [siteClient, setSiteClient] = useState('');
   const [siteName, setSiteName] = useState('');
@@ -109,16 +102,15 @@ export default function RegForm() {
   //   }
   // };
   
-=======
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [password, setPassword] = useState('')
- 
+
   function handleSubmit(event) {
       event.preventDefault();
-      console.log(firstName, lastName, email, dateOfBirth, password) 
+      console.log(firstName, lastName, email, dateOfBirth, password)
   }
 
   const [age, setAge] = React.useState('');
@@ -126,7 +118,6 @@ export default function RegForm() {
   // const handleChange = (event: SelectChangeEvent) => {
   //   setAge(event.target.value);
   // };
->>>>>>> dev
 
   return (
     <div>
@@ -157,24 +148,16 @@ export default function RegForm() {
             
             <h2>Create New Site</h2>
             
-<<<<<<< HEAD
-            <form onSubmit={handleSubmit} className='mt-5'>
-=======
+
             <form onSubmit={handleSubmit} action={<Link to="/login" />} className='mt-5'>
->>>>>>> dev
                 <Stack spacing={2} direction="row" sx={{marginBottom: 4}}>
                     <TextField
                         type="text"
                         variant='outlined'
                         color='secondary'
                         label="Site Name"
-<<<<<<< HEAD
-                        onChange={(e) => setSiteName(e.target.value)}
-                        value={siteName}
-=======
                         onChange={e => setFirstName(e.target.value)}
                         value={firstName}
->>>>>>> dev
                         fullWidth
                         required
                     />
@@ -183,24 +166,11 @@ export default function RegForm() {
                       <Select
                         labelId="demo-simple-select-autowidth-label"
                         id="demo-simple-select-autowidth"
-<<<<<<< HEAD
                         value={siteType}
                         onChange={(e) => setSiteType(e.target.value)}
                         autoWidth
                         required
                         label="siteType"
-                      >
-                        
-                        <MenuItem value='Residential'>Residential</MenuItem>
-                        <MenuItem value='Industrial'>Industrial</MenuItem>
-                        <MenuItem value='Commercial'>Commercial</MenuItem>
-                        <MenuItem value='Infrastructure'>Infrastructure</MenuItem>
-=======
-                        value={age}
-                        // onChange={handleChange}
-                        autoWidth
-                        required
-                        label="Type"
                       >
                         {/* <MenuItem value="">
                           <em>None</em>
@@ -209,7 +179,7 @@ export default function RegForm() {
                         <MenuItem value={21}>Industrial</MenuItem>
                         <MenuItem value={22}>Commercial</MenuItem>
                         <MenuItem value={22}>Infrastructure</MenuItem>
->>>>>>> dev
+
                       </Select>
                   </FormControl>
                 </Stack>
@@ -219,32 +189,18 @@ export default function RegForm() {
                       <Select
                         labelId="demo-simple-select-autowidth-label"
                         id="demo-simple-select-autowidth"
-<<<<<<< HEAD
                         value={siteClient}
                         onChange={(e) => setSiteClient(e.target.value)}
                         fullWidth
                         required
                         label="siteClient"
-=======
-                        value={age}
-                        // onChange={handleChange}
-                        fullWidth
-                        required
-                        label="Site Client"
->>>>>>> dev
                       >
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
-<<<<<<< HEAD
-                        <MenuItem value='Andros'>Andros</MenuItem>
-                        <MenuItem value='Pedro'>Pedro</MenuItem>
-                        <MenuItem value='Murphy'>Murphy</MenuItem>
-=======
                         <MenuItem value={10}>Twenty</MenuItem>
                         <MenuItem value={21}>Twenty one</MenuItem>
                         <MenuItem value={22}>Twenty one and a half</MenuItem>
->>>>>>> dev
                       </Select>
                   </FormControl>
                 
@@ -253,13 +209,8 @@ export default function RegForm() {
                     variant='outlined'
                     color='secondary'
                     label="Site Description"
-<<<<<<< HEAD
                     onChange={(e) => setSiteDesc(e.target.value)}
                     value={siteDesc}
-=======
-                    onChange={e => setEmail(e.target.value)}
-                    value={email}
->>>>>>> dev
                     fullWidth
                     rows={4}
                     sx={{mb: 4}}
