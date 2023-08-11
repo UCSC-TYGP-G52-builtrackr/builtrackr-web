@@ -4,7 +4,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaYoutube } from 'react
 
 const Footer = () => {
   return (
-    <FooterContainer>
+    <FooterContainer id="footer">
         <FooterWrap>
             <FooterLinksContainer>
                 <FooterLinksWrapper>
@@ -54,10 +54,10 @@ const Footer = () => {
             <SocialMedia>
                 <SocialMediaWrap>
                     <SocialLogo to='/home'>
-                        builTrackr
+                        BuilTrackr
 
                     </SocialLogo>
-                    <WebsiteRights>builTrackr © {new Date().getFullYear()} All rights reserved.</WebsiteRights>
+                    <WebsiteRights>BuilTrackr © {new Date().getFullYear()} All rights reserved.</WebsiteRights>
                 <SocialIcons>
                     <SocialIconLink href="/" target="_blank" area-label="Facebook">
                     <FaFacebook />
