@@ -30,6 +30,7 @@ import ItemList from './pages/Warehouse/ItemList';
 import { Material } from './pages/Warehouse/Material';
 import  FileUpload  from './pages/Supervisor/Documents/Documents';
 import Analytics from './pages/Supervisor/Analytics/Analytics';
+import { BsChatDots } from 'react-icons/bs';
 
 function App() {
   const {

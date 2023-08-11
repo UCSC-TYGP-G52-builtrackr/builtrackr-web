@@ -14,17 +14,15 @@ const Footer = () => {
                             <FooterLink to="/signin">Testimonials</FooterLink>
                             <FooterLink to="/signin">Careers</FooterLink>
                             <FooterLink to="/signin">Investors</FooterLink>
-                            <FooterLink to="/signin">Terms of Services</FooterLink>
                         
                     </FooterLinksItems>
 
                     <FooterLinksItems>
-                        <FooterLinkTitle>About Us</FooterLinkTitle> 
-                            <FooterLink to="/signin">How It Works</FooterLink>
-                            <FooterLink to="/signin">Testimonials</FooterLink>
-                            <FooterLink to="/signin">Careers</FooterLink>
-                            <FooterLink to="/signin">Investors</FooterLink>
-                            <FooterLink to="/signin">Terms of Services</FooterLink>
+                        <FooterLinkTitle>Contact Us</FooterLinkTitle> 
+                            <FooterLink to="/signin">Contact</FooterLink>
+                            <FooterLink to="/signin">Support</FooterLink>
+                            <FooterLink to="/signin">Destinations</FooterLink>
+                            <FooterLink to="/signin">Sponsorships</FooterLink>
                         
                     </FooterLinksItems>
 
@@ -32,22 +30,21 @@ const Footer = () => {
 
                 <FooterLinksWrapper>
                     <FooterLinksItems>
-                        <FooterLinkTitle>About Us</FooterLinkTitle> 
-                            <FooterLink to="/signin">How It Works</FooterLink>
-                            <FooterLink to="/signin">Testimonials</FooterLink>
-                            <FooterLink to="/signin">Careers</FooterLink>
-                            <FooterLink to="/signin">Investors</FooterLink>
+                        <FooterLinkTitle>Privacy Policy</FooterLinkTitle> 
                             <FooterLink to="/signin">Terms of Services</FooterLink>
+                            <FooterLink to="/signin">Cookie Policy</FooterLink>
+                            <FooterLink to="/signin">Data Collection</FooterLink>
+                            <FooterLink to="/signin">Policy Updates</FooterLink>
+                            
                         
                     </FooterLinksItems>
 
                     <FooterLinksItems>
-                        <FooterLinkTitle>About Us</FooterLinkTitle> 
-                            <FooterLink to="/signin">How It Works</FooterLink>
-                            <FooterLink to="/signin">Testimonials</FooterLink>
-                            <FooterLink to="/signin">Careers</FooterLink>
-                            <FooterLink to="/signin">Investors</FooterLink>
-                            <FooterLink to="/signin">Terms of Services</FooterLink>
+                        <FooterLinkTitle>Social Medias</FooterLinkTitle> 
+                            <FooterLink to="/signin">Facebook</FooterLink>
+                            <FooterLink to="/signin">Instagram</FooterLink>
+                            <FooterLink to="/signin">Twitter</FooterLink>
+                            <FooterLink to="/signin">Youtube</FooterLink>
                         
                     </FooterLinksItems>
                     
@@ -60,7 +57,7 @@ const Footer = () => {
                         builTrackr
 
                     </SocialLogo>
-                    <WebsiteRights>builTracker © {new Date().getFullYear()} All rights reserved.</WebsiteRights>
+                    <WebsiteRights>builTrackr © {new Date().getFullYear()} All rights reserved.</WebsiteRights>
                 <SocialIcons>
                     <SocialIconLink href="/" target="_blank" area-label="Facebook">
                     <FaFacebook />

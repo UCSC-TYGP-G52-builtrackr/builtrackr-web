@@ -59,7 +59,8 @@ width: 100%;
 `;
 
 export const FooterLinkTitle = styled.h1`
-font-size: 14px;
+font-size: 15px;
+font-weight: bold;
 margin-bottom: 16px;
 `;
 

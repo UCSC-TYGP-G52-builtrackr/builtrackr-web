@@ -27,6 +27,7 @@ z-index: 1;
 width: 100%;
 padding: 0 24px;
 max-width: 1100px;
+
 `;
 
 export const NavLogo =styled(LinkR)`
@@ -125,5 +126,3 @@ box-shadow: 4px 4px 62px rgba(77, 71, 195, 0.40);
 
 
 `;
-
-

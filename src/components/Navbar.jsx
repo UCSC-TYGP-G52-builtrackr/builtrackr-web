@@ -9,7 +9,9 @@ import Notification from './Notification';
 import UserProfile from './UserProfile';
 import { useStateContext } from '../contexts/ContextProvider';
 
+
  const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
+
     <button
       type="button"
       onClick={() => customFunc()}
@@ -48,6 +50,7 @@ const Navbar = () => {
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
   return (
+
     <div className="relative flex gap-10 justify-end p-1.5 md:ml-10 md:mr-1">
 
       {/* <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} /> */}
@@ -59,9 +62,10 @@ const Navbar = () => {
           >
             <p>
               <div><span className="ml-1 text-[16px] font-bold text-black">
-                Govindani Sahasrika
+
+                Michael Scott
               </span></div>
-              <span className='float-right text-sm'>Site Supervisor</span>
+              <span className='float-right text-sm'>Chief Engineer</span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
             <img

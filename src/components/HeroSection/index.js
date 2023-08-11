@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import Video from '../../assets/videos/video.mov'
+//import BackgroundImage from '../../assets/images/background.png';
 import {Button} from '../ButtonElements'
 import { HeroContainer, HeroBg, VideoBg, HeroContent, HeroH1, HeroP, HeroBtnWrapper, ArrowForward, ArrowRight } from './HeroElements'
 
@@ -14,7 +15,8 @@ const onHover = () => {
     return (
         <HeroContainer>
           <HeroBg>
-            <VideoBg autoPlay loop muted src={Video} type='video/mov' />
+          {/* <img src={BackgroundImage} alt="Background" /> */}
+          <VideoBg autoPlay loop muted src={Video} type='video/mov' />
           </HeroBg>
           <HeroContent>
             <HeroH1>builTrackr Made You Easy</HeroH1>
