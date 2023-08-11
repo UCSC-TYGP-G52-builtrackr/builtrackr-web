@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoutes = ({ type }) => {
-  const authorized = true;
-  const logedUserType = 0; //parseInt(JSON.parse(localStorage.getItem("user_type")));
+  const authorized =
+    JSON.parse(localStorage.getItem("is_loged")) === "true" ? true : false;
+  const logedUserType = parseInt(JSON.parse(localStorage.getItem("user_type")));
   console.log(logedUserType);
   const logedUserHome = JSON.parse(localStorage.getItem("home_page"));
 

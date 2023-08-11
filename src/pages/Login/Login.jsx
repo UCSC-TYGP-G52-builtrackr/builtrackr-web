@@ -48,6 +48,8 @@ export function Login() {
           );
           console.log(data);
           if (data.status === 201) {
+            const token = data.headers["set-cookie"];
+            console.log(token);
             const jsonData = await data.json();
             console.log(jsonData);
 
@@ -64,6 +66,7 @@ export function Login() {
               "no",
               JSON.stringify(jsonData.employee_id.toString())
             );
+            localStorage.setItem("is_loged", JSON.stringify("true"));
 
             if (jsonData.type === 1) {
               localStorage.setItem("home_page", JSON.stringify("admin"));
@@ -92,6 +95,8 @@ export function Login() {
             .post("http://localhost:4000/api/user/auth", values)
             .then((res) => {
               if (res.status === 201) {
+                const token = res.headers["set-cookie"];
+                console.log(token);
                 const adminType = 0;
                 console.log(res.data.name);
                 toast.success("Login Successfull");
@@ -105,6 +110,7 @@ export function Login() {
                   JSON.stringify(res.data.id.toString())
                 );
                 localStorage.setItem("home_page", JSON.stringify("Admin"));
+                localStorage.setItem("is_loged", JSON.stringify("true"));
 
                 setTimeout(() => {
                   navigate("/admin");
