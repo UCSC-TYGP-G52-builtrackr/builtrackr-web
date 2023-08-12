@@ -5,32 +5,31 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { alignProperty } from "@mui/material/styles/cssUtils";
-
+import {encryptData } from '../../encrypt'
 export function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
+    type: "",
   });
   const navigate = useNavigate();
-  const [name, setName] = useState("Nilshan");
   const [errors, setErrors] = useState({});
   function handleInput(event) {
     const newObj = { ...values, [event.target.name]: event.target.value };
     setValues(newObj);
   }
-
+  console.log(values.type);
   async function handleValidation(event) {
-    console.log(values);
     event.preventDefault();
-    setErrors(Validation(values));
+    const error = Validation(values);
+    setErrors(error);
     console.log(errors);
-    const type = "Employee";
-    if (Object.keys(errors).length > 0) {
+    if (!error) {
+      console.log(error)
       return;
-    } else {
-      if (type === "Employee") {
-        console.log("ok1");
 
+    } else {
+      if (values.type === "Employee") {
         try {
           const data = await fetch(
             "http://localhost:4000/api/employee/loginEmployee",
@@ -51,21 +50,39 @@ export function Login() {
             const jsonData = await data.json();
             console.log(jsonData);
 
-            localStorage.setItem("user_type", JSON.stringify(jsonData.type.toString()));
-            localStorage.setItem("name", JSON.stringify(jsonData.name));
-            localStorage.setItem("company_id", JSON.stringify(jsonData.company_id.toString()));
-            localStorage.setItem("no", JSON.stringify(jsonData.employee_id.toString()));
+            localStorage.setItem(
+              "user_type",
+              JSON.stringify(encryptData(jsonData.type.toString()))
+            );
+            localStorage.setItem("name", JSON.stringify(encryptData(jsonData.name)));
+            localStorage.setItem(
+              "company_id",
+              JSON.stringify(encryptData(jsonData.company_id.toString()))
+            );
+            localStorage.setItem(
+              "no",
+              JSON.stringify(encryptData(jsonData.employee_id.toString()))
+            );
+            localStorage.setItem("is_loged", JSON.stringify(encryptData("yes")));
+
 
             if (jsonData.type === 1) {
-              localStorage.setItem("home_page", JSON.stringify("Admin"));
-              setName(jsonData.name);
-              navigate("/admin", { state: { name: jsonData.name } });
+              localStorage.setItem("home_page", JSON.stringify(encryptData("Admin")));
+              navigate("/admin");
               toast.success("Login Successfull");
-            }
-            else if(jsonData.type===4){
-              localStorage.setItem("home_page", JSON.stringify("sitemanager/dashboard"));
-              setName(jsonData.name);
-              navigate("/sitemanager/dashboard", { state: { name: jsonData.name } });
+            } else if (jsonData.type === 4) {
+              localStorage.setItem(
+                "home_page",
+                JSON.stringify(encryptData("sitemanager/dashboard"))
+              );
+              navigate("/sitemanager/dashboard");
+              toast.success("Login Successfull");
+            }else if (jsonData.type === 5) {
+              localStorage.setItem(
+                "home_page",
+                JSON.stringify(encryptData("Supervisor/KanbanBoard"))
+              );
+              navigate("/Supervisor/KanbanBoard");
               toast.success("Login Successfull");
             }
           }
@@ -73,7 +90,6 @@ export function Login() {
           console.error(err.message);
         }
       } else {
-        console.log("Ok2");
         try {
           await axios
             .post("http://localhost:4000/api/user/auth", values)
@@ -84,17 +100,19 @@ export function Login() {
                 toast.success("Login Successfull");
                 localStorage.setItem(
                   "user_type",
-                  JSON.stringify(adminType.toString())
+                  JSON.stringify(encryptData(adminType.toString()))
                 );
-                localStorage.setItem("name", JSON.stringify(res.data.name));
+                localStorage.setItem("name", JSON.stringify(encryptData(res.data.name)));
                 localStorage.setItem(
                   "company_id",
-                  JSON.stringify(res.data.id.toString())
+                  JSON.stringify(encryptData(res.data.id.toString()))
                 );
-                localStorage.setItem("home_page", JSON.stringify("Admin"));
+                localStorage.setItem("home_page", JSON.stringify(encryptData("Admin")));
+                localStorage.setItem("is_loged", JSON.stringify(encryptData("yes")));
+
 
                 setTimeout(() => {
-                  navigate("/admin", { state: { name: res.data.name } });
+                  navigate("/admin");
                 }, 2000);
               } else {
                 toast.error("Login Failed");
@@ -168,6 +186,25 @@ export function Login() {
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
+              <label>Login As</label>
+              <select
+                className="login-type-select"
+                value={values.type}
+                onChange={handleInput}
+                name="type"
+              >
+                <option className="login-option" value="" disabled>
+                  Selecet Login Type
+                </option>
+                <option className="login-option" value="Employee">
+                  Employee
+                </option>
+                <option className="login-option" value="Admin">
+                  Admin
+                </option>
+              </select>
+              {errors.type && <p style={{ color: "red" }}>{errors.type}</p>}
+              <br />
               <a href="forgotPassword">Forgot Password?</a> <br />
               <button className="next_button" type="submit">
                 {" "}

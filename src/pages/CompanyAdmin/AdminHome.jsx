@@ -1,9 +1,10 @@
 import react from "react";
 import { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { json, useLocation } from "react-router-dom";
 import Navbar from "../../components/CompanyAdmin/NavBar";
 import SideBar from "../../components/CompanyAdmin/SideBar";
 import ChatSpace from "../../components/CompanyAdmin/ChatSpace";
+import { decryptData } from "../../encrypt";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { BsChatDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
@@ -20,6 +21,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { IoIosArrowDropleft } from "react-icons/io";
 
 import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
@@ -92,11 +94,13 @@ const AdminHome = () => {
     setThemeSettings,
   } = useStateContext();
 
-  const location = useLocation();
-  const { name } = location.state || "";
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  console.log(name)
 
-  const company_id = parseInt(JSON.parse(localStorage.getItem("company_id")));
-
+  const company_id = parseInt(
+    decryptData(JSON.parse(localStorage.getItem("company_id")))
+  );
+  console.log(company_id);
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -169,6 +173,22 @@ const AdminHome = () => {
   const closeConfirmationModal2 = () => {
     setConfirmationModal2(false);
   };
+
+  // Handle Created and not created user roles privileges lists
+  let addedList2;
+  let addedList3;
+  let addedList4;
+  let addedList5;
+  userRoles.filter((el) => el.type === 2).map((el) => (addedList2 = true));
+  userRoles.filter((el) => el.type === 3).map((el) => (addedList3 = true));
+  userRoles.filter((el) => el.type === 4).map((el) => (addedList4 = true));
+  userRoles.filter((el) => el.type === 5).map((el) => (addedList5 = true));
+
+  let allRoleAdded =
+    addedList2 && addedList3 && addedList4 && addedList5 ? true : false;
+
+  console.log(allRoleAdded);
+
   const handleCloseEmployeeForm = () => {
     setEmployeeAddForm(false);
     setFName("");
@@ -196,11 +216,14 @@ const AdminHome = () => {
   };
 
   const [selectedRole, setSelectedRole] = useState(0);
+  console.log(selectedRole);
 
-  console.log(selectedRole)
+  const backToAdminHome = () => {
+    setSelectedRole(0);
+    setSelectedEmployee([]);
+  };
 
   const displayRole = (type) => {
-    console.log(type)
     setSelectedRole(type);
   };
 
@@ -208,7 +231,7 @@ const AdminHome = () => {
   const selectUserRoleDetails = userRoles.filter(
     (item) => item.type === selectedRole
   );
-  console.log(selectUserRoleDetails)
+  console.log(selectUserRoleDetails);
   const style = {
     position: "absolute",
     marginLeft: "150px",
@@ -310,7 +333,7 @@ const AdminHome = () => {
           body: JSON.stringify({
             name: roleName,
             type: selectedList,
-            company_id: 1,
+            company_id: company_id,
           }),
         });
 
@@ -330,6 +353,7 @@ const AdminHome = () => {
       setConfirmationModal2(false);
       setRoleNameErr("");
       setRoleImageErr("");
+      setSelectedList(0);
     }
   };
 
@@ -473,6 +497,13 @@ const AdminHome = () => {
         >
           <ToastContainer />
           {selectedRole !== 0 && (
+            <IoIosArrowDropleft
+              size="30px"
+              style={{ marginLeft: "20px", cursor: "pointer" }}
+              onClick={backToAdminHome}
+            />
+          )}
+          {selectedRole !== 0 && (
             <div
               className="main"
               style={{
@@ -480,8 +511,14 @@ const AdminHome = () => {
               }}
             >
               <div className="role-privileges">
-                {selectedRole === 1 && <h1>HR Manager's all privileges</h1>}
-                {selectUserRoleDetails.filter( (element) => element.type !== 1).map((el) => <h1>{`${el.role_name}'s all privileges`}</h1> )}
+                {selectedRole === 1 && (
+                  <h1 className="role-title">HR Manager's all privileges</h1>
+                )}
+                {selectUserRoleDetails
+                  .filter((element) => element.type !== 1)
+                  .map((el) => (
+                    <h1 className="role-title">{`${el.role_name}'s all privileges`}</h1>
+                  ))}
 
                 <div className="privileges-box">
                   {selectedRole === 1 &&
@@ -540,7 +577,7 @@ const AdminHome = () => {
               )}
             </div>
           )}
-          {selectedRole === 0 && (
+          {selectedRole === 0 && !allRoleAdded && (
             <div className="button">
               <button
                 className="add-button"
@@ -665,41 +702,42 @@ const AdminHome = () => {
                             className="all-privileges-set"
                             id={selctedListErr && "selected-list-error"}
                           >
-                            <PrivilegeSet
-                              privileges={list1}
-                              no={1}
-                              key={1}
-                              click={selectPrivilegeList}
-                              selectList={selectedList}
-                            />
-                            <PrivilegeSet
-                              privileges={list2}
-                              no={2}
-                              key={2}
-                              click={selectPrivilegeList}
-                              selectList={selectedList}
-                            />
-                            <PrivilegeSet
-                              privileges={list3}
-                              no={3}
-                              key={3}
-                              click={selectPrivilegeList}
-                              selectList={selectedList}
-                            />
-                            <PrivilegeSet
-                              privileges={list4}
-                              no={4}
-                              key={4}
-                              click={selectPrivilegeList}
-                              selectList={selectedList}
-                            />
-                            <PrivilegeSet
-                              privileges={list5}
-                              no={5}
-                              key={5}
-                              click={selectPrivilegeList}
-                              selectList={selectedList}
-                            />
+                            {!addedList2 && (
+                              <PrivilegeSet
+                                privileges={list2}
+                                no={2}
+                                key={2}
+                                click={selectPrivilegeList}
+                                selectList={selectedList}
+                              />
+                            )}
+                            {!addedList3 && (
+                              <PrivilegeSet
+                                privileges={list3}
+                                no={3}
+                                key={3}
+                                click={selectPrivilegeList}
+                                selectList={selectedList}
+                              />
+                            )}
+                            {!addedList4 && (
+                              <PrivilegeSet
+                                privileges={list4}
+                                no={4}
+                                key={4}
+                                click={selectPrivilegeList}
+                                selectList={selectedList}
+                              />
+                            )}
+                            {!addedList5 && (
+                              <PrivilegeSet
+                                privileges={list5}
+                                no={5}
+                                key={5}
+                                click={selectPrivilegeList}
+                                selectList={selectedList}
+                              />
+                            )}
                           </div>
                           {selctedListErr && (
                             <span className="selecte-list-err">
@@ -1178,8 +1216,16 @@ function ConfirmationdModal({
           aria-describedby="child-modal-description"
         >
           <Box sx={style}>
-            <h2 id="child-modal-title">Text in a child modal</h2>
-            <p id="child-modal-description">{text} </p>
+            <h1
+              style={{
+                textAlign: "center",
+                fontSizeAdjust: "16px",
+                fontWeight: "600",
+              }}
+              id="child-modal-description"
+            >
+              {text}{" "}
+            </h1>
             <div className="two-btns">
               <Buttons
                 type={"button"}
