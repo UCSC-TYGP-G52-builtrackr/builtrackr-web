@@ -7,7 +7,7 @@ import Header from '../../components/HrManager/HeaderHr';
 import Dropdown from '../../components/HrManager/Dropdown';
 import RegForm from '../../components/RegForm';
 import React, { useState } from 'react';
-
+import EmpRegForm from '../../components/HrManager/EmpRegForm'
 import dummyEmployees from '../../data/HrManager/dummyEmployees';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPencilAlt, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -20,10 +20,12 @@ import Sidebar from '../../components/Sidebar';
 import SidebarHR from '../../components/HrManager/SidebarHR';
 import ChatSpace from '../../components/ChatSpace';
 import { BsChatDots } from 'react-icons/bs';
-
+import { Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../CSS/HrManager/App.css';
+
+
 
 const Employees = () => {
   const selectionsettings = { persistSelection: true };
@@ -32,7 +34,7 @@ const Employees = () => {
   const navigate = useNavigate();
   const { themeSettings, setThemeSettings } = useStateContext();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-
+const [employeeAddForm, setemployeeAddForm]= useState(false);
   const handleDeleteClick = (employee) => {
     Swal.fire({
       title: 'Delete Employee?',
@@ -58,6 +60,17 @@ const Employees = () => {
 
   const handleCloseModal = () => {
     setSelectedEmployee(null);
+  };
+
+
+  const [showEmpRegForm, setShowEmpRegForm] = useState(false);
+
+  const handleAddClick = () => {
+    setemployeeAddForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowEmpRegForm(false);
   };
 
 
@@ -125,13 +138,18 @@ const Employees = () => {
         </table>
       </div>
       <div className="flex justify-end mt-4">
-        <Link
-          to="/AddEmployee"
-          className="bg-blue-500 text-white py-2 px-4 rounded shadow hover:bg-blue-600"
-        >
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          Add Employee
-        </Link>
+      {/* <Link
+  to="/EmpRegForm"
+  className="bg-yellow-400 text-white py-2 px-4 rounded shadow hover:bg-yellow-500"
+>
+  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+  Add Employee
+</Link> */}
+     <Button variant="contained" color="warning" className="bg-yellow-400" onClick={handleAddClick}>
+        Add Employee
+      </Button>
+    <EmpRegForm employeeAddForm={employeeAddForm} />
+      {showEmpRegForm && <EmpRegForm onClose={handleCloseForm} />}
       </div>
       {selectedEmployee && (
         <EmployeeDetailModal

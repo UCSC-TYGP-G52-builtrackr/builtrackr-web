@@ -55,9 +55,9 @@ const Users = () => {
             {URData.map((user) => {
               return (
                 <div className='relative h-[250px] w-[250px]'>
-                <div className='absolute inset-0 bg-center bg-cover shadow-2xl' style={{ backgroundImage: `url(${user.image})` }}></div>
-                <div className='absolute inset-0 flex flex-col items-center justify-center bg-gray-300 bg-opacity-75'>
-                <div className='mt-12 text-3xl text-center'>{user.name}</div>
+                <div className='absolute inset-0 bg-center bg-cover shadow-2xl rounded-[50%]' style={{ backgroundImage: `url(${user.image})` }}></div>
+                <div className='absolute inset-0 flex flex-col items-center justify-center bg-gray-300 bg-opacity-10'>
+                <div className='bg-white bg-opacity-40 mt-12 text-3xl text-center'>{user.name}</div>
 
                 <nav>
                   <Link to={`/HR/user roles/${user.id}`}>
@@ -76,9 +76,7 @@ const Users = () => {
             })}
 
               {/* new site creation tile */}
-                <div className='bg-gray-300 h-[250px] w-[250px] flex justify-center items-center shadow-2xl'>
-                    <RegFormHR/>
-                </div>
+                
                 
             </div> 
             {/* end of users grid */}
