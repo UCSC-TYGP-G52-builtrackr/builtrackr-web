@@ -1,41 +1,41 @@
-import React from 'react'
-import {FaBars} from 'react-icons/fa'
-import {Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem,NavLinks,NavBtn, NavBtnLink } from './NavbarElements'
-import {NavLink} from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { FaBars } from 'react-icons/fa';
+import { Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem, NavLinks, NavBtn, NavBtnLink } from './NavbarElements';
+import { useNavigate } from 'react-router-dom';
+import logoImage from '../../assets/images/logonew.png';
 
-const Navbar = ( {toggle} ) => {
-    const navigate = useNavigate();
+const Navbar = ({ toggle }) => {
+  const navigate = useNavigate();
+
   return (
-    
     <>
-    <Nav>
+      <Nav>
         <NavbarContainer>
-            <NavLogo to='/'>builTrackr</NavLogo>
-            <MobileIcon onClick={toggle}>
-                <FaBars/>
-            </MobileIcon>
-            <NavMenu>
-                <NavItem>
-                    <NavLinks to='about'>About</NavLinks>
-                </NavItem>
-                <NavItem>
-                    <NavLinks to='services'>Services</NavLinks>
-                </NavItem>
-                <NavItem>
-                    <NavLinks to='contactus'>Contact Us</NavLinks>
-                </NavItem>
-                <NavItem>
-                    <NavLinks to="/Login" onClick={navigate("/Register")}>Sign Up</NavLinks>
-                </NavItem>
-            </NavMenu>
-            <NavBtn>
-                <NavBtnLink to="/Login">Sign In</NavBtnLink>
-            </NavBtn>
+          <NavLogo to='/'> <img src={logoImage} alt="Logo" style={{ width: '7.5rem', height: '4.5rem' }} /> </NavLogo>
+          <MobileIcon onClick={toggle}>
+            <FaBars />
+          </MobileIcon>
+          <NavMenu>
+            <NavItem>
+              <NavLinks to='aboutus'>About</NavLinks>
+            </NavItem>
+            <NavItem>
+              <NavLinks to='services'>Services</NavLinks>
+            </NavItem>
+            <NavItem>
+              <NavLinks to='footer'>Contact Us</NavLinks>
+            </NavItem>
+            <NavItem>
+              <NavLinks to="/Register" onClick={() => navigate('/Register')}>Sign Up</NavLinks>
+            </NavItem>
+          </NavMenu>
+          <NavBtn>
+            <NavBtnLink to="/Login">Sign In</NavBtnLink>
+          </NavBtn>
         </NavbarContainer>
-    </Nav>
+      </Nav>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
