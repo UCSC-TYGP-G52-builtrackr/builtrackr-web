@@ -206,7 +206,7 @@ export function Login() {
               {errors.type && <p style={{ color: "red" }}>{errors.type}</p>}
               <br />
               <a href="forgotPassword">Forgot Password?</a> <br />
-              <button className="next_button" type="submit">
+              <button className="next_button" type="submit" style={{backgroundColor:"#ffcc00", marginTop:"10px" , fontWeight:"700"}}>
                 {" "}
                 Login
               </button>

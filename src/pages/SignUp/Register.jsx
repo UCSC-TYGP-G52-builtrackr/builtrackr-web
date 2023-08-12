@@ -177,7 +177,7 @@ export const Register = () => {
                 <div className="error">{errors.contactNo}</div>
               )}
               <br />
-              <button className="next_button" type="submit">
+              <button className="next_button" type="submit" style={{backgroundColor:"#ffcc00", marginTop:"10px" , fontWeight:"700"}}>
                 Next Page
               </button>
             </div>

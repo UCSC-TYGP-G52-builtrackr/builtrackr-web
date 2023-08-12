@@ -287,7 +287,7 @@ export const RegisterTwo = () => {
               {errors.cPassword && (
                 <p style={{ color: "red" }}>{errors.cPassword}</p>
               )}
-              <button className="next_button" type="submit" onClick={e=>handleSubmit(e)}>
+              <button className="next_button" type="submit" onClick={e=>handleSubmit(e)} style={{backgroundColor:"#ffcc00", marginTop:"10px" , fontWeight:"700"}}>
                 Register
               </button>
             </div>
