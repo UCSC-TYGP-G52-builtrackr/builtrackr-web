@@ -67,21 +67,24 @@ export function Login() {
 
 
             if (jsonData.type === 1) {
-              localStorage.setItem("home_page", JSON.stringify(encryptData("Admin")));
-              navigate("/admin");
+              localStorage.setItem("home_page", JSON.stringify(encryptData("hrmanager/userroles")));
+              navigate("/hrmanager/userroles");
+              toast.success("Login Successfull");
+            } else if (jsonData.type === 2){
+              localStorage.setItem("home_page", JSON.stringify(encryptData("inventorymanager/dashboard")));
+              navigate("/inventorymanager/dashboard");
+              toast.success("Login Successfull");
+            }  else if (jsonData.type === 3){
+              localStorage.setItem("home_page", JSON.stringify(encryptData("chiefEngineer/sites")));
+              navigate("/chiefEngineer/sites");
               toast.success("Login Successfull");
             } else if (jsonData.type === 4) {
-              localStorage.setItem(
-                "home_page",
-                JSON.stringify(encryptData("sitemanager/dashboard"))
+              localStorage.setItem("home_page",JSON.stringify(encryptData("sitemanager/dashboard"))
               );
               navigate("/sitemanager/dashboard");
               toast.success("Login Successfull");
             }else if (jsonData.type === 5) {
-              localStorage.setItem(
-                "home_page",
-                JSON.stringify(encryptData("Supervisor/KanbanBoard"))
-              );
+              localStorage.setItem("home_page",JSON.stringify(encryptData("Supervisor/KanbanBoard")));
               navigate("/Supervisor/KanbanBoard");
               toast.success("Login Successfull");
             }

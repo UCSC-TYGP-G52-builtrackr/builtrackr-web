@@ -19,26 +19,22 @@ import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
 import PaymentPlan from "./pages/SignUp/PaymentPlan";
-import Sites from './pages/chiefEngineer/Sites';
-import { Board } from './pages/Supervisor/KanbanBoard/Board';
-import {Drop} from './components/DropDown/Drop';
-import { Test } from './components/Comment/test';
-import { DashboardW } from './pages/Warehouse/DashboardW';
-import ItemList from './pages/Warehouse/ItemList';
-import { Material } from './pages/Warehouse/Material';
-import  FileUpload  from './pages/Supervisor/Documents/Documents';
-import Analytics from './pages/Supervisor/Analytics/Analytics';
-import { BsChatDots } from 'react-icons/bs';
-import Users from './pages/HrManager/Users';
-import LeaveDetails from './pages/HrManager/LeaveDetails';
-import Employees from './pages/HrManager/Employees';
-import Performance from './pages/HrManager/Performance';
-import SiteManagers from './pages/chiefEngineer/SiteManagers';
-import OneSite from './pages/chiefEngineer/OneSite';
-
-
-
-
+import Sites from "./pages/chiefEngineer/Sites";
+import { Board } from "./pages/Supervisor/KanbanBoard/Board";
+import { Drop } from "./components/DropDown/Drop";
+import { Test } from "./components/Comment/test";
+import { DashboardW } from "./pages/Warehouse/DashboardW";
+import ItemList from "./pages/Warehouse/ItemList";
+import { Material } from "./pages/Warehouse/Material";
+import FileUpload from "./pages/Supervisor/Documents/Documents";
+import Analytics from "./pages/Supervisor/Analytics/Analytics";
+import { BsChatDots } from "react-icons/bs";
+import Users from "./pages/HrManager/Users";
+import LeaveDetails from "./pages/HrManager/LeaveDetails";
+import Employees from "./pages/HrManager/Employees";
+import Performance from "./pages/HrManager/Performance";
+import SiteManagers from "./pages/chiefEngineer/SiteManagers";
+import OneSite from "./pages/chiefEngineer/OneSite";
 
 function App() {
   const {
@@ -61,8 +57,6 @@ function App() {
   }, []);
 
   return (
-
- 
     <div className="App">
       <Routes>
         <Route path="/home" element={<Home />} />
@@ -80,19 +74,19 @@ function App() {
         </Route>
         {/* HR Manager */}
         <Route element={<ProtectedRoutes type={1} />}></Route>
-        <Route path="/hrmanager/user roles" element={(<Users />)} />
-            <Route path="/hrmanager/employees" element={(<Employees />)} />
-            <Route path="/hrmanager/leave" element={(<LeaveDetails />)} />
-            <Route path="/hrmanager/performance review" element={(<Performance />)} />
+        <Route path="/hrmanager/userroles" element={<Users />} />
+        <Route path="/hrmanager/employees" element={<Employees />} />
+        <Route path="/hrmanager/leave" element={<LeaveDetails />} />
+        <Route path="/hrmanager/performance review" element={<Performance />} />
         {/* Inventory Manager */}
         <Route element={<ProtectedRoutes type={2} />}></Route>
 
         {/* Cheif Engineer */}
         <Route element={<ProtectedRoutes type={3} />}>
-        <Route path="/chiefEngineer/sites" element={(<Sites />)} />
-            <Route path="/chiefEngineer/site managers" element={(<SiteManagers />)} />
-            <Route path="/chiefEngineer/analytics" element={(<Analytics />)} />
-            <Route path="/chiefEngineer/sites/:id" element={(<OneSite />)} />
+          <Route path="/chiefEngineer/sites" element={<Sites />} />
+          <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
+          <Route path="/chiefEngineer/analytics" element={<Analytics />} />
+          <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
         </Route>
         {/* Site Manager */}
         <Route element={<ProtectedRoutes type={4} />}>
@@ -106,25 +100,23 @@ function App() {
 
         {/* Site Supervisor */}
         <Route element={<ProtectedRoutes type={5} />}>
-          <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
+          <Route path="/Supervisor/KanbanBoard" element={<Board />} />
 
-                <Route path="/dropdown" element={(<Drop />)} />
-                <Route path="/test" element={(<Test />)} />
-           
-                <Route path="/chiefEngineer/sites" element={<Sites />} />
-                <Route path="/chiefEngineer/tasks" element={<Sites />} />
-                <Route path= "/Equipments" element={<DashboardW />} />
-                <Route path= "/Equipments/List" element={<ItemList/>} />
-                <Route path= "/Materials" element={<Material />} />
-                <Route path= "/Materials/List" element={<ItemList/>} />
-                <Route path = '/Supervisor/Documents' element = {<FileUpload/>} />
-                <Route path = '/Supervisor/Analytics' element = {<Analytics/>} />
-          </Route>
+          <Route path="/dropdown" element={<Drop />} />
+          <Route path="/test" element={<Test />} />
+
+          <Route path="/chiefEngineer/sites" element={<Sites />} />
+          <Route path="/chiefEngineer/tasks" element={<Sites />} />
+          <Route path="/Equipments" element={<DashboardW />} />
+          <Route path="/Equipments/List" element={<ItemList />} />
+          <Route path="/Materials" element={<Material />} />
+          <Route path="/Materials/List" element={<ItemList />} />
+          <Route path="/Supervisor/Documents" element={<FileUpload />} />
+          <Route path="/Supervisor/Analytics" element={<Analytics />} />
+        </Route>
       </Routes>
-
     </div>
   );
 }
 
 export default App;
-
