@@ -31,6 +31,13 @@ import { Material } from './pages/Warehouse/Material';
 import  FileUpload  from './pages/Supervisor/Documents/Documents';
 import Analytics from './pages/Supervisor/Analytics/Analytics';
 import { BsChatDots } from 'react-icons/bs';
+//import from HR
+import Users from './pages/HrManager/Users';
+import LeaveDetails from './pages/HrManager/LeaveDetails';
+import Employees from './pages/HrManager/Employees';
+import Performance from './pages/HrManager/Performance';
+
+
 
 function App() {
   const {
@@ -72,6 +79,10 @@ function App() {
         </Route>
         {/* HR Manager */}
         <Route element={<ProtectedRoutes type={1} />}></Route>
+        <Route path="/hrmanager/user roles" element={(<Users />)} />
+            <Route path="/hrmanager/employees" element={(<Employees />)} />
+            <Route path="/hrmanager/leave" element={(<LeaveDetails />)} />
+            <Route path="/hrmanager/performance review" element={(<Performance />)} />
         {/* Inventory Manager */}
         <Route element={<ProtectedRoutes type={2} />}></Route>
 
