@@ -9,6 +9,9 @@ import avatar from "../../data/avatar.jpg";
 import Notification from "./Notification";
 import UserProfile from "./UserProfile";
 import { useStateContext } from "../../contexts/ContextProvider";
+import { deDE } from "@mui/x-date-pickers";
+import { decryptData } from "../../encrypt";
+import { useNavigate } from "react-router-dom";
 
 // const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 //     <button
@@ -34,7 +37,7 @@ const NavBar = () => {
     setScreenSize,
     screenSize,
   } = useStateContext();
-  const name = JSON.parse(localStorage.getItem("name"));
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
 
 
   useEffect(() => {
@@ -74,10 +77,8 @@ const NavBar = () => {
           className="flex items-center gap-2 p-1 rounded-lg cursor-pointer hover:bg-light-gray"
           onClick={() => handleClick("userProfile")}
         >
-          <p style={{display:"flex", flexDirection:"column"}}>
-            <span className="text-[16px] font-bold text-black">
-              {name}
-            </span>
+          <p style={{ display: "flex", flexDirection: "column" }}>
+            <span className="text-[16px] font-bold text-black">{name}</span>
             <span className="float-right text-sm">Company Admin</span>
           </p>
           <MdKeyboardArrowDown className="text-gray-400 text-14" />

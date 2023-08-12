@@ -26,6 +26,8 @@
     "antd": "^5.8.2",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.9",
     "express": "^4.18.2",
     "feedbackfin_react": "^2.0.0",
