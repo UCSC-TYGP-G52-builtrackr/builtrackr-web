@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatSpace from "./components/CompanyAdmin/ChatSpace";
 import { useStateContext } from "./contexts/ContextProvider";
 import ProtectedRoutes from "./ProtectedRoutes";
-// import Test from "./pages/CompanyAdmin/Test";
 import "./App.css";
 import { Login } from "./pages/Login/Login";
 import { Register } from "./pages/SignUp/Register";
@@ -18,7 +17,6 @@ import Task from "./pages/SiteManager/Task";
 // import Analytics from "./pages/SiteManager/Analytics";
 import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
-import { ChakraProvider } from "@chakra-ui/react";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
 import PaymentPlan from "./pages/SignUp/PaymentPlan";
 import Sites from './pages/chiefEngineer/Sites';
@@ -31,11 +29,14 @@ import { Material } from './pages/Warehouse/Material';
 import  FileUpload  from './pages/Supervisor/Documents/Documents';
 import Analytics from './pages/Supervisor/Analytics/Analytics';
 import { BsChatDots } from 'react-icons/bs';
-//import from HR
 import Users from './pages/HrManager/Users';
 import LeaveDetails from './pages/HrManager/LeaveDetails';
 import Employees from './pages/HrManager/Employees';
 import Performance from './pages/HrManager/Performance';
+import SiteManagers from './pages/chiefEngineer/SiteManagers';
+import OneSite from './pages/chiefEngineer/OneSite';
+
+
 
 
 
@@ -87,7 +88,12 @@ function App() {
         <Route element={<ProtectedRoutes type={2} />}></Route>
 
         {/* Cheif Engineer */}
-        <Route element={<ProtectedRoutes type={3} />}></Route>
+        <Route element={<ProtectedRoutes type={3} />}>
+        <Route path="/chiefEngineer/sites" element={(<Sites />)} />
+            <Route path="/chiefEngineer/site managers" element={(<SiteManagers />)} />
+            <Route path="/chiefEngineer/analytics" element={(<Analytics />)} />
+            <Route path="/chiefEngineer/sites/:id" element={(<OneSite />)} />
+        </Route>
         {/* Site Manager */}
         <Route element={<ProtectedRoutes type={4} />}>
           <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
