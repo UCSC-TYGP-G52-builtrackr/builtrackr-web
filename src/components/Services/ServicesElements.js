@@ -1,19 +1,20 @@
 import styled from 'styled-components'
 
 export const ServicesContainer = styled.div`
-height: 1150px;
+height: 1180px;
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
 background: #fff;
+margin-bottom:50px;
 
 @media screen and (max-width: 768px){
-    height: 1900px;
+    height: 1980px;
 }
 
 @media screen and (max-width: 480px){
-    height: 2100px;
+    height: 2180px;
 }
 `;
 
@@ -44,7 +45,7 @@ flex-direction: column;
 justify-content: flex-start;
 align-items: center;
 border: none;
-max-height: 400px;
+max-height: 450px;
 padding: 30px;
 
 transition: all 0.2s ease-in-out;

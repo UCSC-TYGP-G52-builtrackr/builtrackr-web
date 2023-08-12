@@ -1,15 +1,30 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { SiteData } from '../../data/SiteData';
 import Header from '../../components/Header';
+import Dropdown from '../../components/Dropdown';
 import RegForm from '../../components/RegForm';
+
+// dashboard common components
+import Navbar from '../../components/Navbar'
+import Sidebar from '../../components/Sidebar';
+import SidebarCE from '../../components/SidebarCE';
+import ChatSpace from '../../components/ChatSpace';
+import { BsChatDots } from 'react-icons/bs';
+
 import { useNavigate } from "react-router-dom";
+import { useStateContext } from '../../contexts/ContextProvider';
+import '../../App.css';
+
 
 const Sites = () => {
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
   const editing = { allowDeleting: true, allowEditing: true };
   const navigate = useNavigate();
+  const { themeSettings, setThemeSettings } = useStateContext();
+
 
   return (
     <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">

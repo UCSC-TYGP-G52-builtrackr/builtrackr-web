@@ -18,7 +18,7 @@ const Services = () => {
         <ServicesCard>
             <ServicesIcon src={Icon2}/>
             <ServicesH2>Allocate Manpower</ServicesH2>
-            <ServicesP>Effortlessly manage your workforce with our innovative Allocate Manpower feature, ensuring the right people are in the right place at the right time, maximizing efficiency and productivity.</ServicesP>
+            <ServicesP>Enhance workforce efficiency with our "Allocate Manpower" feature, placing the right people in the right roles at the right times.</ServicesP>
         </ServicesCard>
         <ServicesCard>
             <ServicesIcon src={Icon3 }/>
