@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image } from '@chakra-ui/react';
+import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image, ChakraProvider } from '@chakra-ui/react';
 import { useDropzone } from 'react-dropzone';
 import { useEffect, useState } from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
@@ -51,13 +51,14 @@ const FileUpload = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
+    <ChakraProvider>
     <>
     <Navbar />
     <div className='flex'>
     <Sidebar/>
-    <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]">
+    <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]" style={{width:"80%",marginLeft:"18%"}} >
     <div className='ml-[300px] flex items-center justify-center'>
-    <div className='flex flex-col'>
+    <div className='flex flex-col' style={{width:"80%",marginRight:"18%"}}>
     <Box {...getRootProps()} cursor="pointer" className='max-w-lg '>
       <input {...getInputProps()} />
 
@@ -87,7 +88,17 @@ const FileUpload = () => {
                   {pdfUrl.name}
                 </Text>
              
-                <Button mt={4} colorScheme="blue" onClick={() => viewPdf(pdfUrl.path)}>
+                <Button mt={4} colorScheme="blue" onClick={() => viewPdf(pdfUrl.path)} style={{
+                backgroundColor: "#ffcc00",
+                border: "none",
+                color: "black",
+                padding: "10px 20px",
+                fontSize: "16px",
+                borderRadius: "4px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                cursor: "pointer",
+                transition: "background-color 0.3s, box-shadow 0.3s",
+              }}>
                   View Document
                 </Button>
               </Box>
@@ -103,6 +114,7 @@ const FileUpload = () => {
 
 
 </>
+</ChakraProvider>
   );
 };
 
