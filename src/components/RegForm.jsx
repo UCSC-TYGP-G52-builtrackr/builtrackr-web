@@ -34,15 +34,83 @@ export default function RegForm() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [siteType, setSiteType] = useState('');
+  const [siteClient, setSiteClient] = useState('');
+  const [siteName, setSiteName] = useState('');
+  const [siteDesc, setSiteDesc] = useState('');
+ 
+  async function handleSubmit(e) {
+      e.preventDefault();
+
+      // Create a JavaScript object with the form data
+      const formData = {
+        siteType: siteType,
+        siteClient: siteClient,
+        siteName: siteName,
+        siteDesc: siteDesc,
+      };
+
+      const data = await fetch(
+        "http://localhost:4000/api/site/addSite",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (data.status === 200) {
+        const jsonData = await data.json();
+        console.log(jsonData);
+        handleClose();
+        setSiteName('');
+        setSiteDesc('');
+        setSiteType('');
+        setSiteClient('');
+        // toast.success("HR Manager registed successfuly");
+      }
+      
+      // axios.post('/', formData)
+      // .then((response) => {
+      //   console.log('Form data sent successfully:', response.data);
+      //   // Do something with the response if needed
+      // })
+      // .catch((error) => {
+      //   console.error('Error sending form data:', error);
+      // });
+    }
+
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   switch (name) {
+  //     case 'siteName':
+  //       setSiteName(value);
+  //       break;
+  //     case 'siteType':
+  //       setSiteType(value);
+  //       break;
+  //     case 'siteClient':
+  //       setSiteClient(value);
+  //       break;
+  //     case 'siteDesc':
+  //       setSiteDesc(value);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+  
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [password, setPassword] = useState('')
- 
+
   function handleSubmit(event) {
       event.preventDefault();
-      console.log(firstName, lastName, email, dateOfBirth, password) 
+      console.log(firstName, lastName, email, dateOfBirth, password)
   }
 
   const [age, setAge] = React.useState('');
@@ -80,6 +148,7 @@ export default function RegForm() {
             
             <h2>Create New Site</h2>
             
+
             <form onSubmit={handleSubmit} action={<Link to="/login" />} className='mt-5'>
                 <Stack spacing={2} direction="row" sx={{marginBottom: 4}}>
                     <TextField
@@ -97,11 +166,11 @@ export default function RegForm() {
                       <Select
                         labelId="demo-simple-select-autowidth-label"
                         id="demo-simple-select-autowidth"
-                        value={age}
-                        // onChange={handleChange}
+                        value={siteType}
+                        onChange={(e) => setSiteType(e.target.value)}
                         autoWidth
                         required
-                        label="Type"
+                        label="siteType"
                       >
                         {/* <MenuItem value="">
                           <em>None</em>
@@ -110,6 +179,7 @@ export default function RegForm() {
                         <MenuItem value={21}>Industrial</MenuItem>
                         <MenuItem value={22}>Commercial</MenuItem>
                         <MenuItem value={22}>Infrastructure</MenuItem>
+
                       </Select>
                   </FormControl>
                 </Stack>
@@ -119,11 +189,11 @@ export default function RegForm() {
                       <Select
                         labelId="demo-simple-select-autowidth-label"
                         id="demo-simple-select-autowidth"
-                        value={age}
-                        // onChange={handleChange}
+                        value={siteClient}
+                        onChange={(e) => setSiteClient(e.target.value)}
                         fullWidth
                         required
-                        label="Site Client"
+                        label="siteClient"
                       >
                         <MenuItem value="">
                           <em>None</em>
@@ -139,8 +209,8 @@ export default function RegForm() {
                     variant='outlined'
                     color='secondary'
                     label="Site Description"
-                    onChange={e => setEmail(e.target.value)}
-                    value={email}
+                    onChange={(e) => setSiteDesc(e.target.value)}
+                    value={siteDesc}
                     fullWidth
                     rows={4}
                     sx={{mb: 4}}
