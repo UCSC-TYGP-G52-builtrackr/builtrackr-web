@@ -7,6 +7,7 @@ import Button from '@mui/joy/Button';
 import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import Typography from '@mui/joy/Typography';
+import { Input } from '@mui/material';
 
 
 
@@ -66,6 +67,7 @@ export const Todo = (props) =>{
        Do you want to decline the task?
       </Typography>
       <Typography id="nested-modal-description" textColor="text.tertiary">
+        <Input placeholder='Enter the reason' />
        
       </Typography>
       <Box
@@ -76,8 +78,8 @@ export const Todo = (props) =>{
           flexDirection: { xs: 'column', sm: 'row-reverse' },
         }}
       >
-        <Button variant="solid" color="neutral" onClick={() => setOpen(false)}>
-          Continue
+        <Button variant="solid" color="danger" onClick={() => setOpen(false)}>
+          Decline
         </Button>
         <Button
           variant="outlined"
