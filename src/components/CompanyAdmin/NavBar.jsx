@@ -37,7 +37,7 @@ const NavBar = () => {
     setScreenSize,
     screenSize,
   } = useStateContext();
-  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  // const name = decryptData(JSON.parse(localStorage.getItem("name")));
 
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const NavBar = () => {
           onClick={() => handleClick("userProfile")}
         >
           <p style={{ display: "flex", flexDirection: "column" }}>
-            <span className="text-[16px] font-bold text-black">{name}</span>
+            <span className="text-[16px] font-bold text-black">{'Cham'}</span>
             <span className="float-right text-sm">Company Admin</span>
           </p>
           <MdKeyboardArrowDown className="text-gray-400 text-14" />

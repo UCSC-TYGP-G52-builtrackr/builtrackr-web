@@ -19,9 +19,9 @@ import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 import { Card, Text, Metric, Flex, ProgressBar } from "@tremor/react";
 
 // dashboard common components
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/ChiefEngineer/Navbar'
 import Sidebar from '../../components/Sidebar';
-import SidebarCE from '../../components/SidebarCE';
+import SidebarCE from '../../components/ChiefEngineer/SidebarCE';
 import ChatSpace from '../../components/ChatSpace';
 import { BsChatDots } from 'react-icons/bs';
 import PieComponent from '../../components/PieComponent';
@@ -75,7 +75,7 @@ const datas = [
   },
 ];
 
-const Analytics = () => {
+const CEAnalytics = () => {
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
   const editing = { allowDeleting: true, allowEditing: true };
@@ -111,15 +111,17 @@ const Analytics = () => {
             {/* horizontal KPI cards list */}
             <div className='grid grid-cols-4 gap-[20px] mt-[25px] pb-[15px]'>
                 <div className='border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#B589DF] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
-                    <div>
-                        <h2 className='text-[#B589DF] text-sm font-bold'>Schedule Performance <br/>Index</h2>
+                    <div className='text-start'>
+                        <h2 className='text-[#B589DF] text-sm font-bold'>Schedule Perform <br/>Index</h2>
                         <h1 className='text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]'>1.2</h1>
                     </div>
-                    <FaRegCalendarMinus fontSize={28} color="" />
+                    <div className='text-4xl'>
+                    <FaRegCalendarMinus fontSize="inherit"/>
+                    </div>
 
                 </div>
                 <div className='border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#1CC88A] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
-                    <div>
+                    <div className='text-start'>
                         <h2 className='text-[#1cc88a] text-sm font-bold'>
                             Cost Performance <br/>Index</h2>
                         <h1 className='text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]'>4.2</h1>
@@ -130,7 +132,7 @@ const Analytics = () => {
                     
                 </div>
                 <div className='border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#36B9CC] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
-                    <div>
+                    <div className='text-start'>
                         <h2 className='text-[#36B9CC] text-sm font-bold'>Safety Incident <br/>Rate</h2>
                         <h1 className='text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]'>11%</h1>
                     </div>
@@ -140,7 +142,7 @@ const Analytics = () => {
                     
                 </div>
                 <div className='border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#F6C23E] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
-                    <div>
+                    <div className='text-start'>
                         <h2 className='text-[#F6C23E] text-sm font-bold'>Defects Per <br/>Unit</h2>
                         <h1 className='text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]'>2</h1>
                     </div>
@@ -209,23 +211,23 @@ const Analytics = () => {
                     </div>
                     <div className='px-[25px] space-y-[15px] py-[15px]'>
                         <div>
-                            <h2>Task 1</h2>
+                            <h2 className="text-start">Task 1</h2>
                             <Progress percent={30} strokeColor="#E74A3B" />
                         </div>
                         <div>
-                            <h2>Task 2</h2>
+                            <h2 className="text-start">Task 2</h2>
                             <Progress percent={50} status="active" strokeColor="#F6C23E" />
                         </div>
                         <div>
-                            <h2>Task 3</h2>
+                            <h2 className="text-start">Task 3</h2>
                             <Progress percent={70} status="active" strokeColor="#4E73DF" />
                         </div>
                         <div>
-                            <h2>Task 4</h2>
+                            <h2 className="text-start">Task 4</h2>
                             <Progress percent={100} strokeColor="#36B9CC" />
                         </div>
                         <div>
-                            <h2>Task 5</h2>
+                            <h2 className="text-start">Task 5</h2>
                             <Progress percent={50} status="exception" strokeColor="#1CC88A" />
                         </div>
                     </div>
@@ -253,4 +255,4 @@ const Analytics = () => {
   );
 };
 
-export default Analytics;
+export default CEAnalytics;

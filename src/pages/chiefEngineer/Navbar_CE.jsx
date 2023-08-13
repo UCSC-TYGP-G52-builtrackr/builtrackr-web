@@ -24,7 +24,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
     </button>
 );
 
-const Navbar = () => {
+const Navbar_CE = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
 
   useEffect(() => {
@@ -82,4 +82,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar_CE;

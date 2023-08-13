@@ -35,6 +35,8 @@ import Employees from "./pages/HrManager/Employees";
 import Performance from "./pages/HrManager/Performance";
 import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
+import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
+import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 
 function App() {
   const {
@@ -85,8 +87,10 @@ function App() {
         <Route element={<ProtectedRoutes type={3} />}>
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
-          <Route path="/chiefEngineer/analytics" element={<Analytics />} />
+          {/* <Route path="/chiefEngineer/analytics" element={<Analytics />} /> */}
           <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
+          <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
+          <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
         </Route>
         {/* Site Manager */}
         <Route element={<ProtectedRoutes type={4} />}>
