@@ -57,6 +57,7 @@ function App() {
  
     <div className="App">
       <Routes>
+      <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
