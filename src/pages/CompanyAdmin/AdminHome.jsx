@@ -1,5 +1,6 @@
 import react from "react";
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { json, useLocation } from "react-router-dom";
 import Navbar from "../../components/CompanyAdmin/NavBar";
 import SideBar from "../../components/CompanyAdmin/SideBar";
@@ -95,7 +96,7 @@ const AdminHome = () => {
   } = useStateContext();
 
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
-  console.log(name)
+  console.log(name);
 
   const company_id = parseInt(
     decryptData(JSON.parse(localStorage.getItem("company_id")))
@@ -110,7 +111,6 @@ const AdminHome = () => {
 
   // User role add
   const [roleImage, setRoleImage] = useState("");
-  const [roleImageErr, setRoleImageErr] = useState("");
 
   const [roleName, setRoleName] = useState("");
   const [roleNameErr, setRoleNameErr] = useState("");
@@ -122,6 +122,8 @@ const AdminHome = () => {
     setSelectedList(no);
     setSelectedListErr("");
   };
+  console.log(selectedList);
+  console.log(roleImage);
 
   // Empolyee add from
   const [fName, setFName] = useState("");
@@ -249,8 +251,6 @@ const AdminHome = () => {
     setSelectedList(0);
     setRoleName("");
     setRoleNameErr("");
-    setRoleImage("");
-    setRoleImageErr("");
     setSelectedListErr("");
   };
 
@@ -323,7 +323,6 @@ const AdminHome = () => {
       setConfirmationModal2(false);
       return;
     } else {
-      console.log(roleNameErr);
       try {
         const data = await fetch("http://localhost:4000/api/user/addUserRole", {
           method: "POST",
@@ -352,7 +351,6 @@ const AdminHome = () => {
       setRoleImage("");
       setConfirmationModal2(false);
       setRoleNameErr("");
-      setRoleImageErr("");
       setSelectedList(0);
     }
   };
@@ -434,36 +432,51 @@ const AdminHome = () => {
         registerDate: registerDate,
         address: address,
         password: password,
-        company_id: 1,
+        company_id: company_id,
         type: 1,
       };
-      console.log(lNameErr);
-      console.log(fNameErr);
-      console.log(nicErr);
-      try {
-        const data = await fetch(
-          "http://localhost:4000/api/employee/registerEmployee",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+      let emailErr = false;
 
-        if (data.status === 200) {
-          const jsonData = await data.json();
-          console.log(jsonData);
-          toast.success("HR Manager registed successfuly");
-        }
+      try {
+        await axios
+          .post("http://localhost:4000/api/employee/employeeExists", formData)
+          .then((res) => {
+            if (res.data.status) {
+              emailErr = true;
+              toast.error("Email Already exist");
+              setConfirmationModal1(false)
+              return;
+            }
+          });
       } catch (err) {
-        console.error(err.message);
+        toast.error(err.response.data.error);
+        return;
       }
-      closeConfirmationModal1(false);
-      handleCloseEmployeeForm();
+      if (!emailErr) {
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/registerEmployee",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            }
+          );
+
+          if (data.status === 200) {
+            const jsonData = await data.json();
+            console.log(jsonData);
+            toast.success("HR Manager registed successfuly");
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
+        closeConfirmationModal1(false);
+        handleCloseEmployeeForm();
+      }
     } else {
-      console.log("Hiiiiiii");
       setConfirmationModal1(false);
       return;
     }
@@ -638,7 +651,7 @@ const AdminHome = () => {
                         onChange={(e) => setRoleName(e.target.value)}
                         helperText={roleNameErr !== "" && roleNameErr}
                       />
-                      <div style={{ display: "flex" }}>
+                      {/* <div style={{ display: "flex" }}>
                         <div className="image-button">
                           <input
                             id="file-upload"
@@ -654,16 +667,10 @@ const AdminHome = () => {
                         <span style={{ marginTop: "6px", paddingLeft: "20px" }}>
                           {roleImage.name}
                         </span>
-                      </div>
+                      </div> */}
 
                       <div className="select-privilages-box">
                         <div className="select-privilages">
-                          {selectedList === 1 && (
-                            <SelectPlivilege
-                              privilegesList={list1}
-                              click={selectPrivilegeList}
-                            />
-                          )}
                           {selectedList === 2 && (
                             <SelectPlivilege
                               privilegesList={list2}
