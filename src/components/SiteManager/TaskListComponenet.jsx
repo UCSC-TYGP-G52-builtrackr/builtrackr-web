@@ -26,6 +26,7 @@ import React from "react";
 const TaskListCard = ({ taskList }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
 
   const handleViewTask = (task) => {
     setSelectedTask(task);
@@ -90,7 +91,7 @@ const TaskListCard = ({ taskList }) => {
               <Table variant="striped" mt={4}>
                 <Thead>
                   <Tr>
-                    <Th>Task Name</Th>
+                    <Th><b> Task Name</b></Th>
                     {/* <Th>Special Information</Th>
                   <Th>Due Date</Th> */}
                   </Tr>

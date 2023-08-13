@@ -9,6 +9,7 @@ import avatar from '../../data/HrManager/avatar.jpg';
 import Notification from './Notification';
 import UserProfile from './UserProfile';
 import { useStateContext } from '../../contexts/ContextProvider';
+import { decryptData } from '../../encrypt';
 
 // const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 //     <button
@@ -26,6 +27,8 @@ import { useStateContext } from '../../contexts/ContextProvider';
 
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -61,7 +64,7 @@ const Navbar = () => {
         >
           <p>
             <div><span className="ml-1 text-[16px] font-bold text-black">
-              Sandun Chathuranga
+              {name}
             </span></div>
             <span className='float-right text-sm'>Hr Manager</span>
           </p>

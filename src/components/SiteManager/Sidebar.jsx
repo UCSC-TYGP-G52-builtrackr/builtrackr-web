@@ -4,7 +4,6 @@ import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 // import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiLogOut } from 'react-icons/fi';
-
 import { links,SiteManagerLinks as Links } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
 
@@ -16,6 +15,12 @@ export const Sidebar = () => {
       setActiveMenu(false);
     }
   };
+  
+ 
+  const  logout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  }
 
   const activeLink = 'flex items-center gap-5 pl-4 ml-8 pt-3 pb-2 mb-8 text-black bg-yellow-400 rounded-l-lg text-md';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb -6 mb-8 rounded-l-lg text-md text-white dark:text-white dark:hover:text-black hover:bg-yellow-400';
@@ -62,7 +67,7 @@ export const Sidebar = () => {
               </div>
             ))}
 
-            <div className="flex items-center gap-2 pl-2  pt -35  rounded-l-lg text-md mt-64  text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
+            <div className="flex items-center gap-2 pl-2  pt -35  rounded-l-lg text-md mt-64  text-red-600 " onClick={logout}><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
           </div>
         </>
       )}

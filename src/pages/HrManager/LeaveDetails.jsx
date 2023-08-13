@@ -112,13 +112,13 @@ const LeaveDetails = () => {
                       <td className="p-4">
                         <div className="flex justify-center space-x-2">
                           <button
-                            className="py-1 px-2 rounded-lg text-xs bg-blue-500 text-white"
+                            className="py-1 px-2 rounded-lg text-xs bg-yellow-400 text-black border border-white"
                             onClick={() => togglePrevious(employee.id)}
                           >
                             Previous
                           </button>
                           <button
-                            className="py-1 px-2 rounded-lg text-xs bg-blue-500 text-white"
+                            className="py-1 px-2 rounded-lg text-xs bg-yellow-400 text-black border border-white"
                             onClick={() => toggleUpcoming(employee.id)}
                           >
                             Upcoming
