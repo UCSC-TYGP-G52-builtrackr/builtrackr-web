@@ -126,12 +126,13 @@
 
   .cardinfo_box  input[type=file]{
     border-radius:8px;
-    padding: 15px;
+    padding: 10px;
     text-align: center;
     border: 2px;
     box-shadow: #0b0b0b;
     background-color: #ffffff;
     font-size: 16px;
+    height: fit-content;
   }
 
   .writer_info{
@@ -154,4 +155,12 @@
     margin-top: -10%;
     display:flex;
    
+  }
+
+  .cardinfo_box_feedback{
+    display: flex;
+    flex-direction: column;
+    margin-top:10% ;
+    gap: 15px;
+    height: 10px;
   }

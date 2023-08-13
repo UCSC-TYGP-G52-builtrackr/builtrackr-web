@@ -16,6 +16,7 @@ import { Modal } from "../../modal/Modal";
 import { Editable } from "../../Editable/Editable";
 import { Drop } from "../../DropDown/Drop";
 import "./CardInfo.css";
+import { CommentForm } from "../../Comment/commentForm";
 
 export const CardInfo = (props) => {
   const colors = [
@@ -332,10 +333,11 @@ export const CardInfo = (props) => {
           <div className="cardinfo_box_title">
             <p>Feedback</p>
           </div>
-          <div className="writer_info">
+          {/* <div className="writer_info">
             <p><span className ="user"><User/></span> <span className= "name">Mr.Gineth Karunanayake<br/>Site Manager <br/>just Now</span></p>
-          </div>
+          </div> */}
           <div className="cardinfo_box_feedback">
+            <CommentForm /> 
             {/* <textarea
               placeholder="Enter your feedback"
               value={feedback}

@@ -29,7 +29,7 @@
   align-content: center;
   padding: 10px;
 }
-img {
+.image_1 img {
   width: 500px;
   height: 500px;
 }
@@ -139,14 +139,14 @@ button {
 
 @media only screen and (max-width: 1130px) {
 
-  img {
+  .image_1 img {
     width: 300px;
     height: 300px;
   }
 }
 @media only screen and (max-width: 700px) {
 
-  img {
+  .image_1 img {
     display: none;
   }
   .grid_container {

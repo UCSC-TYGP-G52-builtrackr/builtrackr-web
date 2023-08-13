@@ -183,7 +183,7 @@ export const Material = () => {
           <Card style={{ width: 100 }  }   />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '100px', marginLeft: '20%' }}>
-              <img src="./bricks.jpg" alt="bricks" width="15px" height="15px" />
+              <img src="./bricks.jpg" alt="bricks" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -211,7 +211,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '180px', marginLeft: '-5%' }}>
-              <img src="./cement.jpg" alt="cement" width="15px" height="25px" />
+              <img src="./cement.jpg" alt="cement" width="100px" height="100px"/>
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -239,7 +239,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '110px', marginLeft: '20%' }}>
-              <img src="./gray gravel.jpg" alt="gravel" width="20px" height="20px" />
+              <img src="./gray gravel.jpg" alt="gravel" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -267,7 +267,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '165px', marginLeft: '0%' }}>
-              <img src="./sand.jpg" alt="sand" width="15px" height="25px" />
+              <img src="./sand.jpg" alt="sand" width="100px" height="100px"/>
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -295,7 +295,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '140px', marginLeft: '10%' }}>
-              <img src="./Blocks.jpg" alt="drill" width="15px" height="15px" />
+              <img src="./Blocks.jpg" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">

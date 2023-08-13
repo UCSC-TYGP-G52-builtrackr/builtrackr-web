@@ -14,7 +14,7 @@ const onSubmit  = event => {
     <div>
         <form onSubmit={onSubmit}>
             <textarea  className ="comment-form-textarea" value={text} onChange={(e) => setText(e.target.value)} />
-        <button className="comment-form-button" type="submit" disabled = {isTextareaDisabled}>{submitLabel}</button>
+        <button className="comment-form-button" type="submit" disabled = {isTextareaDisabled}>Submit</button>
         </form>
     </div>
   )
