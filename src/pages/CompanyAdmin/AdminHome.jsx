@@ -94,13 +94,15 @@ const AdminHome = () => {
     setThemeSettings,
   } = useStateContext();
 
-  const name = decryptData(JSON.parse(localStorage.getItem("name")));
-  console.log(name)
+  // const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  // console.log(name)
 
-  const company_id = parseInt(
-    decryptData(JSON.parse(localStorage.getItem("company_id")))
-  );
-  console.log(company_id);
+  // const company_id = parseInt(
+  //   decryptData(JSON.parse(localStorage.getItem("company_id")))
+  // );
+  // console.log(company_id);
+
+  const company_id = 1;
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -486,7 +488,7 @@ const AdminHome = () => {
       </div>
       <div className="ml-72">
         <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
-          <Navbar name={name} />
+          <Navbar name={'cham'} />
         </div>
         {themeSettings && <ChatSpace />}
         <div
