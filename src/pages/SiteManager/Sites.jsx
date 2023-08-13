@@ -66,7 +66,21 @@ const SiteDashboard = () => {
   }, []);
 
   const selectSupervisor = (supervisor) => {
-    //Request
+
+    //axios request to the backend to assign the supervisor 
+    axios
+      .post("http://localhost:4000/api/sitemanager/selectsupervisor", {
+        supervisor: supervisor,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data);
+        }
+      });
+
+    
+    
+
     toast({
       title: "Supervisor Selected",
       description: "Supervisor has been selected successfully",
