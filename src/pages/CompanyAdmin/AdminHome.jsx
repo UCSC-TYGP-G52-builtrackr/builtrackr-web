@@ -501,7 +501,7 @@ const AdminHome = () => {
       </div>
       <div className="ml-72">
         <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
-          <Navbar name={'cham'} />
+          <Navbar/>
         </div>
         {themeSettings && <ChatSpace />}
         <div
