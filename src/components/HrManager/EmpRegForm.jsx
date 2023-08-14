@@ -482,7 +482,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       </div>
       <ConfirmationdModal
         confirmModal={confirmModal}
-        text={`Are you sure want add ${fName} as a HR Manager`}
+        text={`Are you sure want add ${fName} as Employee?`}
         closeConfirmationModal={closeConfirmModal}
         submit={handelSubmitEmployyeAdd}
       />

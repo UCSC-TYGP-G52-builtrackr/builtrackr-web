@@ -424,19 +424,7 @@ export const links = [
     title: 'Pages',
     links: [
       
-      {
-        name: 'sites',
-        icon: <RiContactsLine />,
-      },
-      {
-        name: 'tasks',
-        icon: <RiContactsLine />,
-      },
-      {
-        name: 'analytics',
-        icon: <RiContactsLine />},
-
-          {
+         {
         name: 'Kanbanboard',
         icon: <Clipboard />,
       },

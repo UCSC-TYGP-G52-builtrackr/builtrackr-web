@@ -11,7 +11,7 @@ import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 
 // dashboard common components
 import Navbar from '../../../components/Navbar';
-import Sidebar from '../../../components/Sidebar';
+import Sidebar from '../../../components/SiteSupervisor/SideBar';
 import ChatSpace from '../../../components/ChatSpace';
 import { BsChatDots } from 'react-icons/bs';
 import PieComponent from '../../../components/PieComponents';

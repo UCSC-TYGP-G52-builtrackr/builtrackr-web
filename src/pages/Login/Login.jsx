@@ -21,10 +21,12 @@ export function Login() {
   console.log(values.type);
   async function handleValidation(event) {
     event.preventDefault();
+    setErrors({})
     const error = Validation(values);
-    setErrors(error);
+    console.log(error);
+    setErrors(error)
     console.log(errors);
-    if (!error) {
+    if (!errors) {
       console.log(error);
       return;
     } else {
@@ -204,7 +206,7 @@ export function Login() {
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
-              <label>Login As</label>
+              <label>Role</label>
               <select
                 className="login-type-select"
                 value={values.type}
@@ -221,7 +223,7 @@ export function Login() {
                   Admin
                 </option>
               </select>
-              {errors.type && <p style={{ color: "red" }}>{errors.type}</p>}
+              {errors.typeErr && <p style={{ color: "red" }}>{errors.typeErr}</p>}
               <br />
               <a href="forgotPassword">Forgot Password?</a> <br />
               <button

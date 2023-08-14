@@ -116,7 +116,7 @@ function App() {
           <Route path="/Equipments/List" element={<ItemList />} />
           <Route path="/Materials" element={<Material />} />
           <Route path="/Materials/List" element={<ItemList />} />
-          <Route path="/Supervisor/Documents" element={<FileUpload />} />
+          <Route path="/Supervisor/Documents" element={<SMDocuments />} />
           <Route path="/Supervisor/Analytics" element={<Analytics />} />
         </Route>
       </Routes>

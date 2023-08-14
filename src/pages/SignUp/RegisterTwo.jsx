@@ -25,31 +25,63 @@ export const RegisterTwo = () => {
   }
 
 
-  function handleValidation(event) {
-    console.log(values);
-    event.preventDefault();
-    console.log(errors);
+  // function handleValidation(event) {
+  //   console.log(values);
+  //   event.preventDefault();
+  //   console.log(errors);
 
-    setErrors({
-      username: values.username.trim().length === 0 ? "User Name required" : "",
-      OTP: values.OTP.trim().length === 0 ? "OTP required" : "",
-      password: values.password.trim().length === 0 ? "Password required" : "",
-      cPassword:values.cPassword.trim()===""?"Confirm Password required":values.password.trim()===values.cPassword.trim()?"":"Password does not match",
+  //   setErrors({
+  //     username: values.username.trim().length === 0 ? "User Name required" : "",
+  //     OTP: values.OTP.trim().length === 0 ? "OTP required" : "",
+  //     password: values.password.trim().length === 0 ? "Password required" : "",
+  //     cPassword:values.cPassword.trim()===""?"Confirm Password required":values.password.trim()===values.cPassword.trim()?"":"Password does not match",
       
-    });
+  //   });
     
-  }
+  // }
   const location = useLocation();
   const formData = location.state;
   if (!formData) {
     return <div>No form data found.</div>;
   }
   // Access the form values
-  const { email, name, regNo, line1, line2, contactNo,certificate } = formData;
+  const { email, name, regNo, line1, line2,city, contactNo,certificate } = formData;
   console.log(formData);
   const handleSubmit = async(e) => {
+    setErrors({username: "",password: "", cPassword: "", OTP:""})
     if(otpVerify===false){
       toast.error('Please Verify OTP')
+      return
+    }
+    let error = false
+    if(values.username.trim().length === 0){
+      setErrors((prevErrors) => ({
+        ...prevErrors,    
+        username: "User Name Required",   
+      }));
+      error = true;
+    }
+    if(values.password.trim().length === 0){
+      setErrors((prevErrors) => ({
+        ...prevErrors,    
+        password: "Password Required",   
+      }));
+      error = true;
+    }
+    if(values.cPassword.trim().length === 0){
+      setErrors((prevErrors) => ({
+        ...prevErrors,    
+        cPassword: "Confirm Password Required",   
+      }));
+      error = true;
+    } else if(values.password.trim()!==values.cPassword.trim()){  
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        cPassword: "Password does not match",
+      }));
+      error = true;
+    }
+    if(error || errors.OTP){
       return
     }
     try {
@@ -57,7 +89,7 @@ export const RegisterTwo = () => {
       const password = values.password;
 
       await axios.post('http://localhost:4000/api/user/register',{
-        username,email,password,regNo,line1,line2,contactNo,certificate,name
+        username,email,password,regNo,line1,line2,city,contactNo,certificate,name
       })
       .then(res => {
         console.log(res);

@@ -140,6 +140,12 @@ const AdminHome = () => {
   const [address, setAddress] = useState("");
   const [addressErr, setAddressErr] = useState("");
 
+  // const[address2,setAddress2]=useState("");
+  // const [address2Err, setAddress2Err] = useState("");
+
+  // const [city, setCity] = useState("");
+  // const[cityErr,setCityErr]=useState("");
+
   const [id, setId] = useState("");
   const [idErr, setIdErr] = useState("");
 
@@ -209,6 +215,10 @@ const AdminHome = () => {
     setEmailErr("");
     setAddress("");
     setAddressErr("");
+    // setAddress2("");
+    // setAddress2Err("");
+    // setCity("");
+    // setCityErr("");
     setPassword("");
     setPasswordErr("");
     setConfirmPassword("");
@@ -356,7 +366,7 @@ const AdminHome = () => {
       setSelectedList(0);
     }
   };
-
+console.log(userRoles)
   const handelSubmitEmployyeAdd = async (e) => {
     e.preventDefault();
     let hasErrors = false;
@@ -368,6 +378,8 @@ const AdminHome = () => {
     setIdErr("");
     setPhoneErr("");
     setAddressErr("");
+    // setAddress2Err("");
+    // setCityErr("");
     setPasswordErr("");
     setConfirmPasswordErr("");
 
@@ -411,6 +423,14 @@ const AdminHome = () => {
       setAddressErr("Enter address");
       hasErrors = true;
     }
+    // if(address2.length===0){
+    //   setAddress2Err("Enter address");
+    //   hasErrors = true;
+    // }
+    // if(city.length===0){
+    //   setCityErr("Enter city");
+    //   hasErrors = true;
+    // }
     if (password.length === 0) {
       setPasswordErr("Enter password");
       hasErrors = true;
@@ -890,7 +910,7 @@ const AdminHome = () => {
                   </div>
                   <TextField
                     className="outlined-basic"
-                    label="Address"
+                    label="Address line 1"
                     variant="outlined"
                     size="small"
                     style={{ margin: "20px 0" }}
@@ -900,6 +920,30 @@ const AdminHome = () => {
                     error={addressErr !== "" && true}
                     helperText={addressErr !== "" && addressErr}
                   />
+                  {/* <TextField
+                    className="outlined-basic"
+                    label="Address line 2"
+                    variant="outlined"
+                    size="small"
+                    style={{ margin: "20px 0" }}
+                    sx={{ width: "100%" }}
+                    value={address2}
+                    onChange={(e) => setAddress2(e.target.value)}
+                    error={address2Err !== "" && true}
+                    helperText={address2Err !== "" && address2Err}
+                  />
+                  <TextField
+                    className="outlined-basic"
+                    label="Cty"
+                    variant="outlined"
+                    size="small"
+                    style={{ margin: "20px 0" }}
+                    sx={{ width: "100%" }}
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    error={cityErr !== "" && true}
+                    helperText={cityErr !== "" && cityErr}
+                  /> */}
                   <div className="two-inputs">
                     <TextField
                       className="outlined-basic"

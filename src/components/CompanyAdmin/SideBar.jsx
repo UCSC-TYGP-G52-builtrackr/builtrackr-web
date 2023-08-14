@@ -21,15 +21,15 @@ const links = [
       },
     ],
   },
-  {
-    title: "Subscription",
-    links: [
-      {
-        name: "subscription",
-        icon: <BiSolidCreditCard />,
-      },
-    ],
-  },
+  // {
+  //   title: "Subscription",
+  //   links: [
+  //     {
+  //       name: "subscription",
+  //       icon: <BiSolidCreditCard />,
+  //     },
+  //   ],
+  // },
 ];
 
 const SideBar = () => {

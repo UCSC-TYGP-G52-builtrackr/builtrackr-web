@@ -57,12 +57,12 @@ const SideBar = () => {
                 {item.links.map((link) => (
                   <div className="my-4">
                     <NavLink
-                      to={`/chiefEngineer/${link.name}`}
+                      to={`/Supervisor/${link.name}`}
                       isActive={(match, location) => {
                         const { pathname } = location;
                         return (
-                          pathname === "/chiefEngineer" ||
-                          pathname.startsWith("/chiefEngineer/sites")
+                          pathname === "/Supervisor" ||
+                          pathname.startsWith("/Supervisor/Kanbanboard")
                         );
                       }}
                       // to={`/${link.name}`}

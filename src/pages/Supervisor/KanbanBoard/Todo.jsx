@@ -29,7 +29,7 @@ export const Todo = (props) =>{
     useEffect(() => {
         const fetchCards = async () => {
           try {
-            const response = await axios.get('http://localhost:5000/api/card/viewcard');
+            const response = await axios.get('http://localhost:4000/api/card/viewcard');
              // Replace with your API endpoint to fetch card data
 
             if (response.status === 200) {
@@ -102,14 +102,14 @@ export const Todo = (props) =>{
 
 {cards.map((item) => (
           <TodoCard
-            key={item.id}
-            card={[item.id ,item.f_name]}
+            key={item.task_id}
+            card={[item.task_id ,item.taskname]}
             removeCard={props.removeCard}
-            boardId={props.board?.id}
+            boardId={props.board?.task_id}
             dragEnded={props.dragEnded}
             dragEntered={props.dragEntered}
             updateCard={props.updateCard}
-            onClick={() => handleOpen(item.id)}
+            onClick={() => handleOpen(item.task_id)}
           />
         ))}
       </div>
