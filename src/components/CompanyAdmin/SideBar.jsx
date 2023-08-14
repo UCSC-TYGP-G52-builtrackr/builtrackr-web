@@ -36,6 +36,7 @@ const SideBar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
 
+    
   const navigate = useNavigate();
 
   const handleCloseSideBar = () => {

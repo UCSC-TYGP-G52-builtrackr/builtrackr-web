@@ -17,7 +17,7 @@ export const RegisterTwo = () => {
   });
   const [otpVerify, setOtpVerify] = useState(false);
   const navigate = useNavigate();
-
+  const [verifiedMsg, setVerifiedMsg] = useState(false);
   const [errors, setErrors] = useState({ OTP:"",username: "",password: "", cPassword: ""});
   function handleInput(event) {
     const newObj = { ...values, [event.target.name]: event.target.value };
@@ -93,7 +93,6 @@ export const RegisterTwo = () => {
       }
       else if (index < 4) {
           current.nextElementSibling.focus()
-
       }
       otp_check = '';
       for (let ip of otp_inputs) {
@@ -109,13 +108,15 @@ export const RegisterTwo = () => {
 
   }
 
-  function verifyOTP() {
+  function verifyOTP(otp) {
+    console.log("verify otp");
+    console.log(otp);
       fetch('http://localhost:4000/api/user/verifyotp',
           {
               method: "POST",
               body: JSON.stringify({
                   "email": `${email}`,
-                  "otp": `${otp_check}`
+                  "otp": `${otp}`
               }),
               headers: { 'Content-Type': 'application/json' }
 
@@ -130,6 +131,7 @@ export const RegisterTwo = () => {
                       // successEle.style.display = 'block';
                       // errorEle.style.display = 'none';
                        setOtpVerify(true);
+                       setVerifiedMsg(true);
 
                   }
                   else {
@@ -141,6 +143,21 @@ export const RegisterTwo = () => {
                   }
               }
           )
+
+  }
+
+  function handleOTP(e){
+    if(e.target.value.length<5){
+      setErrors({...errors,OTP:""})
+      setValues({...values,OTP:e.target.value})
+      if(e.target.value.trim().length===4){
+        console.log(e.target.value);
+        verifyOTP(e.target.value);
+      } 
+    }else{
+      setErrors({...errors,OTP:"OTP should be 4 digits"})
+    }
+    
 
   }
 
@@ -223,12 +240,9 @@ export const RegisterTwo = () => {
               <br />
               <button className="next_buttonOtp" onClick={event=>sendOTP(event)}>Send OTP</button>
               <label>Enter OTP</label>
-              <div className="otp-input-fields">
-                <input type="number" className="otp_num otp_num_1" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
-                <input type="number" className="otp_num otp_num_2" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
-                <input type="number" className="otp_num otp_num_3" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
-                <input type="number" className="otp_num otp_num_4" onKeyUp={(e)=>moveNext(e)} maxLength="1"/>
-            </div>
+              <div className="flex items-center justify-center gap-4 ">
+                <input type="text" className="w-2/5" style={{width:200,textAlign:"center"}} value={values.OTP} onChange={handleOTP}/>
+              </div>
             {errors.OTP && (
                 <p style={{ color: "red" }}>{errors.OTP}</p>
               )}
@@ -273,7 +287,7 @@ export const RegisterTwo = () => {
               {errors.cPassword && (
                 <p style={{ color: "red" }}>{errors.cPassword}</p>
               )}
-              <button className="next_button" type="submit" onClick={e=>handleSubmit(e)}>
+              <button className="next_button" type="submit" onClick={e=>handleSubmit(e)} style={{backgroundColor:"#ffcc00", marginTop:"10px" , fontWeight:"700"}}>
                 Register
               </button>
             </div>
