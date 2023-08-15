@@ -9,6 +9,7 @@ import React, { useState,useEffect } from "react";
 import EmpRegForm from "../../components/HrManager/EmpRegForm";
 import dummyEmployees from "../../data/HrManager/dummyEmployees";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AiOutlinePlus } from 'react-icons/ai'
 import {
   faEye,
   faPencilAlt,
@@ -145,6 +146,7 @@ const Employees = () => {
             style={{ position: "absolute", right: "30px" , backgroundColor:"#ffcc00", color:"black"}}
           >
             Add Employee
+            <AiOutlinePlus style={{marginLeft:"10px"}}/>
           </Button>
 
           <div className="p-8" style={{marginTop:"70px"}}>

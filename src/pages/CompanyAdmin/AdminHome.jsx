@@ -23,6 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { IoIosArrowDropleft } from "react-icons/io";
+import { AiOutlinePlus } from 'react-icons/ai'
+
 
 import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
@@ -103,7 +105,9 @@ const AdminHome = () => {
   // );
   // console.log(company_id);
 
-  const company_id = 1;
+  const company_id = decryptData(
+    JSON.parse(localStorage.getItem("company_id"))
+  );
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -140,11 +144,11 @@ const AdminHome = () => {
   const [address, setAddress] = useState("");
   const [addressErr, setAddressErr] = useState("");
 
-  // const[address2,setAddress2]=useState("");
-  // const [address2Err, setAddress2Err] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [address2Err, setAddress2Err] = useState("");
 
-  // const [city, setCity] = useState("");
-  // const[cityErr,setCityErr]=useState("");
+  const [city, setCity] = useState("");
+  const [cityErr, setCityErr] = useState("");
 
   const [id, setId] = useState("");
   const [idErr, setIdErr] = useState("");
@@ -215,10 +219,10 @@ const AdminHome = () => {
     setEmailErr("");
     setAddress("");
     setAddressErr("");
-    // setAddress2("");
-    // setAddress2Err("");
-    // setCity("");
-    // setCityErr("");
+    setAddress2("");
+    setAddress2Err("");
+    setCity("");
+    setCityErr("");
     setPassword("");
     setPasswordErr("");
     setConfirmPassword("");
@@ -366,7 +370,7 @@ const AdminHome = () => {
       setSelectedList(0);
     }
   };
-console.log(userRoles)
+  console.log(userRoles);
   const handelSubmitEmployyeAdd = async (e) => {
     e.preventDefault();
     let hasErrors = false;
@@ -378,10 +382,20 @@ console.log(userRoles)
     setIdErr("");
     setPhoneErr("");
     setAddressErr("");
-    // setAddress2Err("");
-    // setCityErr("");
+    setAddress2Err("");
+    setCityErr("");
     setPasswordErr("");
     setConfirmPasswordErr("");
+
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
+    const digitRegex = /\d/;
+
+    const hasUppercase = uppercaseRegex.test(password);
+    const hasLowercase = lowercaseRegex.test(password);
+    const hasSpecialChar = specialCharRegex.test(password);
+    const hasDigit = digitRegex.test(password);
 
     if (fName.length === 0) {
       setFNameErr("Enter Employee First Name");
@@ -423,16 +437,24 @@ console.log(userRoles)
       setAddressErr("Enter address");
       hasErrors = true;
     }
-    // if(address2.length===0){
-    //   setAddress2Err("Enter address");
-    //   hasErrors = true;
-    // }
-    // if(city.length===0){
-    //   setCityErr("Enter city");
-    //   hasErrors = true;
-    // }
+    if (address2.length === 0) {
+      setAddress2Err("Enter address");
+      hasErrors = true;
+    }
+    if (city.length === 0) {
+      setCityErr("Enter city");
+      hasErrors = true;
+    }
     if (password.length === 0) {
       setPasswordErr("Enter password");
+      hasErrors = true;
+    } else if (password.length < 8) {
+      setPasswordErr("Password Contains atleast 8 Characters");
+      hasErrors = true;
+    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
+      setPasswordErr(
+        "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
+      );
       hasErrors = true;
     }
     if (confirmPassword.length === 0) {
@@ -466,7 +488,7 @@ console.log(userRoles)
             if (res.data.status) {
               emailErr = true;
               toast.error("Email Already exist");
-              setConfirmationModal1(false)
+              setConfirmationModal1(false);
               return;
             }
           });
@@ -521,7 +543,7 @@ console.log(userRoles)
       </div>
       <div className="ml-72">
         <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
-          <Navbar/>
+          <Navbar />
         </div>
         {themeSettings && <ChatSpace />}
         <div
@@ -619,6 +641,7 @@ console.log(userRoles)
                 onClick={() => setDisplayForm(true)}
               >
                 Add user roles
+                <AiOutlinePlus style={{marginLeft:"10px"}}/>
               </button>
             </div>
           )}
@@ -908,19 +931,20 @@ console.log(userRoles)
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <TextField
-                    className="outlined-basic"
-                    label="Address line 1"
-                    variant="outlined"
-                    size="small"
-                    style={{ margin: "20px 0" }}
-                    sx={{ width: "100%" }}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    error={addressErr !== "" && true}
-                    helperText={addressErr !== "" && addressErr}
-                  />
-                  {/* <TextField
+                  <div>
+                    <TextField
+                      className="outlined-basic"
+                      label="Address line 1"
+                      variant="outlined"
+                      size="small"
+                      style={{ margin: "20px 0" }}
+                      sx={{ width: "100%" }}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      error={addressErr !== "" && true}
+                      helperText={addressErr !== "" && addressErr}
+                    />
+                    {/* <TextField
                     className="outlined-basic"
                     label="Address line 2"
                     variant="outlined"
@@ -931,8 +955,9 @@ console.log(userRoles)
                     onChange={(e) => setAddress2(e.target.value)}
                     error={address2Err !== "" && true}
                     helperText={address2Err !== "" && address2Err}
-                  />
-                  <TextField
+                  /> */}
+                  </div>
+                  {/* <TextField
                     className="outlined-basic"
                     label="Cty"
                     variant="outlined"
@@ -947,7 +972,7 @@ console.log(userRoles)
                   <div className="two-inputs">
                     <TextField
                       className="outlined-basic"
-                      label="Paasowrd"
+                      label="Paasword"
                       variant="outlined"
                       size="small"
                       sx={{ width: "50%" }}

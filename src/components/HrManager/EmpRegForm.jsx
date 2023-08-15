@@ -49,6 +49,12 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
   const [address, setAddress] = useState("");
   const [addressErr, setAddressErr] = useState("");
 
+  const [address2, setAddress2] = useState("");
+  const [address2Err, setAddress2Err] = useState("");
+
+  const [city, setCity] = useState("");
+  const [cityErr, setCityErr] = useState("");
+
   const [id, setId] = useState("");
   const [idErr, setIdErr] = useState("");
 
@@ -94,6 +100,10 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setEmailErr("");
     setAddress("");
     setAddressErr("");
+    setAddress2("");
+    setAddress2Err("");
+    setCity("");
+    setCityErr("");
     setPassword("");
     setPasswordErr("");
     setConfirmPassword("");
@@ -150,8 +160,20 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setIdErr("");
     setPhoneErr("");
     setAddressErr("");
+    setAddress2Err("");
+    setCityErr("");
     setPasswordErr("");
     setConfirmPasswordErr("");
+
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
+    const digitRegex = /\d/;
+
+    const hasUppercase = uppercaseRegex.test(password);
+    const hasLowercase = lowercaseRegex.test(password);
+    const hasSpecialChar = specialCharRegex.test(password);
+    const hasDigit = digitRegex.test(password);
 
     if (fName.length === 0) {
       setFNameErr("Enter Employee First Name");
@@ -193,8 +215,24 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       setAddressErr("Enter address");
       hasErrors = true;
     }
+    if (address2.length === 0) {
+      setAddress2Err("Enter address");
+      hasErrors = true;
+    }
+    if (city.length === 0) {
+      setCityErr("Enter city");
+      hasErrors = true;
+    }
     if (password.length === 0) {
       setPasswordErr("Enter password");
+      hasErrors = true;
+    } else if (password.length < 8) {
+      setPasswordErr("Password Contains atleast 8 Characters");
+      hasErrors = true;
+    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
+      setPasswordErr(
+        "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
+      );
       hasErrors = true;
     }
     if (confirmPassword.length === 0) {
@@ -430,6 +468,31 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                     error={addressErr !== "" && true}
                     helperText={addressErr !== "" && addressErr}
                   />
+                   {/* <TextField
+                    className="outlined-basic"
+                    label="Address line 2"
+                    variant="outlined"
+                    size="small"
+                    style={{ margin: "20px 0" }}
+                    sx={{ width: "100%" }}
+                    value={address2}
+                    onChange={(e) => setAddress2(e.target.value)}
+                    error={address2Err !== "" && true}
+                    helperText={address2Err !== "" && address2Err}
+                  />
+                  
+                  <TextField
+                    className="outlined-basic"
+                    label="Cty"
+                    variant="outlined"
+                    size="small"
+                    style={{ margin: "20px 0" }}
+                    sx={{ width: "100%" }}
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    error={cityErr !== "" && true}
+                    helperText={cityErr !== "" && cityErr}
+                  /> */}
                   {employeeTypeValue !== 6 && (
                     <div className="two-inputs">
                       <TextField
