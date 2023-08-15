@@ -104,7 +104,7 @@ export function Login() {
           toast.error(err.response.data.error);
         }
 
-      } else {
+      } else if(values.type === "Admin") {
         try {
           await axios
             .post("http://localhost:4000/api/user/auth", values)
