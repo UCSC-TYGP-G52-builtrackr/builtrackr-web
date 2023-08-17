@@ -98,12 +98,11 @@ const AdminHome = () => {
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
   console.log(name);
 
-  // const company_id = parseInt(
-  //   decryptData(JSON.parse(localStorage.getItem("company_id")))
-  // );
-  // console.log(company_id);
+  const company_id = parseInt(
+    decryptData(JSON.parse(localStorage.getItem("company_id")))
+  );
+  console.log(company_id);
 
-  const company_id = 1;
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -1117,7 +1116,7 @@ console.log(userRoles)
                   <div className="two-inputs">
                     <TextField
                       className="outlined-basic"
-                      label="Paasowrd"
+                      label="Password"
                       variant="outlined"
                       size="small"
                       sx={{ width: "50%" }}

@@ -68,10 +68,10 @@ export function Login() {
               } else if (res.data.type === 2) {
                 localStorage.setItem(
                   "home_page",
-                  JSON.stringify(encryptData("inventorymanager/dashboard"))
+                  JSON.stringify(encryptData("/inventorymanager/Equipments"))
                 );
                 setTimeout(() => {
-                  navigate("/inventorymanager/dashboard");
+                  navigate("/inventorymanager/Equipments");
                 }, 2000);
               } else if (res.data.type === 3) {
                 localStorage.setItem(

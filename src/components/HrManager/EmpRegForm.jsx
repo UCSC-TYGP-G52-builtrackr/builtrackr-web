@@ -434,7 +434,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                     <div className="two-inputs">
                       <TextField
                         className="outlined-basic"
-                        label="Paasowrd"
+                        label="Passowrd"
                         variant="outlined"
                         size="small"
                         sx={{ width: "50%" }}
