@@ -22,7 +22,6 @@ import Sidebar from '../../components/Sidebar';
 import SidebarHR from '../../components/HrManager/SidebarHR';
 import ChatSpace from '../../components/ChatSpace';
 import { BsChatDots } from 'react-icons/bs';
-
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../App.css';
