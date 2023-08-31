@@ -21,6 +21,8 @@
   padding: 8px;
   border: 2px solid #000;
   margin-right: 20px;
+  display: flex;
+  margin-top: 20px;
 }
 .user-role-create-from {
   width: 500px;
@@ -144,6 +146,11 @@ input ::placeholder {
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid #000;
+}
+.user-role img:hover{
+  transition: all 0.3s ease;
+  transform: scale(0.98);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
 }
 .hr-role .link {
   cursor: pointer;
@@ -287,36 +294,10 @@ input ::placeholder {
   border-radius: 10px;
 }
 .employee-table{
-  margin: 10px auto;
+  margin: 20px auto;
+  padding: 0 20px;
 }
-.employee-table thead{
-  background-color: #ffcc00;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-.employee-table thead td{
-  padding: 6px 10px;
-  text-align: center;
-}
-.employee-table tbody td{
-  padding: 6px 10px;
-  text-align: center;
-}
-.employee-table tbody tr:nth-child(even){
-  background-color: #efefef;
-}
-.employee-table tbody tr {
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-.employee-table tbody tr:nth-child(odd){
-  background-color: #fff;
-}
-.employee-table tbody td button{
-  background-color: #ffcc00;
-  border-radius: 10px;
-  padding: 4px 8px;
-  font-size: 12px;
-}
+
 .user-privilege-form{
   width: 400px;
   position: absolute;
@@ -339,4 +320,13 @@ input ::placeholder {
 }
 .role-title{
   margin-bottom: 20px;
+}
+.anlyatic-box{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  padding-left: 10px;
+}
+.left-side{
+
 }

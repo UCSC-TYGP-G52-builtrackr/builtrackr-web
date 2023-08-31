@@ -1,4 +1,6 @@
-import AdminHome from "./pages/CompanyAdmin/AdminHome";
+import AdminUserRole from "./pages/CompanyAdmin/AdminUserRole";
+import AdminDashboard from "./pages/CompanyAdmin/AdminDashboard"
+import Subscription from "./pages/CompanyAdmin/Subscription"
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatSpace from "./components/CompanyAdmin/ChatSpace";
@@ -73,7 +75,9 @@ function App() {
 
         {/* Compnay Admin  */}
         <Route element={<ProtectedRoutes type={0} />}>
-          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard/>} />
+          <Route path="/admin/userRoles" element={<AdminUserRole />} />
+          <Route path="/admin/Subscription" element={<Subscription/>}/>
         </Route>
         {/* HR Manager */}
         <Route element={<ProtectedRoutes type={1} />}></Route>

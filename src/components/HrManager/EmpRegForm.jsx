@@ -104,6 +104,8 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setAddress2Err("");
     setCity("");
     setCityErr("");
+    setRegisterDate({});
+    setDob({});
     setPassword("");
     setPasswordErr("");
     setConfirmPassword("");
@@ -164,6 +166,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setCityErr("");
     setPasswordErr("");
     setConfirmPasswordErr("");
+    console.log(employeeTypeValue);
 
     const uppercaseRegex = /[A-Z]/;
     const lowercaseRegex = /[a-z]/;
@@ -215,31 +218,30 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       setAddressErr("Enter address");
       hasErrors = true;
     }
-    if (address2.length === 0) {
-      setAddress2Err("Enter address");
-      hasErrors = true;
-    }
-    if (city.length === 0) {
-      setCityErr("Enter city");
-      hasErrors = true;
-    }
-    if (password.length === 0) {
-      setPasswordErr("Enter password");
-      hasErrors = true;
-    } else if (password.length < 8) {
-      setPasswordErr("Password Contains atleast 8 Characters");
-      hasErrors = true;
-    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
-      setPasswordErr(
-        "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
-      );
-      hasErrors = true;
-    }
-    if (confirmPassword.length === 0) {
-      setConfirmPasswordErr("Confirm password");
-      hasErrors = true;
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordErr("Passowrds not matched");
+    if (employeeTypeValue !== 6) {
+      if (password.length === 0) {
+        setPasswordErr("Enter password");
+        hasErrors = true;
+      } else if (password.length < 8) {
+        setPasswordErr("Password Contains atleast 8 Characters");
+        hasErrors = true;
+      } else if (
+        !hasUppercase ||
+        !hasLowercase ||
+        !hasSpecialChar ||
+        !hasDigit
+      ) {
+        setPasswordErr(
+          "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
+        );
+        hasErrors = true;
+      }
+      if (confirmPassword.length === 0) {
+        setConfirmPasswordErr("Confirm password");
+        hasErrors = true;
+      } else if (password !== confirmPassword) {
+        setConfirmPasswordErr("Passowrds not matched");
+      }
     }
     if (employeeTypeValue === 0) {
       setEmployeeTypeErr("Select Employee Type");
@@ -248,9 +250,11 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
 
     if (hasErrors) {
       setConfirmModal(false);
+      console.log("Hammmmmmmeeeeeeeeeeeeeee");
       return;
     } else {
       if (employeeTypeValue !== 6) {
+        console.log("heeeeeeeeeeeee");
         const formData = {
           fName: fName,
           lName: lName,
@@ -297,7 +301,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
 
             if (data.status === 200) {
               const jsonData = await data.json();
-              toast.success(`employee registerd successfuly`);
+              toast.success(`Employee registerd successfuly`);
             }
           } catch (err) {
             console.error(err.message);
@@ -307,6 +311,59 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
         }
       } else {
         // labourer add part handel inside that block
+        console.log("hooooo");
+        const formData = {
+          fName: fName,
+          lName: lName,
+          nic: nic,
+          phone: phone,
+          id: id,
+          email: email,
+          dob: dob,
+          registerDate: registerDate,
+          address: address,
+          company_id: company_id,
+        };
+        let emailErr = false;
+
+        try {
+          await axios
+            .post("http://localhost:4000/api/employee/labourerExists", formData)
+            .then((res) => {
+              if (res.data.status) {
+                emailErr = true;
+                toast.error("Email Already exist");
+                setConfirmModal(false);
+                return;
+              }
+            });
+        } catch (err) {
+          toast.error(err.response.data.error);
+          return;
+        }
+        if (!emailErr) {
+          try {
+            const data = await fetch(
+              "http://localhost:4000/api/employee/registerLabourer",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              }
+            );
+
+            if (data.status === 200) {
+              const jsonData = await data.json();
+              toast.success(`Labourer added successfuly`);
+            }
+          } catch (err) {
+            console.error(err.message);
+          }
+          setConfirmModal(false);
+          closeForm();
+        }
       }
     }
   };
@@ -468,7 +525,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                     error={addressErr !== "" && true}
                     helperText={addressErr !== "" && addressErr}
                   />
-                   {/* <TextField
+                  {/* <TextField
                     className="outlined-basic"
                     label="Address line 2"
                     variant="outlined"

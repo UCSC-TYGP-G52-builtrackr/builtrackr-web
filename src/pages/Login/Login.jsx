@@ -126,7 +126,7 @@ export function Login() {
               );
               localStorage.setItem(
                 "home_page",
-                JSON.stringify(encryptData("Admin"))
+                JSON.stringify(encryptData("admin/dashboard"))
               );
               localStorage.setItem(
                 "is_loged",
@@ -134,7 +134,7 @@ export function Login() {
               );
 
               setTimeout(() => {
-                navigate("/admin");
+                navigate("/admin/dashboard");
               }, 2000);
             });
         } catch (err) {

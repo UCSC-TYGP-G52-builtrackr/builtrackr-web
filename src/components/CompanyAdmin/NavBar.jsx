@@ -63,7 +63,7 @@ const NavBar = () => {
   return (
     <div
       className="relative flex justify-end p-2 pr-8 bg-white"
-      style={{ position: "fixed", right: 0 }}
+      style={{ position: "fixed", right: 0,     width: "calc( 100% - 300px )" }}
     >
       <div className="flex gap-2">
         <div

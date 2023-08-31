@@ -1,8 +1,8 @@
-import react from "react";
+import React, { PureComponent } from "react";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { json, useLocation } from "react-router-dom";
-import Navbar from "../../components/CompanyAdmin/NavBar";
+import NavBar from "../../components/CompanyAdmin/NavBar";
 import SideBar from "../../components/CompanyAdmin/SideBar";
 import ChatSpace from "../../components/CompanyAdmin/ChatSpace";
 import { decryptData } from "../../encrypt";
@@ -23,12 +23,69 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { IoIosArrowDropleft } from "react-icons/io";
-import { AiOutlinePlus } from 'react-icons/ai'
-
+import { AiOutlinePlus } from "react-icons/ai";
+import Table from "@mui/joy/Table";
+import Sheet from "@mui/joy/Sheet";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
 import { SelectField } from "@chakra-ui/react";
+
+const data = [
+  {
+    name: "Page A",
+    uv: 4000,
+    pv: 2400,
+    amt: 2400,
+  },
+  {
+    name: "Page B",
+    uv: 3000,
+    pv: 1398,
+    amt: 2210,
+  },
+  {
+    name: "Page C",
+    uv: 2000,
+    pv: 9800,
+    amt: 2290,
+  },
+  {
+    name: "Page D",
+    uv: 2780,
+    pv: 3908,
+    amt: 2000,
+  },
+  {
+    name: "Page E",
+    uv: 1890,
+    pv: 4800,
+    amt: 2181,
+  },
+  {
+    name: "Page F",
+    uv: 2390,
+    pv: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Page G",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+];
 
 const list1 = [
   "Create Employee Profiles",
@@ -87,7 +144,7 @@ const phoneRegex = /^[0]+[0-9]{9}$/;
 //   "Request Inventory",
 // ];
 
-const AdminHome = () => {
+const AdminUserRole = () => {
   const {
     setCurrentColor,
     setCurrentMode,
@@ -98,12 +155,6 @@ const AdminHome = () => {
   } = useStateContext();
 
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
-  console.log(name);
-
-  // const company_id = parseInt(
-  //   decryptData(JSON.parse(localStorage.getItem("company_id")))
-  // );
-  // console.log(company_id);
 
   const company_id = decryptData(
     JSON.parse(localStorage.getItem("company_id"))
@@ -128,8 +179,6 @@ const AdminHome = () => {
     setSelectedList(no);
     setSelectedListErr("");
   };
-  console.log(selectedList);
-  console.log(roleImage);
 
   // Empolyee add from
   const [fName, setFName] = useState("");
@@ -201,8 +250,6 @@ const AdminHome = () => {
   let allRoleAdded =
     addedList2 && addedList3 && addedList4 && addedList5 ? true : false;
 
-  console.log(allRoleAdded);
-
   const handleCloseEmployeeForm = () => {
     setEmployeeAddForm(false);
     setFName("");
@@ -234,7 +281,6 @@ const AdminHome = () => {
   };
 
   const [selectedRole, setSelectedRole] = useState(0);
-  console.log(selectedRole);
 
   const backToAdminHome = () => {
     setSelectedRole(0);
@@ -249,7 +295,9 @@ const AdminHome = () => {
   const selectUserRoleDetails = userRoles.filter(
     (item) => item.type === selectedRole
   );
-  console.log(selectUserRoleDetails);
+
+  const [employeeCount, setEmployeeCount] = useState([]);
+
   const style = {
     position: "absolute",
     marginLeft: "150px",
@@ -285,7 +333,6 @@ const AdminHome = () => {
         );
         if (data.status === 200) {
           const jsonData = await data.json();
-          console.log(jsonData);
           setUserRoles(jsonData);
         } else {
           console.log(data.status);
@@ -298,25 +345,71 @@ const AdminHome = () => {
   }, [displayForm]);
 
   useEffect(() => {
-    const viewEmployees = async () => {
+    const viewEmployeeCount = async () => {
       try {
         const data = await fetch(
-          "http://localhost:4000/api/employee/getEmployees",
+          "http://localhost:4000/api/employee/employeeCount",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id: company_id, type: selectedRole }),
+            body: JSON.stringify({ id: company_id }),
           }
         );
         if (data.status === 200) {
           const jsonData = await data.json();
+          setEmployeeCount(jsonData);
           console.log(jsonData);
-          setSelectedEmployee(jsonData);
+          console.log(employeeCount);
         }
       } catch (err) {
         console.error(err.message);
+      }
+    };
+    viewEmployeeCount();
+  }, [selectedRole, confirmationModal1, displayForm, confirmationModal2]);
+
+  useEffect(() => {
+    const viewEmployees = async () => {
+      if (selectedRole === 6) {
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/getLabourers",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: company_id }),
+            }
+          );
+          if (data.status === 200) {
+            const jsonData = await data.json();
+            setSelectedEmployee(jsonData);
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
+      } else {
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/getEmployees",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: company_id, type: selectedRole }),
+            }
+          );
+          if (data.status === 200) {
+            const jsonData = await data.json();
+            setSelectedEmployee(jsonData);
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
       }
     };
     viewEmployees();
@@ -354,11 +447,9 @@ const AdminHome = () => {
 
         if (data.status === 200) {
           const jsonData = await data.json();
-          console.log(jsonData);
           toast.success(`${roleName} user role created suuessfuly`);
         }
       } catch (err) {
-        console.log("3");
         console.error(err.message);
       }
       setDisplayForm(false);
@@ -370,7 +461,6 @@ const AdminHome = () => {
       setSelectedList(0);
     }
   };
-  console.log(userRoles);
   const handelSubmitEmployyeAdd = async (e) => {
     e.preventDefault();
     let hasErrors = false;
@@ -437,14 +527,14 @@ const AdminHome = () => {
       setAddressErr("Enter address");
       hasErrors = true;
     }
-    if (address2.length === 0) {
-      setAddress2Err("Enter address");
-      hasErrors = true;
-    }
-    if (city.length === 0) {
-      setCityErr("Enter city");
-      hasErrors = true;
-    }
+    // if (address2.length === 0) {
+    //   setAddress2Err("Enter address");
+    //   hasErrors = true;
+    // }
+    // if (city.length === 0) {
+    //   setCityErr("Enter city");
+    //   hasErrors = true;
+    // }
     if (password.length === 0) {
       setPasswordErr("Enter password");
       hasErrors = true;
@@ -511,8 +601,13 @@ const AdminHome = () => {
 
           if (data.status === 200) {
             const jsonData = await data.json();
-            console.log(jsonData);
-            toast.success("HR Manager registed successfuly");
+            toast.success(
+              "HR Manager registed successfuly. Email was sent to the employee"
+            );
+          } else if (data.status === 201) {
+            toast.success(
+              "HR Manager registed successfuly. But email was not sent to the employee"
+            );
           }
         } catch (err) {
           console.error(err.message);
@@ -543,7 +638,7 @@ const AdminHome = () => {
       </div>
       <div className="ml-72">
         <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
-          <Navbar />
+          <NavBar />
         </div>
         {themeSettings && <ChatSpace />}
         <div
@@ -571,11 +666,12 @@ const AdminHome = () => {
                 {selectedRole === 1 && (
                   <h1 className="role-title">HR Manager's all privileges</h1>
                 )}
-                {selectUserRoleDetails
-                  .filter((element) => element.type !== 1)
-                  .map((el) => (
-                    <h1 className="role-title">{`${el.role_name}'s all privileges`}</h1>
-                  ))}
+                {selectedRole !== 6 &&
+                  selectUserRoleDetails
+                    .filter((element) => element.type !== 1)
+                    .map((el) => (
+                      <h1 className="role-title">{`${el.role_name}'s all privileges`}</h1>
+                    ))}
 
                 <div className="privileges-box">
                   {selectedRole === 1 &&
@@ -604,8 +700,37 @@ const AdminHome = () => {
 
               {selectedEmployee.length !== 0 ? (
                 <>
-                  <div>
-                    <table className="employee-table">
+                  <div className="employee-table">
+                    <Sheet sx={{ height: 550, overflow: "auto" }}>
+                      <Table
+                        aria-label="table with sticky header"
+                        stickyHeader
+                        stripe="odd"
+                        hoverRow
+                      >
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Employee No</th>
+                            <th>Register date</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedEmployee.map((element) => (
+                            <tr>
+                              <td>{element.f_name}</td>
+                              <td>{element.id}</td>
+                              <td>{element.register_date}</td>
+                              <td>Edit Privileges</td>
+                              <td>Working</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Sheet>
+                    {/* <table className="employee-table">
                       <thead>
                         <tr>
                           <td>Name</td>
@@ -626,11 +751,11 @@ const AdminHome = () => {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </table> */}
                   </div>
                 </>
               ) : (
-                <h1>No emplyees</h1>
+                <h1 style={{ textAlign: "center" }}>No empolyees</h1>
               )}
             </div>
           )}
@@ -641,7 +766,9 @@ const AdminHome = () => {
                 onClick={() => setDisplayForm(true)}
               >
                 Add user roles
-                <AiOutlinePlus style={{marginLeft:"10px"}}/>
+                <AiOutlinePlus
+                  style={{ marginLeft: "10px", marginTop: "5px" }}
+                />
               </button>
             </div>
           )}
@@ -668,6 +795,41 @@ const AdminHome = () => {
                   selectRole={displayRole}
                 />
               ))}
+              <div className="">
+                <UserRole
+                  role={{
+                    photo_path: "labourer.jpeg",
+                    role_name: "Labourer",
+                    type: 6,
+                  }}
+                  selectRole={displayRole}
+                />
+              </div>
+            </div>
+          )}
+          {employeeCount && selectedRole === 0 && (
+            <div className="anlyatic-box">
+              <div className="left-side">
+                <BarChart
+                  width={600}
+                  height={350}
+                  data={employeeCount}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="role_name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="count" fill="#ffcc00" />
+                  {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
+                </BarChart>
+              </div>
             </div>
           )}
 
@@ -911,6 +1073,21 @@ const AdminHome = () => {
                       helperText={emailErr !== "" && emailErr}
                     />
                   </div>
+                  {/* <div>
+                    <TextField
+                      className="outlined-basic"
+                      label="Address line 2"
+                      variant="outlined"
+                      size="small"
+                      style={{ margin: "20px 0" }}
+                      sx={{ width: "100%" }}
+                      value={address2}
+                      onChange={(e) => setAddress2(e.target.value)}
+                      error={address2Err !== "" && true}
+                      helperText={address2Err !== "" && address2Err}
+                    />
+                  </div> */}
+
                   <div className="two">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -944,18 +1121,6 @@ const AdminHome = () => {
                       error={addressErr !== "" && true}
                       helperText={addressErr !== "" && addressErr}
                     />
-                    {/* <TextField
-                    className="outlined-basic"
-                    label="Address line 2"
-                    variant="outlined"
-                    size="small"
-                    style={{ margin: "20px 0" }}
-                    sx={{ width: "100%" }}
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
-                    error={address2Err !== "" && true}
-                    helperText={address2Err !== "" && address2Err}
-                  /> */}
                   </div>
                   {/* <TextField
                     className="outlined-basic"
@@ -1334,4 +1499,4 @@ function OnePrivilege({ privilege }) {
   );
 }
 
-export default AdminHome;
+export default AdminUserRole;
