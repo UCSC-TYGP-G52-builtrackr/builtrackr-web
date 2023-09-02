@@ -72,18 +72,55 @@ const Employees = () => {
   const handleDeleteClick = (employee) => {
     Swal.fire({
       title: "Delete Employee?",
-      text: `Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`,
+      text: `Are you sure you want to delete ${employee.f_name} ${employee.l_name}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Delete",
       cancelButtonText: "Cancel",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        // TODO: Perform the actual delete operation here
-        // For now, let's just log a message
-        console.log(`Deleted ${employee.firstName} ${employee.lastName}`);
+        try {
+          // Send a request to your server to delete the employee from the database
+          const response = await fetch(
+            "http://localhost:4000/api/employee/deleteEmployee",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: employee.id }), // Assuming employee.id is the unique identifier
+            }
+          );
+  
+          if (response.status === 200) {
+            // Employee deleted successfully from the database
+            // Now update the UI by removing the deleted employee from the state
+            setEmployees((prevEmployees) =>
+              prevEmployees.filter((emp) => emp.id !== employee.id)
+            );
+  
+            Swal.fire({
+              title: "Deleted!",
+              text: "The employee has been deleted successfully.",
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "An error occurred while deleting the employee.",
+              icon: "error",
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            title: "Error!",
+            text: "An error occurred while deleting the employee.",
+            icon: "error",
+          });
+        }
       }
     });
   };

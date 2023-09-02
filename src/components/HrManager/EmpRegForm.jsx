@@ -13,7 +13,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-
+import Swal from "sweetalert2";
 import { decryptData } from "../../encrypt";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const nicRegex1 = /^[2-9]+[0-9]{8}[vVxX]$/;
@@ -21,6 +21,70 @@ const nicRegex2 = /^[1-2]+[0-9]{11}$/;
 const phoneRegex = /^[0]+[0-9]{9}$/;
 
 const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
+
+  const openDeleteConfirmation = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete ${fName} as an employee. This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // User confirmed, call the function to delete the employee
+        handleDeleteEmployee();
+      }
+    });
+  };
+
+  // Function to delete an employee
+  const handleDeleteEmployee = async () => {
+    try {
+      // Send a request to your server to delete the employee
+      const response = await axios.delete(`http://localhost:4000/api/employee/deleteEmployee/${id}`);
+
+      if (response.status === 200) {
+        // Employee deleted successfully
+        Swal.fire({
+          title: 'Success!',
+          text: 'Employee has been deleted.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          onClose: () => {
+            // You can perform any additional actions here
+            // For example, you can refresh the employee list
+            closeForm(); // Close the employee registration form
+          },
+        });
+      } else {
+        // Handle other status codes or errors
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to delete employee.',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        });
+      }
+    } catch (error) {
+      // Handle errors
+      console.error(error);
+      Swal.fire({
+        title: 'Error',
+        text: 'An error occurred while deleting the employee.',
+        icon: 'error',
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
+  };
+
+
+
+
   const style = {
     position: "absolute",
     marginLeft: "150px",
@@ -82,6 +146,10 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setSelectEmployeeType(true);
   };
 
+
+
+
+  
   const [selcetEmployeeType, setSelectEmployeeType] = useState(false);
 
   const closeForm = () => {
@@ -596,6 +664,14 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                   onClick={openConfirmModal}
                 />
               </div>
+              <button
+                type="button"
+                style={{ backgroundColor: 'red' }}
+                className="normal-btn"
+                onClick={() => openDeleteConfirmation()}
+              >
+                Delete
+              </button>
             </form>
           </Box>
         </Modal>
