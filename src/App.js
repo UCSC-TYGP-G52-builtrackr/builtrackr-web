@@ -37,6 +37,8 @@ import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
+import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
+import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
 
 function App() {
   const {
@@ -62,6 +64,8 @@ function App() {
     <div className="App">
       <Routes>
       <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
+      <Route path  = "/Supervisor/KanbanBoard/RequestForm" element = {<RequestForm /> } />
+      <Route path  = "/Supervisor/KanbanBoard/Leaves" element = {<LeaveForm /> } />
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
@@ -113,7 +117,7 @@ function App() {
 
         {/* Site Supervisor */}
         <Route element={<ProtectedRoutes type={5} />}>
-          <Route path="/Supervisor/KanbanBoard" element={<Board />} />
+          {/* <Route path="/Supervisor/KanbanBoard" element={<Board />} /> */}
 
           <Route path="/dropdown" element={<Drop />} />
           <Route path="/test" element={<Test />} />

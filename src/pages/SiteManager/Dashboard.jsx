@@ -81,6 +81,7 @@ const SMDashboard = () => {
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
+  
   function getCurrentDate() {
     const now = new Date();
     const year = now.getFullYear();

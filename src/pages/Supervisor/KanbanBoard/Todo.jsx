@@ -43,6 +43,7 @@ export const Todo = (props) =>{
      fetchCards();
       }, []);
 
+      console.log(cards);
   return (
     
     <>

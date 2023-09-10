@@ -1,23 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import "../card.css";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import Grid from '@mui/material/Grid';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
-import PaidIcon from '@mui/icons-material/Paid';
-import { FormControl, FormLabel, Input } from '@mui/material';
-import { Textarea } from '@chakra-ui/react';
-import ListItemButton from '@mui/material/ListItemButton';
-import EastIcon from '@mui/icons-material/East';
-
+import { Link } from "react-router-dom";
+import axios from 'axios';
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -34,87 +21,129 @@ const style = {
 
 export const CardFirst = () => {
   const [modalContent, setModalContent] = useState(null);
-  const [modal, setModal] = useState(null);
   const [open, setOpen] = useState(false);
-  const [modalopen, setModalOpen] = useState(false);
+ 
 
-  function ChildModal() {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
+
+  //get view request data from backend and set it to labourArray
+  const [labourArray, setLabourArray] = useState([]);
+  const [equipmentArray, setEquipmentArray] = useState([]);
+
+  useEffect(() => {
+  const getLabourData = async () => {
     
-    return (
-      <React.Fragment>
-        <button onClick={handleOpen} style  = {{backgroundColor:"#FFCC00" , padding:"4%" ,width:"200px" , marginTop:"15%"  , boxShadow:"none"}} >{modalContent?.request}</button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style, width: 500 , padding:10} } >
-            <h2 class="text-xl font-extrabold dark:text-black">{modalContent?.request}</h2><br></br>
-           <FormControl mt={4}>
-            <FormLabel>Note</FormLabel>
-            <Textarea placeholder='Enter the description'  w='250px'/>
-            </FormControl><br />
-            <FormControl  style  ={{width:"250px"}}>
-            <FormLabel>Enter the category</FormLabel>
-            <Input  placeholder='Name' />
-            </FormControl><br/><br/>
-            <FormControl  style  ={{width:"250px"}}>
-            <FormLabel>Enter the number</FormLabel>
-           <Input type = "number"  placeholder='Name'  min = '0' />
-            </FormControl><br/><br/>
-            <FormControl mt={4}>
-              <button class = 'ml-40' style  = {{backgroundColor:"#FFCC00" , padding:"5%" ,width:"150px" , boxShadow:"none"}}>Send</button>
-            </FormControl>
-          </Box>
-        </Modal>
-      </React.Fragment>
-    );
-  }
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/api/labour/viewemployee"
+      );
+      console.log(response.data);
+      if (response.status === 200) {
+        setLabourArray(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+};
+ getLabourData();
+}, []);
+
+//equipments
+useEffect(() => {
+  const getEquipmentData = async () => {
+    
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/api/equipment/viewequipments"
+      );
+      console.log(response.data);
+      if (response.status === 200) {
+        setEquipmentArray(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+};
+getEquipmentData ();
+}, []);
+
+
+//assign labour array to rows
+const rows = labourArray.map((labour) => {
+  return {
+    id: labour.id,
+    fullName: labour.name,
+    Category: labour.Category,
+
+  }});
+
+  //assign equipment array to row
+  const row = equipmentArray.map((equipment) => {
+    return {
+      id: equipment.id,
+      Category: equipment.name,
+      Number: equipment.id,
+
+    }});
+
+
+
+  function ChildModal() {}
 
   const handleOpen = (content) => {
     setModalContent(content);
     setOpen(true);
   };
 
-  const Open = (content) => {
-    setModal(content);
-    setModalOpen(true);
-  };
-
-  const Close = () => {
-    setModalOpen(false);
-  };
 
   const handleClose = () => {
     setOpen(false);
   };
-  const handleClick = () => {
-    setOpen(!open);
-  };
 
-  
-  function handleForm(){
+function handleForm(){
 return(
   <form>
   <label>form</label>
   <input type="text" />
   </form>
 );
-
 }
 
 const equipmetArray=[ 'Drills', 'Concreate Mixture' , 'Spirit Level'];
 const equipmentCounts = [10, 2, 8];
-const labourArray=[ 'Mason', 'Carpenter' , 'Painter'];
+const columns: GridColDef[] = [
+
+  {
+    field: 'fullName',
+    headerName: 'Full name',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+  },
+  {
+    field: 'Category',
+    headerName: 'Category',
+    width: 90,
+  },
+];
+
+const column: GridColDef[] = [
+
+  {
+    field: 'Category',
+    headerName: 'Category',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+  },
+  {
+    field: 'Number',
+    headerName: 'Available Number',
+    type: 'number',
+    width: 90,
+  },
+];
+
+
 
   return (
     <>
@@ -124,114 +153,58 @@ const labourArray=[ 'Mason', 'Carpenter' , 'Painter'];
   aria-labelledby="parent-modal-title"
   aria-describedby="parent-modal-description"
 >
-  <Box sx={{ ...style, width: 500 }}>
-    <h2 class = "text-2xl font-extrabold dark:text-black" style  ={{marginTop:"-18%"}}>{modalContent?.title}</h2>
+  <Box sx={{ ...style, width: 600 }}>
+    <h2 class = "text-2xl font-extrabold dark:text-black" style  ={{marginTop:"-18%"}}>{modalContent?.title}</h2><br/>
+   {modalContent?.title === "Workers of the day" && (
+    <div style={{ height: 300, width: '100%' }}>
+ 
+      <DataGrid
+        rows={rows}
+        columns={columns}
+      />
+    </div>
+   )}
+   <br/>
+   {modalContent?.title === "Allocated Equipments" && (
+    <div style={{ height: 300, width: '100%' }}>
+ 
+      <DataGrid
+        rows={row}
+        columns={column}
+      />
+    </div>
+   )}
+   <br/>
+  <div style  ={{display:"inline-block"}}>
+  {modalContent?.title === "Workers of the day" && (
+    <div className='flex'>
+      <Link to="RequestForm">
+        <button className='' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "180px", boxShadow: "none",marginLeft: "-12%",marginTop:"0%" }}>Request Labourers</button>
+      </Link>
+      <Link to="Leaves">
+        <button className='ml-10' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "180px", boxShadow: "none"}}>Request Leaves</button>
+      </Link>
+     </div>
+  )}
+    </div>
 
-    <p id="parent-modal-description">
-      
-    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
+    {modalContent?.title === "Allocated Equipments" && (
+            <Link to="RequestForm">
+              <button className='ml-40' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "200px", boxShadow: "none" }}>Request Equipments</button>
+            </Link>
+    )}
 
-    >
-      <ListItemButton onClick={handleClick}>
-       <EastIcon />  <ListItemText primary={modalContent?.data[0]}/>
-     </ListItemButton>
-     <ListItemButton onClick={handleClick}>
-     <EastIcon />  <ListItemText primary={modalContent?.data[1]}/>
-     </ListItemButton>
-     <ListItemButton onClick={handleClick}>
-     <EastIcon /> <ListItemText primary= {modalContent?.data[2]}/>
-     </ListItemButton>
-     </List>
-</p>
     <ChildModal />
   </Box>
 </Modal>
 
-<Modal
-  open={modalopen}
-  onClose={Close}
-  aria-labelledby="parent-modal-title"
-  aria-describedby="parent-modal-description"
->
-  <Box sx={{ ...style,width: 800 }}>
-    <br/>
-    <h1  class="text-3xl font-extrabold dark:text-black" id="parent-modal-title"  style = {{marginTop:"-16%"}}>{modal?.title}</h1><br />
-    <p id="parent-modal-description">
-      <h3 class="text-xl font-bold dark:text-black" >Description</h3>
-     <br />
-      Two story house in address No 12, Asswadduma,Kurunegala in area of 2000 sqft.
-      <br />
-    </p><br />
-    <Box sx={{ flexGrow: 1, width: 600 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={6} md={6}>
-        <List sx={{ width: '100%', maxWidth: 380, bgcolor: 'background.paper' }}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <AccountCircleIcon/>
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary="Project Owner" secondary="K.M.G. Sahasrika" />
-      </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-          <DateRangeIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary="Project Start Date" secondary="sep 01,2023" />
-      </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-          <EventAvailableIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary="Project End Date" secondary="sep 01,2024" />
-      </ListItem>
-     
-    </List>
-        </Grid>
-        <Grid item xs={6} md={6}>
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-          <QueryBuilderIcon  />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary="Project Duration" secondary="1 year" />
-      </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <PaidIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary="Approximate Budget" secondary="Rs 200, 000,000" />
-      </ListItem>
-          </List>
-        </Grid>
-        </Grid>
-        </Box>
-  </Box>
-</Modal>
 
- 
-
-      <div className="card_1" onClick={() =>Open({ title: "Project Information", description: "Content for Project Information" })}>
-        <h4>Project Information</h4>
-      </div>
-      <div className="card_1" onClick={() => handleOpen({ title: "Allocated Equipments", description: "",  data:equipmetArray, count:equipmentCounts
-    ,request:"Request Equipments"}, handleForm())}>
+   <div className="card_1" onClick={() => handleOpen({ title: "Allocated Equipments", description: "", 
+    request:"Request Equipments"}, handleForm())}>
         <h4>Allocated Equipments</h4>
       </div>
-      <div className="card_1" onClick={() => handleOpen({ title: "Workers of the day", description: "Content for Workers of the day",  data:labourArray, count:equipmentCounts
-       ,request:"Request Labourers", 
+      <div className="card_1" onClick={() => handleOpen({ title: "Workers of the day", description: "Content for Workers of the day", 
+       request:"Request Labourers", 
     }, handleForm())}>
         <h4>Workers of the day</h4>
       </div>

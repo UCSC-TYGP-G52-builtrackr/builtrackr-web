@@ -10,7 +10,7 @@ import Notification from "../Notification";
 import UserProfile from "../UserProfile";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { deDE } from "@mui/x-date-pickers";
-import { decryptData } from "../../encrypt";
+// import { decryptData } from "../../encrypt";
 import { useNavigate } from "react-router-dom";
 
 // const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
@@ -37,7 +37,7 @@ const NavBar = () => {
     setScreenSize,
     screenSize,
   } = useStateContext();
-  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  const name = (JSON.parse(localStorage.getItem("name")));
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
