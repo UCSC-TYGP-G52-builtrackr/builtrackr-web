@@ -350,3 +350,5 @@ export const CardInfo = (props) => {
     </Modal>
   );
 };
+
+export default CardInfo;

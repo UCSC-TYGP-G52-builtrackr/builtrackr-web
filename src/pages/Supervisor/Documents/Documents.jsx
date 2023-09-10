@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image ,ChakraProvider} from '@chakra-ui/react';
 import { useDropzone } from 'react-dropzone';
 import { useEffect, useState } from 'react';
-// import { pdfjs, Document, Page } from 'react-pdf';
 import NavBar from "../../../components/SiteSupervisor/NavBar";
 import SideBar from "../../../components/SiteSupervisor/SideBar";
 import axios from 'axios';
@@ -20,6 +19,7 @@ import {
   useToast,
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
+import { Document, Page, pdfjs } from 'react-pdf';
 
 
 const FileUpload = () => {
@@ -35,13 +35,14 @@ const FileUpload = () => {
 
 
   const [pdfUrls, setPdfUrls] = useState([]);
+
   const toast = useToast();
   const cancelRef = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [toDelete, setToDelete] = useState(null);
   const viewPdf = async (pdfUrl) => {
     const response = await axios.post(
-      "http://localhost:4000/api/upload/downloadpdfs",
+      "http://localhost:4000/api/fileupload/downloadpdfs",
       {
         filename: pdfUrl.name,
       }
@@ -53,6 +54,10 @@ const FileUpload = () => {
     // build temporary URL from file
     const url = URL.createObjectURL(file);
     // open URL in new window
+
+
+    // Set the PDF URL to display
+
     window.open(url);
   };
 
@@ -62,7 +67,7 @@ const FileUpload = () => {
   const fetchPdfUrls = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/upload/getpdfs"
+        "http://localhost:4000/api/fileupload/getpdfs"
       );
       console.log(response);
       setPdfUrls(response.data);
@@ -79,8 +84,9 @@ const onDrop = useCallback(async (acceptedFiles) => {
   try {
     const formData = new FormData();
     formData.append("document", acceptedFiles[0]);
+     console.log(acceptedFiles[0]);
 
-    await axios.post("http://localhost:4000/api/upload", formData, {
+    await axios.post("http://localhost:4000/api/fileupload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -96,7 +102,7 @@ const onDrop = useCallback(async (acceptedFiles) => {
 const fetchPdfUrls = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:4000/api/upload/getpdfs"
+      "http://localhost:4000/api/fileupload/getpdfs"
     );
     console.log(response);
     setPdfUrls(response.data);
@@ -109,7 +115,7 @@ const fetchPdfUrls = async () => {
 const deletePdf = async (filename) => {
   try {
     await axios.delete(
-      `http://localhost:4000/api/upload/deletepdf/${toDelete.name}`
+      `http://localhost:4000/api/fileupload/deletepdf/${toDelete.name}`
     );
     // After successful deletion, update the PDF URLs in state
     setPdfUrls((prevUrls) =>
@@ -145,6 +151,9 @@ const openDeleteModal = ({ index }) => {
 };
 
 const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+
+
 
   return (
     <ChakraProvider>

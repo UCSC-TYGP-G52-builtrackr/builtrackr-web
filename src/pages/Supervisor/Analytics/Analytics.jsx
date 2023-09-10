@@ -66,10 +66,8 @@ const datas = [
 ];
 
 const Analytics = () => {
-  const selectionsettings = { persistSelection: true };
-  const toolbarOptions = ['Delete'];
-  const editing = { allowDeleting: true, allowEditing: true };
-  const navigate = useNavigate();
+    console.log(localStorage);
+ 
   const { themeSettings, setThemeSettings } = useStateContext();
 
   return (

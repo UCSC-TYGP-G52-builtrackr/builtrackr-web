@@ -67,6 +67,7 @@ function App() {
       <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
       <Route path  = "/Supervisor/KanbanBoard/RequestForm" element = {<RequestForm /> } />
       <Route path  = "/Supervisor/KanbanBoard/Leaves" element = {<LeaveForm /> } />
+      <Route path="/Supervisor/Analytics" element={<Analytics />} />
       <Route path="/Supervisor/Documents" element={<FileUpload />} />
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
@@ -131,7 +132,7 @@ function App() {
           <Route path="/Materials" element={<Material />} />
           <Route path="/Materials/List" element={<ItemList />} />
           <Route path="/Supervisor/Documents" element={<SMDocuments />} />
-          <Route path="/Supervisor/Analytics" element={<Analytics />} />
+          
         </Route>
       </Routes>
     </div>
