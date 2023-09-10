@@ -92,9 +92,6 @@ const handleSubmit = async (event) =>{
   };
 
    const {
-    setCurrentColor,
-    setCurrentMode,
-    currentMode,
     activeMenu,
     themeSettings,
     setThemeSettings,

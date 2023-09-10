@@ -40,6 +40,7 @@ import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
 import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
 
+
 function App() {
   const {
     setCurrentColor,
@@ -66,6 +67,7 @@ function App() {
       <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
       <Route path  = "/Supervisor/KanbanBoard/RequestForm" element = {<RequestForm /> } />
       <Route path  = "/Supervisor/KanbanBoard/Leaves" element = {<LeaveForm /> } />
+      <Route path="/Supervisor/Documents" element={<FileUpload />} />
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
