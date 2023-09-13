@@ -34,6 +34,11 @@ const Task = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toISOString().split('T')[0];
+  };
 
   return (
     <ChakraProvider>

@@ -55,7 +55,10 @@ const TaskListCard = ({ taskList }) => {
         console.error("Error deleting task:", error);
       });
   };
-
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toISOString().split('T')[0];
+  };
   return (
     <ChakraProvider>
       <Box borderWidth="1px" borderRadius="md" p={4} mb={4}>
@@ -144,7 +147,7 @@ const TaskListCard = ({ taskList }) => {
                     <Tr>
                       <Td>{selectedTask.taskname}</Td>
                       <Td>{selectedTask.specialinformation}</Td>
-                      <Td>{selectedTask.duedate}</Td>
+                      <Td>{formatDate(selectedTask.duedate)}</Td>
                       {/* <Td>{selectedTask.sitesupervisor}</Td> */}
                     </Tr>
                   </Tbody>

@@ -37,6 +37,7 @@ import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
+import LaborLeaveTable from "./pages/SiteManager/Leaves";
 
 function App() {
   const {
@@ -109,6 +110,7 @@ function App() {
           <Route path="/sitemanager/documents" element={<SMDocuments />} />
           <Route path="/sitemanager/sites" element={<SiteDashboard />} />
           <Route path="/sitemanager/analytics" element={<Analytics />} />
+          <Route path="/sitemanager/labourleaves" element={<LaborLeaveTable />} />
         </Route>
 
         {/* Site Supervisor */}
