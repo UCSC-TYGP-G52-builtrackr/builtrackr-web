@@ -25,6 +25,7 @@ import {
   TablePagination,
   tablePaginationClasses as classes,
 } from "@mui/base/TablePagination";
+import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
 // import { useDemoData } from "@mui/x-data-grid-generator";
 
@@ -113,6 +114,8 @@ const Employees = () => {
     setPage(0);
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const viewUserRoles = async () => {
       try {
@@ -140,6 +143,7 @@ const Employees = () => {
   }, [employeeAddForm]);
 
   useEffect(() => {
+    setIsLoading(true);
     const viewEmployees = async () => {
       try {
         const data = await fetch(
@@ -161,6 +165,8 @@ const Employees = () => {
         }
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
     viewEmployees();
@@ -228,10 +234,23 @@ const Employees = () => {
           </Select>
 
           <div className="p-8" style={{ marginTop: "10px" }}>
+          {isLoading ? (
+                  <div
+                    className="loading"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <CircularProgress />
+                  </div>
+                ) : (
             <div className="overflow-x-auto">
               <table className="table-auto w-full border-collapse">
                 <thead>
                   <tr>
+                    <th className="p-4 border">#</th>
                     <th className="p-4 border">Employee ID</th>
                     <th className="p-4 border">First Name</th>
                     <th className="p-4 border">Last Name</th>
@@ -239,68 +258,98 @@ const Employees = () => {
                     <th className="p-4 border">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {sortingRole === 0 &&
-                    (rowsPerPage > 0
-                      ? employees.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : employees
-                    ).map((employee) => (
-                      <tr key={employee.empID} className="border">
-                        <td className="p-4">{employee.id}</td>
-                        <td className="p-4">{employee.f_name}</td>
-                        <td className="p-4">{employee.l_name}</td>
-                        <td className="p-4">{employee.role_name}</td>
-                        <td className="p-4 text-center">
-                          <button
-                            className="mr-3"
-                            onClick={() => handleViewClick(employee)}
-                          >
-                            <FontAwesomeIcon icon={faEye} />
-                          </button>
-                          <button className="mr-3">
-                            <FontAwesomeIcon icon={faPencilAlt} />
-                          </button>
-                          <button onClick={() => handleDeleteClick(employee)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  {sortingRole !== 0 &&
-                    (rowsPerPage > 0
-                      ? sortingRoleDetails.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : sortingRoleDetails
-                    ).map((employee) => (
-                      <tr key={employee.empID} className="border">
-                        <td className="p-4">{employee.id}</td>
-                        <td className="p-4">{employee.f_name}</td>
-                        <td className="p-4">{employee.l_name}</td>
-                        <td className="p-4">{employee.role_name}</td>
-                        <td className="p-4 text-center">
-                          <button
-                            className="mr-3"
-                            onClick={() => handleViewClick(employee)}
-                          >
-                            <FontAwesomeIcon icon={faEye} />
-                          </button>
-                          <button className="mr-3">
-                            <FontAwesomeIcon icon={faPencilAlt} />
-                          </button>
-                          <button onClick={() => handleDeleteClick(employee)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
+                  <tbody>
+                    {sortingRole === 0 &&
+                      (rowsPerPage > 0
+                        ? employees.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : employees
+                      ).map((employee) => (
+                        <tr key={employee.empID} className="border">
+                          <td>
+                            <img
+                              src={`http://localhost:4000/employees/${employee.photo_path}`}
+                              alt="profile"
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                objectFit: "contain",
+                                borderRadius: "50%",
+                                display: "block",
+                                margin: "auto",
+                              }}
+                            />
+                          </td>
+                          <td className="p-4">{employee.id}</td>
+                          <td className="p-4">{employee.f_name}</td>
+                          <td className="p-4">{employee.l_name}</td>
+                          <td className="p-4">{employee.role_name}</td>
+                          <td className="p-4 text-center">
+                            <button
+                              className="mr-3"
+                              onClick={() => handleViewClick(employee)}
+                            >
+                              <FontAwesomeIcon icon={faEye} />
+                            </button>
+                            <button className="mr-3">
+                              <FontAwesomeIcon icon={faPencilAlt} />
+                            </button>
+                            <button onClick={() => handleDeleteClick(employee)}>
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    {sortingRole !== 0 &&
+                      (rowsPerPage > 0
+                        ? sortingRoleDetails.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : sortingRoleDetails
+                      ).map((employee) => (
+                        <tr key={employee.empID} className="border">
+                          <td>
+                            <img
+                              src={`http://localhost:4000/employees/${employee.photo_path}`}
+                              alt="profile"
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                objectFit: "contain",
+                                borderRadius: "50%",
+                                display: "block",
+                                margin: "auto",
+                              }}
+                            />
+                          </td>
+                          <td className="p-4">{employee.id}</td>
+                          <td className="p-4">{employee.f_name}</td>
+                          <td className="p-4">{employee.l_name}</td>
+                          <td className="p-4">{employee.role_name}</td>
+                          <td className="p-4 text-center">
+                            <button
+                              className="mr-3"
+                              onClick={() => handleViewClick(employee)}
+                            >
+                              <FontAwesomeIcon icon={faEye} />
+                            </button>
+                            <button className="mr-3">
+                              <FontAwesomeIcon icon={faPencilAlt} />
+                            </button>
+                            <button onClick={() => handleDeleteClick(employee)}>
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                
               </table>
             </div>
+            )}
             <div
               className=""
               style={{

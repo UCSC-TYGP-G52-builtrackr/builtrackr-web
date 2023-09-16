@@ -42,51 +42,6 @@ import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
 import { SelectField } from "@chakra-ui/react";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
-
 const list1 = [
   "Create Employee Profiles",
   "Manage Employee Status",
@@ -156,9 +111,11 @@ const AdminUserRole = () => {
 
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
 
-  const company_id = decryptData(
-    JSON.parse(localStorage.getItem("company_id"))
+  const company_id = parseInt(
+    decryptData(JSON.parse(localStorage.getItem("company_id")))
   );
+  console.log(company_id);
+
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -220,11 +177,108 @@ const AdminUserRole = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
 
+  const [image, setImage] = useState({});
+  const [imageName, setImageName] = useState("");
+  const [imageErr, setImageErr] = useState("");
+
   const [confirmationModal1, setConfirmationModal1] = useState(false);
 
   const displayConfirmationModal1 = () => {
-    setConfirmationModal1(true);
+    let hasErrors = false;
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
+    const digitRegex = /\d/;
+
+    const hasUppercase = uppercaseRegex.test(password);
+    const hasLowercase = lowercaseRegex.test(password);
+    const hasSpecialChar = specialCharRegex.test(password);
+    const hasDigit = digitRegex.test(password);
+
+    setImageErr("");
+    setFNameErr("");
+    setLNameErr("");
+    setNicErr("");
+    setPhoneErr("");
+    setIdErr("");
+    setEmailErr("");
+    setAddressErr("");
+    setPasswordErr("");
+    setConfirmPasswordErr("");
+    setDobErr("");
+    setRegisterDateErr("");
+
+    if (fName.length === 0) {
+      setFNameErr("Enter Employee First Name");
+      hasErrors = true;
+    }
+    if (lName.length === 0) {
+      setLNameErr("Enter Employee last Name");
+      hasErrors = true;
+    }
+    if (email.length === 0) {
+      setEmailErr("Enter email");
+      hasErrors = true;
+    } else if (!emailRegex.test(email)) {
+      setEmailErr("Invalid email type");
+      hasErrors = true;
+    }
+    if (nic.length === 0) {
+      setNicErr("Enter NIC no");
+      hasErrors = true;
+    } else if (nic.length !== 10 && nic.length !== 12) {
+      setNicErr("Invalid Nic no1");
+      hasErrors = true;
+    } else if (!nicRegex1.test(nic) && !nicRegex2.test(nic)) {
+      setNicErr("Invalid Nic no2");
+      hasErrors = true;
+    }
+    if (id.length === 0) {
+      setIdErr("Enter employee Id");
+      hasErrors = true;
+    }
+    if (phone.length === 0) {
+      setPhoneErr("Enter mobile number");
+      hasErrors = true;
+    } else if (!phoneRegex.test(phone)) {
+      setPhoneErr("Invalid mobile number");
+      hasErrors = true;
+    }
+    if (address.length === 0) {
+      setAddressErr("Enter address");
+      hasErrors = true;
+    }
+    if (image.name === undefined) {
+      setImageErr("Select a image");
+      hasErrors = true;
+    }
+
+    if (password.length === 0) {
+      setPasswordErr("Enter password");
+      hasErrors = true;
+    } else if (password.length < 8) {
+      setPasswordErr("Password Contains atleast 8 Characters");
+      hasErrors = true;
+    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
+      setPasswordErr(
+        "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
+      );
+      hasErrors = true;
+    }
+    if (confirmPassword.length === 0) {
+      setConfirmPasswordErr("Confirm password");
+      hasErrors = true;
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordErr("Passowrds not matched");
+    }
+
+    if (!hasErrors) {
+      setConfirmationModal1(true);
+    } else {
+      return;
+    }
   };
+
   const closeConfirmationModal1 = () => {
     setConfirmationModal1(false);
   };
@@ -274,6 +328,9 @@ const AdminUserRole = () => {
     setPasswordErr("");
     setConfirmPassword("");
     setConfirmPasswordErr("");
+    setImage({});
+    setImageErr("");
+    setImageName("");
     setDob("");
     setDobErr("");
     setRegisterDate("");
@@ -317,6 +374,32 @@ const AdminUserRole = () => {
     setRoleNameErr("");
     setSelectedListErr("");
   };
+
+  const[hrAdded, setHrAdded] = useState(false)
+  useEffect(() => {
+    const isHrAdded = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/employee/hrExist",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: company_id, type:1 }),
+          }
+        );
+        if (data.status ) {
+          setHrAdded(true);
+        } else {
+          console.log(data.status);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    isHrAdded();
+  }, []);
 
   useEffect(() => {
     const viewUserRoles = async () => {
@@ -462,162 +545,90 @@ const AdminUserRole = () => {
     }
   };
   const handelSubmitEmployyeAdd = async (e) => {
-    e.preventDefault();
-    let hasErrors = false;
+    const formData = {
+      fName: fName,
+      lName: lName,
+      nic: nic,
+      phone: phone,
+      id: id,
+      email: email,
+      dob: dob,
+      registerDate: registerDate,
+      address: address,
+      password: password,
+      company_id: company_id,
+      type: 1,
+      imageName: imageName,
+    };
 
-    setFNameErr("");
-    setLNameErr("");
-    setEmailErr("");
-    setNicErr("");
-    setIdErr("");
-    setPhoneErr("");
-    setAddressErr("");
-    setAddress2Err("");
-    setCityErr("");
-    setPasswordErr("");
-    setConfirmPasswordErr("");
+    let emailErr = false;
 
-    const uppercaseRegex = /[A-Z]/;
-    const lowercaseRegex = /[a-z]/;
-    const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
-    const digitRegex = /\d/;
-
-    const hasUppercase = uppercaseRegex.test(password);
-    const hasLowercase = lowercaseRegex.test(password);
-    const hasSpecialChar = specialCharRegex.test(password);
-    const hasDigit = digitRegex.test(password);
-
-    if (fName.length === 0) {
-      setFNameErr("Enter Employee First Name");
-      hasErrors = true;
-    }
-    if (lName.length === 0) {
-      setLNameErr("Enter Employee last Name");
-      hasErrors = true;
-    }
-    if (email.length === 0) {
-      setEmailErr("Enter email");
-      hasErrors = true;
-    } else if (!emailRegex.test(email)) {
-      setEmailErr("Invalid email type");
-      hasErrors = true;
-    }
-    if (nic.length === 0) {
-      setNicErr("Enter NIC no");
-      hasErrors = true;
-    } else if (nic.length !== 10 && nic.length !== 12) {
-      setNicErr("Invalid Nic no1");
-      hasErrors = true;
-    } else if (!nicRegex1.test(nic) && !nicRegex2.test(nic)) {
-      setNicErr("Invalid Nic no2");
-      hasErrors = true;
-    }
-    if (id.length === 0) {
-      setIdErr("Enter employee Id");
-      hasErrors = true;
-    }
-    if (phone.length === 0) {
-      setPhoneErr("Enter mobile number");
-      hasErrors = true;
-    } else if (!phoneRegex.test(phone)) {
-      setPhoneErr("Invalid mobile number");
-      hasErrors = true;
-    }
-    if (address.length === 0) {
-      setAddressErr("Enter address");
-      hasErrors = true;
-    }
-    // if (address2.length === 0) {
-    //   setAddress2Err("Enter address");
-    //   hasErrors = true;
-    // }
-    // if (city.length === 0) {
-    //   setCityErr("Enter city");
-    //   hasErrors = true;
-    // }
-    if (password.length === 0) {
-      setPasswordErr("Enter password");
-      hasErrors = true;
-    } else if (password.length < 8) {
-      setPasswordErr("Password Contains atleast 8 Characters");
-      hasErrors = true;
-    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
-      setPasswordErr(
-        "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
-      );
-      hasErrors = true;
-    }
-    if (confirmPassword.length === 0) {
-      setConfirmPasswordErr("Confirm password");
-      hasErrors = true;
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordErr("Passowrds not matched");
-    }
-
-    if (!hasErrors) {
-      const formData = {
-        fName: fName,
-        lName: lName,
-        nic: nic,
-        phone: phone,
-        id: id,
-        email: email,
-        dob: dob,
-        registerDate: registerDate,
-        address: address,
-        password: password,
-        company_id: company_id,
-        type: 1,
-      };
-      let emailErr = false;
-
-      try {
-        await axios
-          .post("http://localhost:4000/api/employee/employeeExists", formData)
-          .then((res) => {
-            if (res.data.status) {
-              emailErr = true;
-              toast.error("Email Already exist");
-              setConfirmationModal1(false);
-              return;
-            }
-          });
-      } catch (err) {
-        toast.error(err.response.data.error);
-        return;
-      }
-      if (!emailErr) {
-        try {
-          const data = await fetch(
-            "http://localhost:4000/api/employee/registerEmployee",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
-            }
-          );
-
-          if (data.status === 200) {
-            const jsonData = await data.json();
-            toast.success(
-              "HR Manager registed successfuly. Email was sent to the employee"
-            );
-          } else if (data.status === 201) {
-            toast.success(
-              "HR Manager registed successfuly. But email was not sent to the employee"
-            );
+    try {
+      await axios
+        .post("http://localhost:4000/api/employee/employeeExists", formData)
+        .then((res) => {
+          if (res.data.status) {
+            emailErr = true;
+            toast.error("Email Already exist");
+            setConfirmationModal1(false);
+            return;
           }
-        } catch (err) {
-          console.error(err.message);
-        }
-        closeConfirmationModal1(false);
-        handleCloseEmployeeForm();
-      }
-    } else {
-      setConfirmationModal1(false);
+        });
+    } catch (err) {
+      toast.error(err.response.data.error);
       return;
+    }
+    if (!emailErr) {
+      try {
+        const formDataImage = new FormData();
+        formDataImage.append("image", image);
+        const photoUpload = await axios.post(
+          "http://localhost:4000/api/upload/employee",
+          formDataImage,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (photoUpload.status === 200) {
+          console.log(photoUpload.data);
+          setImageName(photoUpload.data);
+          setImageName(photoUpload.data);
+          console.log(imageName);
+
+          try {
+            const data = await fetch(
+              "http://localhost:4000/api/employee/registerEmployee",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              }
+            );
+
+            if (data.status === 200) {
+              const jsonData = await data.json();
+              toast.success(
+                "HR Manager registed successfuly. Email was sent to the employee"
+              );
+            } else if (data.status === 201) {
+              toast.success(
+                "HR Manager registed successfuly. But email was not sent to the employee"
+              );
+            }
+          } catch (err) {
+            console.error(err.message);
+          }
+        }
+      } catch (err) {
+        toast.error("Employee register not succes. Please try again later");
+      }
+
+      closeConfirmationModal1(false);
+      handleCloseEmployeeForm();
     }
   };
 
@@ -783,9 +794,9 @@ const AdminUserRole = () => {
                   }}
                   selectRole={displayRole}
                 />
-                <span className="link " onClick={handleOpenEmployeeForm}>
-                  Click here to add an employee
-                </span>
+                {!hrAdded &&  <span className="link " onClick={handleOpenEmployeeForm}>
+                  Click here to add a HR MAnager
+                </span>}
               </div>
 
               {userRoles.map((element, i) => (
@@ -858,23 +869,6 @@ const AdminUserRole = () => {
                         onChange={(e) => setRoleName(e.target.value)}
                         helperText={roleNameErr !== "" && roleNameErr}
                       />
-                      {/* <div style={{ display: "flex" }}>
-                        <div className="image-button">
-                          <input
-                            id="file-upload"
-                            type="file"
-                            hidden
-                            onChange={(e) => setRoleImage(e.target.files[0])}
-                          />
-                          <label htmlFor="file-upload" className="image-upload">
-                            {" "}
-                            Select Image <InsertPhotoIcon />
-                          </label>
-                        </div>
-                        <span style={{ marginTop: "6px", paddingLeft: "20px" }}>
-                          {roleImage.name}
-                        </span>
-                      </div> */}
 
                       <div className="select-privilages-box">
                         <div className="select-privilages">
@@ -987,206 +981,7 @@ const AdminUserRole = () => {
               submit={handelSubmitRoleAdd}
             />
           </>
-          {/* )} */}
         </div>
-        {emplyeeAddForm && (
-          <div className="employye-add-form">
-            <Modal
-              open={emplyeeAddForm}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style} style={{ width: "550px" }}>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-                  Add employee details
-                </h2>
-                <form>
-                  <div className="two-inputs">
-                    <TextField
-                      error={fNameErr !== "" && true}
-                      className="outlined-basic"
-                      label="First Name"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={fName}
-                      onChange={(e) => setFName(e.target.value)}
-                      helperText={fNameErr !== "" && fNameErr}
-                    />
-                    <TextField
-                      error={lNameErr !== "" && true}
-                      className="outlined-basic"
-                      label="Last Name"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={lName}
-                      onChange={(e) => setLName(e.target.value)}
-                      helperText={lNameErr !== "" && lNameErr}
-                    />
-                  </div>
-                  <div className="two-inputs">
-                    <TextField
-                      className="outlined-basic"
-                      label="NIC"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={nic}
-                      onChange={(e) => setNic(e.target.value)}
-                      error={nicErr !== "" && true}
-                      helperText={nicErr !== "" && nicErr}
-                    />
-                    <TextField
-                      className="outlined-basic"
-                      label="Contact No"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      error={phoneErr !== "" && true}
-                      helperText={phoneErr !== "" && phoneErr}
-                    />
-                  </div>
-                  <div className="two-inputs">
-                    <TextField
-                      className="outlined-basic"
-                      label="Employee Id"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={id}
-                      onChange={(e) => setId(e.target.value)}
-                      error={idErr !== "" && true}
-                      helperText={idErr !== "" && idErr}
-                    />
-                    <TextField
-                      className="outlined-basic"
-                      label="Email"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      error={emailErr !== "" && true}
-                      helperText={emailErr !== "" && emailErr}
-                    />
-                  </div>
-                  {/* <div>
-                    <TextField
-                      className="outlined-basic"
-                      label="Address line 2"
-                      variant="outlined"
-                      size="small"
-                      style={{ margin: "20px 0" }}
-                      sx={{ width: "100%" }}
-                      value={address2}
-                      onChange={(e) => setAddress2(e.target.value)}
-                      error={address2Err !== "" && true}
-                      helperText={address2Err !== "" && address2Err}
-                    />
-                  </div> */}
-
-                  <div className="two">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
-                          label="Date of Birth"
-                          slotProps={{ textField: { size: "small" } }}
-                          value={dob}
-                          onChange={(newValue) => setDob(newValue)}
-                          disableFuture
-                        />
-                        <DatePicker
-                          label="Registered Date"
-                          slotProps={{ textField: { size: "small" } }}
-                          value={registerDate}
-                          onChange={(newValue) => setRegisterDate(newValue)}
-                          disableFuture
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </div>
-                  <div>
-                    <TextField
-                      className="outlined-basic"
-                      label="Address line 1"
-                      variant="outlined"
-                      size="small"
-                      style={{ margin: "20px 0" }}
-                      sx={{ width: "100%" }}
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      error={addressErr !== "" && true}
-                      helperText={addressErr !== "" && addressErr}
-                    />
-                  </div>
-                  {/* <TextField
-                    className="outlined-basic"
-                    label="Cty"
-                    variant="outlined"
-                    size="small"
-                    style={{ margin: "20px 0" }}
-                    sx={{ width: "100%" }}
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    error={cityErr !== "" && true}
-                    helperText={cityErr !== "" && cityErr}
-                  /> */}
-                  <div className="two-inputs">
-                    <TextField
-                      className="outlined-basic"
-                      label="Paasword"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      type={"password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      error={passwordErr !== "" && true}
-                      helperText={passwordErr !== "" && passwordErr}
-                    />
-                    <TextField
-                      className="outlined-basic"
-                      label="Password Confirm"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      type={"password"}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      error={confirmPasswordErr !== "" && true}
-                      helperText={
-                        confirmPasswordErr !== "" && confirmPasswordErr
-                      }
-                    />
-                  </div>
-                  <div className="two-btns">
-                    <Buttons
-                      type={"button"}
-                      color={"red"}
-                      text={"Cancel"}
-                      onClick={handleCloseEmployeeForm}
-                    />
-                    <Buttons
-                      type={"button"}
-                      color={"green"}
-                      text={"Create"}
-                      onClick={displayConfirmationModal1}
-                    />
-                  </div>
-                </form>
-              </Box>
-            </Modal>
-          </div>
-        )}
-        <ConfirmationdModal
-          confirmModal={confirmationModal1}
-          text={`Are you sure want add ${fName} as a HR Manager`}
-          closeConfirmationModal={closeConfirmationModal1}
-          submit={handelSubmitEmployyeAdd}
-        />
 
         {emplyeeAddForm && (
           <div className="employye-add-form">
@@ -1304,10 +1099,45 @@ const AdminUserRole = () => {
                     error={addressErr !== "" && true}
                     helperText={addressErr !== "" && addressErr}
                   />
-                  <div className="two-inputs">
+
+                  <div className="image-button">
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={(e) => setImage(e.target.files[0])}
+                    />
+                    <label htmlFor="file-upload" className="image-upload">
+                      Select Image <InsertPhotoIcon />
+                    </label>
+                  </div>
+                  {image.name !== undefined && (
+                    <h1
+                      style={{
+                        marginTop: "6px",
+                      }}
+                    >
+                      {image.name}
+                    </h1>
+                  )}
+
+                  {imageErr && (
+                    <>
+                      <span
+                        style={{
+                          color: "red",
+                          fontSize: "13px",
+                        }}
+                      >
+                        {imageErr}
+                      </span>
+                    </>
+                  )}
+                  <div className="two-inputs" style={{ marginTop: "20px" }}>
                     <TextField
                       className="outlined-basic"
-                      label="Paasowrd"
+                      label="Password"
                       variant="outlined"
                       size="small"
                       sx={{ width: "50%" }}

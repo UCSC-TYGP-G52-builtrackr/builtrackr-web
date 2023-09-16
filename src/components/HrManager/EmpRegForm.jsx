@@ -13,6 +13,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 
 import { decryptData } from "../../encrypt";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,6 +70,10 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
   const [nic, setNic] = useState("");
   const [nicErr, setNicErr] = useState("");
 
+  const [image, setImage] = useState({});
+  const [imageName, setImageName] = useState("");
+  const [imageErr, setImageErr] = useState("");
+
   const [password, setPassword] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
 
@@ -106,6 +111,9 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setCityErr("");
     setRegisterDate({});
     setDob({});
+    setImage({});
+    setImageErr("");
+    setImageName("");
     setPassword("");
     setPasswordErr("");
     setConfirmPassword("");
@@ -166,6 +174,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setCityErr("");
     setPasswordErr("");
     setConfirmPasswordErr("");
+    setImageErr("");
     console.log(employeeTypeValue);
 
     const uppercaseRegex = /[A-Z]/;
@@ -250,11 +259,9 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
 
     if (hasErrors) {
       setConfirmModal(false);
-      console.log("Hammmmmmmeeeeeeeeeeeeeee");
       return;
     } else {
       if (employeeTypeValue !== 6) {
-        console.log("heeeeeeeeeeeee");
         const formData = {
           fName: fName,
           lName: lName,
@@ -268,6 +275,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
           password: password,
           company_id: company_id,
           type: employeeTypeValue,
+          imageName: imageName,
         };
         let emailErr = false;
 
@@ -288,30 +296,54 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
         }
         if (!emailErr) {
           try {
-            const data = await fetch(
-              "http://localhost:4000/api/employee/registerEmployee",
+            const formDataImage = new FormData();
+            formDataImage.append("image", image);
+            const photoUpload = await axios.post(
+              "http://localhost:4000/api/upload/employee",
+              formDataImage,
               {
-                method: "POST",
                 headers: {
-                  "Content-Type": "application/json",
+                  "Content-Type": "multipart/form-data",
                 },
-                body: JSON.stringify(formData),
               }
             );
+            if (photoUpload.status === 200) {
+              console.log(photoUpload.data);
+              setImageName(photoUpload.data);
+              setImageName(photoUpload.data);
+              console.log(imageName);
+              try {
+                const data = await fetch(
+                  "http://localhost:4000/api/employee/registerEmployee",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                  }
+                );
 
-            if (data.status === 200) {
-              const jsonData = await data.json();
-              toast.success(`Employee registerd successfuly`);
+                if (data.status === 200) {
+                  const jsonData = await data.json();
+                  toast.success(`Employee registerd successfuly`);
+                }
+              } catch (err) {
+                toast.error(
+                  `Labourer added not successfuly, try again latter2`
+                );
+              }
             }
           } catch (err) {
-            console.error(err.message);
+            toast.error(`Labourer added not successfuly, try again latter2`);
+            console.log(err);
           }
+
           setConfirmModal(false);
           closeForm();
         }
       } else {
         // labourer add part handel inside that block
-        console.log("hooooo");
         const formData = {
           fName: fName,
           lName: lName,
@@ -323,6 +355,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
           registerDate: registerDate,
           address: address,
           company_id: company_id,
+          imageName: imageName,
         };
         let emailErr = false;
 
@@ -343,23 +376,43 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
         }
         if (!emailErr) {
           try {
-            const data = await fetch(
-              "http://localhost:4000/api/employee/registerLabourer",
+            const formDataImage = new FormData();
+            formDataImage.append("image", image);
+            const photoUpload = await axios.post(
+              "http://localhost:4000/api/upload/labourer",
+              formDataImage,
               {
-                method: "POST",
                 headers: {
-                  "Content-Type": "application/json",
+                  "Content-Type": "multipart/form-data",
                 },
-                body: JSON.stringify(formData),
               }
             );
+            if (photoUpload.status === 200) {
+              setImageName(photoUpload.data);
+              try {
+                const data = await fetch(
+                  "http://localhost:4000/api/employee/registerLabourer",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                  }
+                );
 
-            if (data.status === 200) {
-              const jsonData = await data.json();
-              toast.success(`Labourer added successfuly`);
+                if (data.status === 200) {
+                  const jsonData = await data.json();
+                  toast.success(`Labourer added successfuly`);
+                }
+              } catch (err) {
+                toast.error(`Labourer added not successfuly, try again latter`);
+                console.error(err.message);
+              }
             }
           } catch (err) {
-            console.error(err.message);
+            toast.error(`Labourer added not successfuly, try again latter2`);
+            console.log(err);
           }
           setConfirmModal(false);
           closeForm();
@@ -525,36 +578,30 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                     error={addressErr !== "" && true}
                     helperText={addressErr !== "" && addressErr}
                   />
-                  {/* <TextField
-                    className="outlined-basic"
-                    label="Address line 2"
-                    variant="outlined"
-                    size="small"
-                    style={{ margin: "20px 0" }}
-                    sx={{ width: "100%" }}
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
-                    error={address2Err !== "" && true}
-                    helperText={address2Err !== "" && address2Err}
-                  />
+                  <div style={{ display: "flex" }}>
+                    <div className="image-button">
+                      <input
+                        id="file-upload"
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) => setImage(e.target.files[0])}
+                      />
+                      <label htmlFor="file-upload" className="image-upload">
+                        {" "}
+                        Select Image <InsertPhotoIcon />
+                      </label>
+                    </div>
+                    <span style={{ marginTop: "6px", paddingLeft: "20px" }}>
+                      {image.name}
+                    </span>
+                  </div>
                   
-                  <TextField
-                    className="outlined-basic"
-                    label="Cty"
-                    variant="outlined"
-                    size="small"
-                    style={{ margin: "20px 0" }}
-                    sx={{ width: "100%" }}
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    error={cityErr !== "" && true}
-                    helperText={cityErr !== "" && cityErr}
-                  /> */}
                   {employeeTypeValue !== 6 && (
                     <div className="two-inputs">
                       <TextField
                         className="outlined-basic"
-                        label="Paasowrd"
+                        label="Passowrd"
                         variant="outlined"
                         size="small"
                         sx={{ width: "50%" }}

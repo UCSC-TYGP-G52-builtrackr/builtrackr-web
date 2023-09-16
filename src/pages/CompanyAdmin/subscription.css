@@ -88,3 +88,6 @@
 tbody tr:nth-child(odd){
   background-color: #efefef;
 }
+.currente{
+  background-color: #ffcc00;
+}

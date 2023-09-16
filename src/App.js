@@ -86,7 +86,15 @@ function App() {
         <Route path="/hrmanager/leave" element={<LeaveDetails />} />
         <Route path="/hrmanager/performance review" element={<Performance />} />
         {/* Inventory Manager */}
-        <Route element={<ProtectedRoutes type={2} />}></Route>
+        <Route element={<ProtectedRoutes type={2} />}>
+          <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
+          <Route path="InventoryManger/Equipments/List" element={<ItemList />} />
+          <Route path="InventoryManger/Materials/List" element={<ItemList />} />
+          <Route path="/inventorymanager/Materials" element={<Material />} />
+          <Route path="/inventorymanager/documents" element={<FileUpload />} />
+          <Route path="/inventorymanager/Reports" element={<Analytics />} />
+
+        </Route>
 
         {/* Cheif Engineer */}
         <Route element={<ProtectedRoutes type={3} />}>

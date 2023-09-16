@@ -73,7 +73,7 @@ const EditModal = ({ isOpen, onClose }) => {
               </FormControl><br /><br/>
 <br/>
 <FormControl>
-          <button onClick={handleSubmitModal}>Save Changes</button> 
+          <button onClick={handleSubmitModal} style = {{backgroundColor:"#FFCC00" , padding:"5%" , width:"150px"}}>Save Changes</button> 
           </FormControl>   
         </div>
   
