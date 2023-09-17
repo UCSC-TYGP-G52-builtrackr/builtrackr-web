@@ -40,6 +40,13 @@ import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 
+
+
+import Equipments1 from "./pages/InventoryManager/Equipments1";
+import Materials1 from "./pages/InventoryManager/Materials1";
+import Reports1 from "./pages/InventoryManager/Reports1";
+import Analytics1 from "./pages/InventoryManager/Analytics1";
+
 function App() {
   const {
     setCurrentColor,
@@ -86,7 +93,24 @@ function App() {
         <Route path="/hrmanager/leave" element={<LeaveDetails />} />
         <Route path="/hrmanager/performance review" element={<Performance />} />
         {/* Inventory Manager */}
-        <Route element={<ProtectedRoutes type={2} />}></Route>
+        <Route element={<ProtectedRoutes type={2} />}>
+
+
+        <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
+          <Route path="InventoryManger/Equipments/List" element={<ItemList />} />
+          <Route path="InventoryManger/Materials/List" element={<ItemList />} />
+          <Route path="/inventorymanager/Materials" element={<Material />} />
+          <Route path="/inventorymanager/documents" element={<FileUpload />} />
+          <Route path="/inventorymanager/Reports" element={<Analytics />} />
+<Route path="/inventorymanager/Equipments1" element={<Equipments1/>} />
+        <Route path="/inventorymanager/Materials1" element={<Materials1 />} />
+        <Route path="/inventorymanager/Reports1" element={<Reports1 />} />
+        <Route path="/inventorymanager/Analytics1" element={<Analytics1 />} />
+
+
+
+
+        </Route>
 
         {/* Cheif Engineer */}
         <Route element={<ProtectedRoutes type={3} />}>
