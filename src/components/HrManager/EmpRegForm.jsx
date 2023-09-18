@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { decryptData } from "../../encrypt";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,9 +83,36 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
 
   const [employeeTypeErr, setEmployeeTypeErr] = useState("");
   const [employeeTypeValue, setEmployeeTypeValue] = useState(0);
-  const selcetEmployeTypeChange = (e) => {
+
+  const selcetEmployeTypeChange = async (e) => {
     setEmployeeTypeValue(e.target.value);
-    setSelectEmployeeType(true);
+    setEmployeeTypeErr("");
+
+    if (e.target.value === 2 || e.target.value === 3) {
+      try {
+        await axios
+          .post("http://localhost:4000/api/employee/employeeExistsByType", {
+            company_id: company_id,
+            type: e.target.value,
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.data.status) {
+              setEmployeeTypeErr(
+                `Already added maximun number of ${e.target.name} employees `
+              );
+              setSelectEmployeeType(false);
+              return;
+            } else {
+              setSelectEmployeeType(true);
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setSelectEmployeeType(true);
+    }
   };
 
   const [selcetEmployeeType, setSelectEmployeeType] = useState(false);
@@ -126,41 +154,11 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
   const [userRoles, setUserRoles] = useState([]);
 
   const [confirmModal, setConfirmModal] = useState(false);
-  const openConfirmModal = () => {
-    setConfirmModal(true);
-  };
-  const closeConfirmModal = () => {
-    setConfirmModal(false);
-  };
 
-  useEffect(() => {
-    const viewUserRoles = async () => {
-      try {
-        const data = await fetch(
-          "http://localhost:4000/api/user/getUserRoles",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: company_id }),
-          }
-        );
-        if (data.status === 200) {
-          const jsonData = await data.json();
-          setUserRoles(jsonData);
-        } else {
-          console.log(data.status);
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    viewUserRoles();
-  }, [employeeAddForm]);
+  const [isLoadingError, setIsLoadingError] = useState(false);
+  const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
 
-  const handelSubmitEmployyeAdd = async (e) => {
-    e.preventDefault();
+  const openConfirmModal = async () => {
     let hasErrors = false;
 
     setFNameErr("");
@@ -175,7 +173,6 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setPasswordErr("");
     setConfirmPasswordErr("");
     setImageErr("");
-    console.log(employeeTypeValue);
 
     const uppercaseRegex = /[A-Z]/;
     const lowercaseRegex = /[a-z]/;
@@ -186,6 +183,8 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     const hasLowercase = lowercaseRegex.test(password);
     const hasSpecialChar = specialCharRegex.test(password);
     const hasDigit = digitRegex.test(password);
+
+    setIsLoadingConfirmation(true);
 
     if (fName.length === 0) {
       setFNameErr("Enter Employee First Name");
@@ -227,6 +226,10 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       setAddressErr("Enter address");
       hasErrors = true;
     }
+    if (image.name === undefined) {
+      setImageErr("Select a image");
+      hasErrors = true;
+    }
     if (employeeTypeValue !== 6) {
       if (password.length === 0) {
         setPasswordErr("Enter password");
@@ -256,167 +259,254 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       setEmployeeTypeErr("Select Employee Type");
       hasErrors = true;
     }
+    if (employeeTypeValue === 6) {
+      try {
+        await axios
+          .post("http://localhost:4000/api/employee/labourerExists", {
+            email: email,
+          })
+          .then((res) => {
+            if (res.data.status) {
+              hasErrors = true;
+              setEmailErr("Email Already exist");
+            }
+          });
+      } catch (err) {
+        console.error(err.response.data.error);
+      }
+
+      try {
+        console.log("Hiiii")
+        await axios
+          .post("http://localhost:4000/api/employee/labourerExistById", {
+            company_id: company_id,
+            employee_id: id,
+          })
+          .then((res) => {
+            if (res.data.status) {
+              hasErrors = true;
+              setIdErr("Employee Id Already exist");
+            }
+          });
+      } catch (err) {
+        console.error(err.response.data.error);
+      } finally {
+        setIsLoadingConfirmation(false);
+      }
+    } else {
+      try {
+        await axios
+          .post("http://localhost:4000/api/employee/employeeExists", {
+            email: email,
+          })
+          .then((res) => {
+            if (res.data.status) {
+              hasErrors = true;
+              setEmailErr("Email Already exist");
+            }
+          });
+      } catch (err) {
+        console.error(err.response.data.error);
+      }
+
+      try {
+        await axios
+          .post("http://localhost:4000/api/employee/EmployeeExistById", {
+            company_id: company_id,
+            employee_id: id,
+          })
+          .then((res) => {
+            if (res.data.status) {
+              hasErrors = true;
+              setIdErr("Employee Id Already exist");
+            }
+          });
+      } catch (err) {
+        console.error(err.response.data.error);
+      } finally {
+        setIsLoadingConfirmation(false);
+      }
+    }
 
     if (hasErrors) {
-      setConfirmModal(false);
       return;
     } else {
-      if (employeeTypeValue !== 6) {
-        const formData = {
-          fName: fName,
-          lName: lName,
-          nic: nic,
-          phone: phone,
-          id: id,
-          email: email,
-          dob: dob,
-          registerDate: registerDate,
-          address: address,
-          password: password,
-          company_id: company_id,
-          type: employeeTypeValue,
-          imageName: imageName,
-        };
-        let emailErr = false;
+      setConfirmModal(true);
+    }
+  };
+  const closeConfirmModal = () => {
+    setConfirmModal(false);
+  };
 
-        try {
-          await axios
-            .post("http://localhost:4000/api/employee/employeeExists", formData)
-            .then((res) => {
-              if (res.data.status) {
-                emailErr = true;
-                toast.error("Email Already exist");
-                setConfirmModal(false);
-                return;
-              }
-            });
-        } catch (err) {
-          toast.error(err.response.data.error);
-          return;
+  useEffect(() => {
+    const viewUserRoles = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/user/getUserRoles",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: company_id }),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          setUserRoles(jsonData);
+        } else {
+          console.log(data.status);
         }
-        if (!emailErr) {
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    viewUserRoles();
+  }, [employeeAddForm]);
+
+  const handelSubmitEmployyeAdd = async (e) => {
+    setIsLoadingError(true);
+    if (employeeTypeValue !== 6) {
+      const formData = {
+        fName: fName,
+        lName: lName,
+        nic: nic,
+        phone: phone,
+        id: id,
+        email: email,
+        dob: dob,
+        registerDate: registerDate,
+        address: address,
+        password: password,
+        company_id: company_id,
+        type: employeeTypeValue,
+        imageName: imageName,
+      };
+
+      try {
+        const formDataImage = new FormData();
+        formDataImage.append("image", image);
+        const photoUpload = await axios.post(
+          "http://localhost:4000/api/upload/employee",
+          formDataImage,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (photoUpload.status === 200) {
+          console.log(photoUpload.data);
+          setImageName(photoUpload.data);
+          formData.imageName = photoUpload.data;
+          console.log(imageName);
           try {
-            const formDataImage = new FormData();
-            formDataImage.append("image", image);
-            const photoUpload = await axios.post(
-              "http://localhost:4000/api/upload/employee",
-              formDataImage,
+            const data = await fetch(
+              "http://localhost:4000/api/employee/registerEmployee",
               {
+                method: "POST",
                 headers: {
-                  "Content-Type": "multipart/form-data",
+                  "Content-Type": "application/json",
                 },
+                body: JSON.stringify(formData),
               }
             );
-            if (photoUpload.status === 200) {
-              console.log(photoUpload.data);
-              setImageName(photoUpload.data);
-              setImageName(photoUpload.data);
-              console.log(imageName);
-              try {
-                const data = await fetch(
-                  "http://localhost:4000/api/employee/registerEmployee",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-                  }
-                );
 
-                if (data.status === 200) {
-                  const jsonData = await data.json();
-                  toast.success(`Employee registerd successfuly`);
-                }
-              } catch (err) {
-                toast.error(
-                  `Labourer added not successfuly, try again latter2`
-                );
-              }
+            if (data.status === 200) {
+              const jsonData = await data.json();
+              toast.success(`Employee registerd successfuly`);
             }
           } catch (err) {
-            toast.error(`Labourer added not successfuly, try again latter2`);
-            console.log(err);
+            toast.error(`Labourer added not successfuly, try again latter`);
           }
-
-          setConfirmModal(false);
-          closeForm();
         }
-      } else {
-        // labourer add part handel inside that block
-        const formData = {
-          fName: fName,
-          lName: lName,
-          nic: nic,
-          phone: phone,
-          id: id,
-          email: email,
-          dob: dob,
-          registerDate: registerDate,
-          address: address,
-          company_id: company_id,
-          imageName: imageName,
-        };
-        let emailErr = false;
+      } catch (err) {
+        setConfirmModal(false);
+        toast.error(`Labourer added not successfuly, try again latter`);
+        console.log(err);
+      } finally {
+        setIsLoadingError(false);
+      }
 
+      setConfirmModal(false);
+      closeForm();
+    } else {
+      // labourer add part handel inside that block
+      const formData = {
+        fName: fName,
+        lName: lName,
+        nic: nic,
+        phone: phone,
+        id: id,
+        email: email,
+        dob: dob,
+        registerDate: registerDate,
+        address: address,
+        company_id: company_id,
+        imageName: imageName,
+      };
+      let emailErr = false;
+
+      try {
+        await axios
+          .post("http://localhost:4000/api/employee/labourerExists", formData)
+          .then((res) => {
+            if (res.data.status) {
+              emailErr = true;
+              toast.error("Email Already exist");
+              setConfirmModal(false);
+              return;
+            }
+          });
+      } catch (err) {
+        toast.error(err.response.data.error);
+        return;
+      }
+      if (!emailErr) {
         try {
-          await axios
-            .post("http://localhost:4000/api/employee/labourerExists", formData)
-            .then((res) => {
-              if (res.data.status) {
-                emailErr = true;
-                toast.error("Email Already exist");
-                setConfirmModal(false);
-                return;
-              }
-            });
-        } catch (err) {
-          toast.error(err.response.data.error);
-          return;
-        }
-        if (!emailErr) {
-          try {
-            const formDataImage = new FormData();
-            formDataImage.append("image", image);
-            const photoUpload = await axios.post(
-              "http://localhost:4000/api/upload/labourer",
-              formDataImage,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-            if (photoUpload.status === 200) {
-              setImageName(photoUpload.data);
-              try {
-                const data = await fetch(
-                  "http://localhost:4000/api/employee/registerLabourer",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-                  }
-                );
-
-                if (data.status === 200) {
-                  const jsonData = await data.json();
-                  toast.success(`Labourer added successfuly`);
-                }
-              } catch (err) {
-                toast.error(`Labourer added not successfuly, try again latter`);
-                console.error(err.message);
-              }
+          const formDataImage = new FormData();
+          formDataImage.append("image", image);
+          const photoUpload = await axios.post(
+            "http://localhost:4000/api/upload/employee",
+            formDataImage,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
             }
-          } catch (err) {
-            toast.error(`Labourer added not successfuly, try again latter2`);
-            console.log(err);
+          );
+          if (photoUpload.status === 200) {
+            setImageName(photoUpload.data);
+            formData.imageName = photoUpload.data;
+            try {
+              const data = await fetch(
+                "http://localhost:4000/api/employee/registerLabourer",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(formData),
+                }
+              );
+
+              if (data.status === 200) {
+                const jsonData = await data.json();
+                toast.success(`Labourer added successfuly`);
+              }
+            } catch (err) {
+              toast.error(`Labourer added not successfuly, try again latter`);
+              console.error(err.message);
+            }
           }
-          setConfirmModal(false);
-          closeForm();
+        } catch (err) {
+          toast.error(`Labourer added not successfuly, try again latter2`);
+          console.log(err);
+        } finally {
+          setIsLoadingError(false);
         }
+        setConfirmModal(false);
+        closeForm();
       }
     }
   };
@@ -460,7 +550,9 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                 error={employeeTypeErr !== "" && true}
               >
                 {userRoles.map((el) => (
-                  <MenuItem value={el.type}>{el.role_name}</MenuItem>
+                  <MenuItem value={el.type} name={el.role_name}>
+                    {el.role_name}
+                  </MenuItem>
                 ))}
                 <MenuItem value={6}>Labourers</MenuItem>
               </Select>
@@ -596,9 +688,22 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                       {image.name}
                     </span>
                   </div>
-                  
+                  {imageErr && (
+                    <>
+                      <span
+                        style={{
+                          color: "#D32F2F",
+                          fontSize: "13px",
+                          marginLeft: "14px",
+                        }}
+                      >
+                        {imageErr}
+                      </span>
+                    </>
+                  )}
+
                   {employeeTypeValue !== 6 && (
-                    <div className="two-inputs">
+                    <div className="two-inputs" style={{ marginTop: "20px" }}>
                       <TextField
                         className="outlined-basic"
                         label="Passowrd"
@@ -629,20 +734,32 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                   )}
                 </>
               )}
-              <div className="two-btns">
-                <Buttons
-                  type={"button"}
-                  color={"red"}
-                  text={"Cancel"}
-                  onClick={closeForm}
-                />
-                <Buttons
-                  type={"button"}
-                  color={"green"}
-                  text={"Create"}
-                  onClick={openConfirmModal}
-                />
-              </div>
+              {isLoadingConfirmation ? (
+                <div
+                  style={{
+                    marginTop: "20px",
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                <div className="two-btns">
+                  <Buttons
+                    type={"button"}
+                    color={"red"}
+                    text={"Cancel"}
+                    onClick={closeForm}
+                  />
+                  <Buttons
+                    type={"button"}
+                    color={"green"}
+                    text={"Create"}
+                    onClick={openConfirmModal}
+                  />
+                </div>
+              )}
             </form>
           </Box>
         </Modal>
@@ -652,6 +769,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
         text={`Are you sure want add ${fName} as Employee?`}
         closeConfirmationModal={closeConfirmModal}
         submit={handelSubmitEmployyeAdd}
+        loading={isLoadingError}
       />
     </div>
   );
@@ -674,6 +792,7 @@ function ConfirmationdModal({
   text,
   closeConfirmationModal,
   submit,
+  loading,
 }) {
   const style = {
     position: "absolute",
@@ -695,33 +814,39 @@ function ConfirmationdModal({
           aria-labelledby="child-modal-title"
           aria-describedby="child-modal-description"
         >
-          <Box sx={style}>
-            <h1
-              style={{
-                textAlign: "center",
-                fontSizeAdjust: "16px",
-                fontWeight: "600",
-              }}
-              id="child-modal-description"
-            >
-              {text}{" "}
-            </h1>
-            <div className="two-btns">
-              <Buttons
-                type={"button"}
-                color={"red"}
-                text={"Cancel"}
-                onClick={closeConfirmationModal}
-              />
-              <Buttons
-                type={"button"}
-                color={"green"}
-                text={"Create"}
-                onClick={submit}
-              />
+          {loading ? (
+            <div className="loading_err" style={{}}>
+              <CircularProgress />
             </div>
-            {/* <Button onClick={handleClose}>Close Child Modal</Button> */}
-          </Box>
+          ) : (
+            <Box sx={style}>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSizeAdjust: "16px",
+                  fontWeight: "600",
+                }}
+                id="child-modal-description"
+              >
+                {text}{" "}
+              </h1>
+              <div className="two-btns">
+                <Buttons
+                  type={"button"}
+                  color={"red"}
+                  text={"Cancel"}
+                  onClick={closeConfirmationModal}
+                />
+                <Buttons
+                  type={"button"}
+                  color={"green"}
+                  text={"Create"}
+                  onClick={submit}
+                />
+              </div>
+              {/* <Button onClick={handleClose}>Close Child Modal</Button> */}
+            </Box>
+          )}
         </Modal>
       </div>
     </>

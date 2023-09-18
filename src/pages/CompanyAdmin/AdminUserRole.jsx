@@ -26,6 +26,7 @@ import { IoIosArrowDropleft } from "react-icons/io";
 import { AiOutlinePlus } from "react-icons/ai";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   BarChart,
   Bar,
@@ -183,7 +184,7 @@ const AdminUserRole = () => {
 
   const [confirmationModal1, setConfirmationModal1] = useState(false);
 
-  const displayConfirmationModal1 = () => {
+  const displayConfirmationModal1 = async () => {
     let hasErrors = false;
     const uppercaseRegex = /[A-Z]/;
     const lowercaseRegex = /[a-z]/;
@@ -207,6 +208,8 @@ const AdminUserRole = () => {
     setConfirmPasswordErr("");
     setDobErr("");
     setRegisterDateErr("");
+
+    setIsLoadingConfirmation(true);
 
     if (fName.length === 0) {
       setFNameErr("Enter Employee First Name");
@@ -270,6 +273,39 @@ const AdminUserRole = () => {
       hasErrors = true;
     } else if (password !== confirmPassword) {
       setConfirmPasswordErr("Passowrds not matched");
+    }
+
+    try {
+      await axios
+        .post("http://localhost:4000/api/employee/employeeExists", {
+          email: email,
+        })
+        .then((res) => {
+          if (res.data.status) {
+            hasErrors = true;
+            setEmailErr("Email Already exist");
+          }
+        });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
+
+    try {
+      await axios
+        .post("http://localhost:4000/api/employee/EmployeeExistById", {
+          company_id: company_id,
+          employee_id: id,
+        })
+        .then((res) => {
+          if (res.data.status) {
+            hasErrors = true;
+            setIdErr("Employee Id Already exist");
+          }
+        });
+    } catch (err) {
+      console.error(err.response.data.error);
+    } finally {
+      setIsLoadingConfirmation(false);
     }
 
     if (!hasErrors) {
@@ -375,21 +411,26 @@ const AdminUserRole = () => {
     setSelectedListErr("");
   };
 
-  const[hrAdded, setHrAdded] = useState(false)
+  const [hrAdded, setHrAdded] = useState(false);
+  const [isLoadingRoles, setIsLoadingRoles] = useState(false);
+  const [isLoadingCount, setIsLoadingCount] = useState(false);
+  const [isLoadingError, setIsLoadingError] = useState(false);
+  const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
+
   useEffect(() => {
     const isHrAdded = async () => {
       try {
         const data = await fetch(
-          "http://localhost:4000/api/employee/hrExist",
+          "http://localhost:4000/api/employee/employeeExist",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id: company_id, type:1 }),
+            body: JSON.stringify({ id: company_id, type: 1 }),
           }
         );
-        if (data.status ) {
+        if (data.status) {
           setHrAdded(true);
         } else {
           console.log(data.status);
@@ -402,6 +443,7 @@ const AdminUserRole = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoadingRoles(true);
     const viewUserRoles = async () => {
       try {
         const data = await fetch(
@@ -422,12 +464,15 @@ const AdminUserRole = () => {
         }
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setIsLoadingRoles(false);
       }
     };
     viewUserRoles();
   }, [displayForm]);
 
   useEffect(() => {
+    setIsLoadingCount(true);
     const viewEmployeeCount = async () => {
       try {
         const data = await fetch(
@@ -448,6 +493,8 @@ const AdminUserRole = () => {
         }
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setIsLoadingCount(false);
       }
     };
     viewEmployeeCount();
@@ -560,76 +607,63 @@ const AdminUserRole = () => {
       type: 1,
       imageName: imageName,
     };
-
-    let emailErr = false;
+    setIsLoadingError(true);
 
     try {
-      await axios
-        .post("http://localhost:4000/api/employee/employeeExists", formData)
-        .then((res) => {
-          if (res.data.status) {
-            emailErr = true;
-            toast.error("Email Already exist");
-            setConfirmationModal1(false);
-            return;
-          }
-        });
-    } catch (err) {
-      toast.error(err.response.data.error);
-      return;
-    }
-    if (!emailErr) {
-      try {
-        const formDataImage = new FormData();
-        formDataImage.append("image", image);
-        const photoUpload = await axios.post(
-          "http://localhost:4000/api/upload/employee",
-          formDataImage,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (photoUpload.status === 200) {
-          console.log(photoUpload.data);
-          setImageName(photoUpload.data);
-          setImageName(photoUpload.data);
-          console.log(imageName);
-
-          try {
-            const data = await fetch(
-              "http://localhost:4000/api/employee/registerEmployee",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-              }
-            );
-
-            if (data.status === 200) {
-              const jsonData = await data.json();
-              toast.success(
-                "HR Manager registed successfuly. Email was sent to the employee"
-              );
-            } else if (data.status === 201) {
-              toast.success(
-                "HR Manager registed successfuly. But email was not sent to the employee"
-              );
-            }
-          } catch (err) {
-            console.error(err.message);
-          }
+      const formDataImage = new FormData();
+      formDataImage.append("image", image);
+      const photoUpload = await axios.post(
+        "http://localhost:4000/api/upload/employee",
+        formDataImage,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      } catch (err) {
-        toast.error("Employee register not succes. Please try again later");
-      }
+      );
+      if (photoUpload.status === 200) {
+        console.log(photoUpload.data);
+        setImageName(photoUpload.data);
+        formData.imageName = photoUpload.data;
+        console.log(imageName);
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/registerEmployee",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            }
+          );
 
+          if (data.status === 200) {
+            const jsonData = await data.json();
+            toast.success(
+              "HR Manager registed successfuly. Email was sent to the employee"
+            );
+          } else if (data.status === 201) {
+            toast.success(
+              "HR Manager registed successfuly. But email was not sent to the employee"
+            );
+          }
+        } catch (err) {
+          console.error(err.message);
+        } finally {
+          setIsLoadingError(false);
+        }
+      }
+    } catch (err) {
+      console.log(err);
       closeConfirmationModal1(false);
-      handleCloseEmployeeForm();
+      toast.error("Employee register not succes. Please try again later");
+    } finally {
+      setIsLoadingError(false);
     }
+
+    closeConfirmationModal1(false);
+    handleCloseEmployeeForm();
   };
 
   return (
@@ -794,18 +828,33 @@ const AdminUserRole = () => {
                   }}
                   selectRole={displayRole}
                 />
-                {!hrAdded &&  <span className="link " onClick={handleOpenEmployeeForm}>
-                  Click here to add a HR MAnager
-                </span>}
+                {!hrAdded && (
+                  <span className="link " onClick={handleOpenEmployeeForm}>
+                    Click here to add a HR MAnager
+                  </span>
+                )}
               </div>
 
-              {userRoles.map((element, i) => (
-                <UserRole
-                  role={element}
-                  key={element.role_id}
-                  selectRole={displayRole}
-                />
-              ))}
+              {isLoadingRoles ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                userRoles.map((element, i) => (
+                  <UserRole
+                    role={element}
+                    key={element.role_id}
+                    selectRole={displayRole}
+                  />
+                ))
+              )}
               <div className="">
                 <UserRole
                   role={{
@@ -818,30 +867,44 @@ const AdminUserRole = () => {
               </div>
             </div>
           )}
-          {employeeCount && selectedRole === 0 && (
-            <div className="anlyatic-box">
-              <div className="left-side">
-                <BarChart
-                  width={600}
-                  height={350}
-                  data={employeeCount}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="role_name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="count" fill="#ffcc00" />
-                  {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
-                </BarChart>
-              </div>
+          {isLoadingCount ? (
+            <div
+              className="loading"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "30px",
+              }}
+            >
+              <CircularProgress />
             </div>
+          ) : (
+            employeeCount &&
+            selectedRole === 0 && (
+              <div className="anlyatic-box">
+                <div className="left-side">
+                  <BarChart
+                    width={600}
+                    height={350}
+                    data={employeeCount}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="role_name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="count" fill="#ffcc00" />
+                    {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
+                  </BarChart>
+                </div>
+              </div>
+            )
           )}
 
           {/* {displayForm && ( */}
@@ -1126,8 +1189,9 @@ const AdminUserRole = () => {
                     <>
                       <span
                         style={{
-                          color: "red",
+                          color: "#d32f2f",
                           fontSize: "13px",
+                          marginLeft: "14px",
                         }}
                       >
                         {imageErr}
@@ -1162,20 +1226,32 @@ const AdminUserRole = () => {
                       }
                     />
                   </div>
-                  <div className="two-btns">
-                    <Buttons
-                      type={"button"}
-                      color={"red"}
-                      text={"Cancel"}
-                      onClick={handleCloseEmployeeForm}
-                    />
-                    <Buttons
-                      type={"button"}
-                      color={"green"}
-                      text={"Create"}
-                      onClick={displayConfirmationModal1}
-                    />
-                  </div>
+                  {isLoadingConfirmation ? (
+                    <div
+                      style={{
+                        marginTop: "20px",
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <CircularProgress />
+                    </div>
+                  ) : (
+                    <div className="two-btns">
+                      <Buttons
+                        type={"button"}
+                        color={"red"}
+                        text={"Cancel"}
+                        onClick={handleCloseEmployeeForm}
+                      />
+                      <Buttons
+                        type={"button"}
+                        color={"green"}
+                        text={"Create"}
+                        onClick={displayConfirmationModal1}
+                      />
+                    </div>
+                  )}
                 </form>
               </Box>
             </Modal>
@@ -1186,6 +1262,7 @@ const AdminUserRole = () => {
           text={`Are you sure want add ${fName} as a HR Manager`}
           closeConfirmationModal={closeConfirmationModal1}
           submit={handelSubmitEmployyeAdd}
+          loading={isLoadingError}
         />
       </div>
     </>
@@ -1267,6 +1344,7 @@ function ConfirmationdModal({
   text,
   closeConfirmationModal,
   submit,
+  loading,
 }) {
   const style = {
     position: "absolute",
@@ -1288,33 +1366,39 @@ function ConfirmationdModal({
           aria-labelledby="child-modal-title"
           aria-describedby="child-modal-description"
         >
-          <Box sx={style}>
-            <h1
-              style={{
-                textAlign: "center",
-                fontSizeAdjust: "16px",
-                fontWeight: "600",
-              }}
-              id="child-modal-description"
-            >
-              {text}{" "}
-            </h1>
-            <div className="two-btns">
-              <Buttons
-                type={"button"}
-                color={"red"}
-                text={"Cancel"}
-                onClick={closeConfirmationModal}
-              />
-              <Buttons
-                type={"button"}
-                color={"green"}
-                text={"Create"}
-                onClick={submit}
-              />
+          {loading ? (
+            <div className="loading_err" style={{}}>
+              <CircularProgress />
             </div>
-            {/* <Button onClick={handleClose}>Close Child Modal</Button> */}
-          </Box>
+          ) : (
+            <Box sx={style}>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSizeAdjust: "16px",
+                  fontWeight: "600",
+                }}
+                id="child-modal-description"
+              >
+                {text}{" "}
+              </h1>
+              <div className="two-btns">
+                <Buttons
+                  type={"button"}
+                  color={"red"}
+                  text={"Cancel"}
+                  onClick={closeConfirmationModal}
+                />
+                <Buttons
+                  type={"button"}
+                  color={"green"}
+                  text={"Create"}
+                  onClick={submit}
+                />
+              </div>
+              {/* <Button onClick={handleClose}>Close Child Modal</Button> */}
+            </Box>
+          )}
         </Modal>
       </div>
     </>

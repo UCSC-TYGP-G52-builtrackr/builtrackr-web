@@ -323,5 +323,15 @@ input ::placeholder {
   margin-top: 30px;
   padding-left: 10px;
 }
-.left-side {
+.loading_err {
+  position: absolute;
+  margin-left: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    
+    
 }

@@ -200,64 +200,73 @@ const Employees = () => {
 
           {/* site managers grid */}
 
-          <Button
-            variant="contained"
-            color="warning"
-            className="bg-yellow-400"
-            onClick={handleAddClick}
-            style={{
-              position: "absolute",
-              right: "30px",
-              backgroundColor: "#ffcc00",
-              color: "black",
-            }}
+          <div
+            className="top-container"
+            style={{ display: "flex", justifyContent: "space-between" }}
           >
-            Add Employee
-            <AiOutlinePlus style={{ marginLeft: "10px" }} />
-          </Button>
-          <InputLabel id="demo-simple-select-label">Employee Type</InputLabel>
-          <Select
-            style={{ width: "200px" }}
-            size="small"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={sortingRole}
-            label="Employee Type"
-            onChange={changeUserRole}
-          >
-            <MenuItem value={0}>All</MenuItem>
-            <MenuItem value={1}>HR Manager</MenuItem>
-            {roles.map((el) => (
-              <MenuItem value={el.type}>{el.role_name}</MenuItem>
-            ))}
-            <MenuItem value={6}>Labourer</MenuItem>
-          </Select>
+            <div className="">
+              <InputLabel id="demo-simple-select-label">
+                Employee Type
+              </InputLabel>
+              <Select
+                style={{ width: "200px" }}
+                size="small"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={sortingRole}
+                label="Employee Type"
+                onChange={changeUserRole}
+              >
+                <MenuItem value={0}>All</MenuItem>
+                <MenuItem value={1}>HR Manager</MenuItem>
+                {roles.map((el) => (
+                  <MenuItem value={el.type}>{el.role_name}</MenuItem>
+                ))}
+                <MenuItem value={6}>Labourer</MenuItem>
+              </Select>
+            </div>
+            <Button
+              variant="contained"
+              color="warning"
+              className="bg-yellow-400"
+              onClick={handleAddClick}
+              style={{
+                backgroundColor: "#ffcc00",
+                color: "black",
+                height: "40px",
+                marginTop: "10px",
+              }}
+            >
+              Add Employee
+              <AiOutlinePlus style={{ marginLeft: "10px" }} />
+            </Button>
+          </div>
 
           <div className="p-8" style={{ marginTop: "10px" }}>
-          {isLoading ? (
-                  <div
-                    className="loading"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <CircularProgress />
-                  </div>
-                ) : (
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="p-4 border">#</th>
-                    <th className="p-4 border">Employee ID</th>
-                    <th className="p-4 border">First Name</th>
-                    <th className="p-4 border">Last Name</th>
-                    <th className="p-4 border">Position</th>
-                    <th className="p-4 border">Actions</th>
-                  </tr>
-                </thead>
+            {isLoading ? (
+              <div
+                className="loading"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <CircularProgress />
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="p-4 border">#</th>
+                      <th className="p-4 border">Employee ID</th>
+                      <th className="p-4 border">First Name</th>
+                      <th className="p-4 border">Last Name</th>
+                      <th className="p-4 border">Position</th>
+                      <th className="p-4 border">Actions</th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {sortingRole === 0 &&
                       (rowsPerPage > 0
@@ -346,9 +355,8 @@ const Employees = () => {
                         </tr>
                       ))}
                   </tbody>
-                
-              </table>
-            </div>
+                </table>
+              </div>
             )}
             <div
               className=""
