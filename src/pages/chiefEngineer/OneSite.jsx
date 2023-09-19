@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import { useState, useEffect } from "react";
 // import '../../App.css';
-import PopoverCE from '../../components/PopoverCE';
+import PopoverCE from '../../components/ChiefEngineer/PopoverCE';
 import SidebarCE from '../../components/ChiefEngineer/SidebarCE';
 
 const OneSite = () => {
@@ -133,7 +133,7 @@ const OneSite = () => {
               
               <div className="flex min-w-0 mt-8 gap-x-4">
                 <p className="mt-2 text-lg font-semibold leading-10 text-gray-900">Site Manager</p>
-                <PopoverCE/>
+                <PopoverCE siteId={id}/>
               </div>
 
               <div className='mt-5 text-start'>

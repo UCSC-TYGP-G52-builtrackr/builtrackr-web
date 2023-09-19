@@ -8,7 +8,6 @@ import Dropdown from '../../components/ChiefEngineer/Dropdown';
 
 // dashboard common components
 import Navbar from '../../components/ChiefEngineer/Navbar'
-import Sidebar from '../../components/Sidebar';
 import SidebarCE from '../../components/ChiefEngineer/SidebarCE';
 import ChatSpace from '../../components/ChatSpace';
 import { BsChatDots } from 'react-icons/bs';
@@ -48,7 +47,7 @@ const style = {
   p: 4,
 };
 
-const Sites = () => {
+const Warehouses = () => {
 
   const [siteData, setSiteData] = useState([]);
   const [customerData, setCustomerData] = useState([]);
@@ -65,7 +64,6 @@ const Sites = () => {
   const storedCompId = localStorage.getItem("company_id");
   const decryptedValue = decryptData(JSON.parse(storedCompId));
   const companyID = parseInt(decryptedValue, 10);
-  console.log("company's ID: ", companyID);
 
   const [siteType, setSiteType] = useState('');
   const [siteClient, setSiteClient] = useState('');
@@ -124,11 +122,6 @@ const Sites = () => {
   useEffect(() => {
     const viewSitesAll = async () => {
       try {
-
-        const formData = {
-          companyID: companyID,
-        };
-
         const data = await fetch(
           "http://localhost:4000/api/site/getSites",
           {
@@ -136,7 +129,6 @@ const Sites = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData),
           }
         );
         if (data.status === 200) {
@@ -198,7 +190,7 @@ const Sites = () => {
         <SidebarCE />
       </div>
       <div className='ml-72'>
-            <div className="">
+            <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
               <Navbar />
             </div>
             {themeSettings && (<ChatSpace />)}
@@ -265,7 +257,7 @@ const Sites = () => {
                           Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
                         </Typography> */}
                         
-                        <h2 className='text-lg font-bold text-center'>Create New Site</h2>
+                        <h2 className='text-lg font-bold text-center'>Create New Warehouse</h2>
                         
                         <form onSubmit={handleSubmit} className='mt-5'>
                             <Stack spacing={1} direction="row" sx={{marginBottom: 1}}>
@@ -387,4 +379,4 @@ const Sites = () => {
   );
 };
 
-export default Sites;
+export default Warehouses;
