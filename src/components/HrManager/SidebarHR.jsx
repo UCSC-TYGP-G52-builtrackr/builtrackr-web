@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 import { FiLogOut } from 'react-icons/fi';
@@ -14,6 +14,11 @@ const SidebarHR = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
       setActiveMenu(false);
     }
+  };
+  const navigate = useNavigate()
+  const logout = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   const activeLink = 'flex items-center gap-5 pl-4 ml-8 pt-3 pb-2.5 text-black bg-yellow-400 rounded-l-lg text-md';
@@ -61,7 +66,7 @@ const SidebarHR = () => {
 
           {/* logout */}
           <div className="absolute bottom-0 left-0 w-full p-4">
-            <div className="flex items-center justify-center gap-5 pt-3 pb-2.5 rounded-l-lg text-md custom-mt-percentage text-white "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
+            <div className="flex items-center justify-center gap-5 pt-3 pb-2.5 rounded-l-lg text-md custom-mt-percentage text-white "><FiLogOut onClick={logout}/><span className="capitalize cursor-pointer " onClick={logout}>Logout</span></div>
           </div>
         </>
       )}

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { alignProperty } from "@mui/material/styles/cssUtils";
-import {encryptData } from '../../encrypt'
+import { encryptData } from "../../encrypt";
 export function Login() {
   const [values, setValues] = useState({
     email: "",
@@ -25,106 +25,119 @@ export function Login() {
     setErrors(error);
     console.log(errors);
     if (!error) {
-      console.log(error)
+      console.log(error);
       return;
-
     } else {
       if (values.type === "Employee") {
         try {
-          const data = await fetch(
-            "http://localhost:4000/api/employee/loginEmployee",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-              body: JSON.stringify({
-                email: values.email,
-                password: values.password,
-              }),
-            }
-          );
-          console.log(data);
-          if (data.status === 201) {
-            const jsonData = await data.json();
-            console.log(jsonData);
-
-            localStorage.setItem(
-              "user_type",
-              JSON.stringify(encryptData(jsonData.type.toString()))
-            );
-            localStorage.setItem("name", JSON.stringify(encryptData(jsonData.name)));
-            localStorage.setItem(
-              "company_id",
-              JSON.stringify(encryptData(jsonData.company_id.toString()))
-            );
-            localStorage.setItem(
-              "no",
-              JSON.stringify(encryptData(jsonData.employee_id.toString()))
-            );
-            localStorage.setItem("is_loged", JSON.stringify(encryptData("yes")));
-
-
-            if (jsonData.type === 1) {
-              localStorage.setItem("home_page", JSON.stringify(encryptData("hrmanager/userroles")));
-              navigate("/hrmanager/userroles");
+          await axios
+            .post("http://localhost:4000/api/employee/loginEmployee", values)
+            .then((res) => {
               toast.success("Login Successfull");
-            } else if (jsonData.type === 2){
-              localStorage.setItem("home_page", JSON.stringify(encryptData("inventorymanager/dashboard")));
-              navigate("/inventorymanager/dashboard");
-              toast.success("Login Successfull");
-            }  else if (jsonData.type === 3){
-              localStorage.setItem("home_page", JSON.stringify(encryptData("chiefEngineer/sites")));
-              navigate("/chiefEngineer/sites");
-              toast.success("Login Successfull");
-            } else if (jsonData.type === 4) {
-              localStorage.setItem("home_page",JSON.stringify(encryptData("sitemanager/dashboard"))
+              localStorage.setItem(
+                "user_type",
+                JSON.stringify(encryptData(res.data.type.toString()))
               );
-              navigate("/sitemanager/dashboard");
-              toast.success("Login Successfull");
-            }else if (jsonData.type === 5) {
-              localStorage.setItem("home_page",JSON.stringify(encryptData("Supervisor/KanbanBoard")));
-              navigate("/Supervisor/KanbanBoard");
-              toast.success("Login Successfull");
-            }
-          }
+              localStorage.setItem(
+                "name",
+                JSON.stringify(encryptData(res.data.name))
+              );
+              localStorage.setItem(
+                "company_id",
+                JSON.stringify(encryptData(res.data.company_id.toString()))
+              );
+              localStorage.setItem(
+                "no",
+                JSON.stringify(encryptData(res.data.employee_id.toString()))
+              );
+              localStorage.setItem(
+                "is_loged",
+                JSON.stringify(encryptData("yes"))
+              );
+
+              if (res.data.type === 1) {
+                localStorage.setItem(
+                  "home_page",
+                  JSON.stringify(encryptData("hrmanager/user roles"))
+                );
+                setTimeout(() => {
+                  navigate("/hrmanager/user roles");
+                }, 2000);
+              } else if (res.data.type === 2) {
+                localStorage.setItem(
+                  "home_page",
+                  JSON.stringify(encryptData("inventorymanager/dashboard"))
+                );
+                setTimeout(() => {
+                  navigate("/inventorymanager/dashboard");
+                }, 2000);
+              } else if (res.data.type === 3) {
+                localStorage.setItem(
+                  "home_page",
+                  JSON.stringify(encryptData("chiefEngineer/sites"))
+                );
+                setTimeout(() => {
+                  navigate("/chiefEngineer/sites");
+                }, 2000);
+              } else if (res.data.type === 4) {
+                localStorage.setItem(
+                  "home_page",
+                  JSON.stringify(encryptData("sitemanager/dashboard"))
+                );
+                setTimeout(() => {
+                  navigate("/sitemanager/dashboard");
+                }, 2000);
+              } else if (res.data.type === 5) {
+                localStorage.setItem(
+                  "home_page",
+                  JSON.stringify(encryptData("Supervisor/KanbanBoard"))
+                );
+                setTimeout(() => {
+                  navigate("/Supervisor/KanbanBoard");
+                }, 2000);
+              }
+            });
         } catch (err) {
-          console.error(err.message);
+          console.log(err);
+          toast.error(err.response.data.error);
         }
+
       } else {
         try {
           await axios
             .post("http://localhost:4000/api/user/auth", values)
             .then((res) => {
-              if (res.status === 201) {
-                const adminType = 0;
-                console.log(res.data.name);
-                toast.success("Login Successfull");
-                localStorage.setItem(
-                  "user_type",
-                  JSON.stringify(encryptData(adminType.toString()))
-                );
-                localStorage.setItem("name", JSON.stringify(encryptData(res.data.name)));
-                localStorage.setItem(
-                  "company_id",
-                  JSON.stringify(encryptData(res.data.id.toString()))
-                );
-                localStorage.setItem("home_page", JSON.stringify(encryptData("Admin")));
-                localStorage.setItem("is_loged", JSON.stringify(encryptData("yes")));
+              const adminType = 0;
+              console.log(res);
+              toast.success("Login Successfull");
+              localStorage.setItem(
+                "user_type",
+                JSON.stringify(encryptData(adminType.toString()))
+              );
+              localStorage.setItem(
+                "name",
+                JSON.stringify(encryptData(res.data.name))
+              );
+              localStorage.setItem(
+                "company_id",
+                JSON.stringify(encryptData(res.data.id.toString()))
+              );
+              localStorage.setItem(
+                "home_page",
+                JSON.stringify(encryptData("Admin"))
+              );
+              localStorage.setItem(
+                "is_loged",
+                JSON.stringify(encryptData("yes"))
+              );
 
-
-                setTimeout(() => {
-                  navigate("/admin");
-                }, 2000);
-              } else {
-                toast.error("Login Failed");
-              }
+              setTimeout(() => {
+                navigate("/admin");
+              }, 2000);
             });
-          // navigate('/home')
         } catch (err) {
-          console.log(err); // "Request failed with status code 500"
-          toast.error(err.response.data.message);
+          console.log(err);
+          toast.error(err.response.data.error);
         }
       }
     }
@@ -174,6 +187,7 @@ export function Login() {
                 id="email"
                 value={values.email}
                 onChange={handleInput}
+                style={{ paddingLeft: "10px" }}
               ></input>
               {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
               <label>Password</label>
@@ -184,6 +198,7 @@ export function Login() {
                 id="password"
                 value={values.password}
                 onChange={handleInput}
+                style={{ paddingLeft: "10px" }}
               ></input>
               <br />
               {errors.password && (
@@ -197,7 +212,7 @@ export function Login() {
                 name="type"
               >
                 <option className="login-option" value="" disabled>
-                  Selecet Login Type
+                  Select Login Type
                 </option>
                 <option className="login-option" value="Employee">
                   Employee
@@ -209,7 +224,15 @@ export function Login() {
               {errors.type && <p style={{ color: "red" }}>{errors.type}</p>}
               <br />
               <a href="forgotPassword">Forgot Password?</a> <br />
-              <button className="next_button" type="submit" style={{backgroundColor:"#ffcc00", marginTop:"10px" , fontWeight:"700"}}>
+              <button
+                className="next_button"
+                type="submit"
+                style={{
+                  backgroundColor: "#ffcc00",
+                  marginTop: "10px",
+                  fontWeight: "700",
+                }}
+              >
                 {" "}
                 Login
               </button>

@@ -11,6 +11,8 @@ const ProtectedRoutes = ({ type }) => {
   const logedUserHome = JSON.parse(localStorage.getItem("home_page"))
     ? decryptData(JSON.parse(localStorage.getItem("home_page")))
     : "";
+    console.log(authorized)
+    console.log(logedUserType)
 
   if (authorized !== "yes") {
     return <Navigate to="Login" />;

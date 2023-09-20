@@ -79,7 +79,7 @@ function App() {
         {/* <Route path="/admin" element={<AdminHome />} /> */}
         {/* HR Manager */}
         <Route element={<ProtectedRoutes type={1} />}></Route>
-        <Route path="/hrmanager/userroles" element={<Users />} />
+        <Route path="/hrmanager/user roles" element={<Users />} />
         <Route path="/hrmanager/employees" element={<Employees />} />
         <Route path="/hrmanager/leave" element={<LeaveDetails />} />
         <Route path="/hrmanager/performance review" element={<Performance />} />
