@@ -1,5 +1,4 @@
 export function Validation(values) {
-  console.log(values);
   const errors = {};
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^s@]{2,6}$/;
@@ -25,11 +24,8 @@ export function Validation(values) {
   ) {
     errors.input = "Field is required";
   }
-  if(values.type === "" ){
-    errors.type = "Select login type"
-  }
-  if (values.password !== values.cPassword) {
-    errors.confirm = "Password Didn't Match";
+  if(values.type === ""){
+    errors.typeErr = "Select login type"
   }
   return errors;
 }

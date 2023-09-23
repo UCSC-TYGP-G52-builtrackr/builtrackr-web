@@ -1,5 +1,5 @@
 .comments {
-    margin-top: 20px;
+    margin-top: 20%;
   }
   
   .comments-title {
@@ -8,7 +8,7 @@
   }
   
   .comments-container {
-    margin-top: 40px;
+    margin-top: 20%;
   }
   
   .comment-form-title {
@@ -17,7 +17,7 @@
   
   .comment-form-textarea {
     width: 100%;
-    height: 80px;
+    height: 60px;
     margin-bottom: 8px;
     margin-top: 8px;
     border: 1px solid rgb(107, 114, 12);
@@ -26,14 +26,15 @@
   .comment-form-button {
     font-size: 16px;
     padding: 8px 16px;
-    background: rgb(59, 130, 246);
+    background: #ffcc00;
     border-radius: 8px;
     color: white;
+    margin-left: 80%;
   }
   
   .comment-form-button:hover:enabled {
     cursor: pointer;
-    background: rgb(37, 99, 235);
+    background: #ffd52c;
   }
   
   .comment-form-button:disabled {

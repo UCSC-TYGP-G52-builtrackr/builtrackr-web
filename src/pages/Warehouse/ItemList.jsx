@@ -79,7 +79,7 @@ const handleChange = (event) => {
               <Textarea placeholder='Here is a sample placeholder'  w='250px'/>
             </FormControl><br />
             <FormControl mt={4}>
-              <button class = 'ml-40'>Update</button>
+              <button class = 'ml-40' style  = {{backgroundColor: '#FFCC00' , padding: "5%" , width: "100px"  , marginTop:'5%'}}>Update</button>
             </FormControl>
         </Box>
     </Modal>
@@ -120,13 +120,12 @@ const handleChange = (event) => {
       >
 
         <div style={{ display: 'flex', justifyContent: 'flex-end' , margin:'10px' }}>
-        <Button
-          style={{ backgroundColor: '#ffcc00',border: 'none',color: 'black',padding: '10px 20px',
-          fontSize: '16px',borderRadius: '4px',boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',cursor: 'pointer',
-          transition: 'background-color 0.3s, box-shadow 0.3s',
-        }}>
-          Add Equipment
-        </Button>
+        <button
+            className="flex bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full ml-30 "
+           
+          >
+            Add a Item
+          </button>
       </div>
         <Grid templateColumns="repeat(auto-fit, minmax(1150px, 1fr))" gap={10} >
 

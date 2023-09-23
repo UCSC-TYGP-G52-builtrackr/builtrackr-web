@@ -16,7 +16,7 @@ import {Link} from "react-router-dom";
 import Divider from '@mui/joy/Divider';
 import ModalDialog from '@mui/joy/ModalDialog';
 import EditModal from './EditModal';
-
+import { Input,InputLabel, FormControl } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -125,7 +125,7 @@ export const Material = () => {
               Cancel
             </button>
             <div className="delete">
-            <button variant="solid" color='danger' onClick={() => setOpen(false)} size='xs' >
+            <button variant="solid" color='danger' onClick={() => setOpen(false)} size='xs' padding = '' >
              Delete Item
             </button></div>
           </Box>
@@ -183,11 +183,11 @@ export const Material = () => {
           <Card style={{ width: 100 }  }   />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '100px', marginLeft: '20%' }}>
-              <img src="./bricks.jpg" alt="bricks" width="15px" height="15px" />
+              <img src="/bricks.jpg" alt="bricks" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Materials/List"> Bricks</Link>
+          <Link to = "/InventoryManger/Materials/List"> Bricks</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
             Available Quantity: 100 cubes
@@ -211,7 +211,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '180px', marginLeft: '-5%' }}>
-              <img src="./cement.jpg" alt="cement" width="15px" height="25px" />
+              <img src="/cement.jpg" alt="cement" width="100px" height="100px"/>
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -239,7 +239,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '110px', marginLeft: '20%' }}>
-              <img src="./gray gravel.jpg" alt="gravel" width="20px" height="20px" />
+              <img src="/gray gravel.jpg" alt="gravel" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -267,7 +267,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '165px', marginLeft: '0%' }}>
-              <img src="./sand.jpg" alt="sand" width="15px" height="25px" />
+              <img src="/sand.jpg" alt="sand" width="100px" height="100px"/>
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -295,7 +295,7 @@ export const Material = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '140px', marginLeft: '10%' }}>
-              <img src="./Blocks.jpg" alt="drill" width="15px" height="15px" />
+              <img src="/Blocks.jpg" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -323,45 +323,53 @@ export const Material = () => {
 
         {/*  Create a modal for adding a category */}
         {isModalOpen && (
-          <div className="modal">
-            <Modal
-             open={handleOpenModal}
-             onClose={handleCloseModal}
-            >
-               <Box sx={{ ...style, width: 500 }}>
-            <div className="modal-content">
-              <h2>Add a Category</h2>
-              <input
-                type="text"
-                value={categoryName}
-                onChange={(e) => setCategoryName(e.target.value)}
-                placeholder="Enter category name"
-              />
-              <h2>Add a Description</h2>
-               <input
-                type="text"
-                value={categoryDescription}
-                onChange={(e) => setCategoryName(e.target.value)}
-                placeholder="Enter Description"
-              />
-              <h2>Add a Quantity</h2>
-              <input
-                type="Number"
-                value={categoryQuantity}
-                onChange={(e) => setCategoryName(e.target.value)}
-                placeholder="Enter Quantity"
-              />
-
-              <input
-                type="file"
-                onChange={(e) => setCategoryImage(e.target.files[0].name)}
-                accept=".jpg, .png, .jpeg"
-              />
-              <button onClick={handleSubmitModal}>Create Card</button>
-            </div>
-            </Box>
-            </Modal>
-          </div>
+           <div className="modal">
+           <Modal
+            open={handleOpenModal}
+            onClose={handleCloseModal}
+           >
+              <Box sx={{ ...style, width: 500 }}>
+           <div className="modal-content">
+            <h2 class = "text-xl font-extrabold dark:text-black">Add A category</h2>
+             <FormControl>
+               <InputLabel>Category</InputLabel>
+             <Input
+               type="text"
+               value={categoryName}
+               onChange={(e) => setCategoryName(e.target.value)}
+               placeholder="Enter category name"
+             /></FormControl><br/>
+             <FormControl>
+              <InputLabel>Description</InputLabel>
+              <Input
+               type="text"
+               value={categoryDescription}
+               onChange={(e) => setCategoryName(e.target.value)}
+               placeholder="Enter Description"
+             /></FormControl><br/><br/>
+          <FormControl>
+           <InputLabel>Quantity</InputLabel>
+             <Input
+               type="Number"
+               value={categoryQuantity}
+               onChange={(e) => setCategoryName(e.target.value)}
+               placeholder="Enter Quantity"
+             />
+            </FormControl><br/><br/>
+            <FormControl>
+             <Input
+               type="file"
+               onChange={(e) => setCategoryImage(e.target.files[0].name)}
+               accept=".jpg, .png, .jpeg"
+             />
+             </FormControl><br/>
+             <FormControl>
+             <button onClick={handleSubmitModal} style = {{backgroundColor:'#FFCC00' , marginTop:"%", padding:"4%" , width:"150px"}}>Create Card</button>
+             </FormControl>
+           </div>
+           </Box>
+           </Modal>
+         </div>
         )}
       </div>
       <EditModal

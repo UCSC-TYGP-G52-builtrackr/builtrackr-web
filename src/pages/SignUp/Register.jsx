@@ -12,9 +12,10 @@ export const Register = () => {
   const [regNo, setRegNo] = useState("");
   const [line1, setLine1] = useState("");
   const [line2, setLine2] = useState("");
+  const [city, setCity] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [certificate, setCertificate] = useState({});
-  const [errors, setErrors] = useState({ name: "", contactNo: "" });
+  const [errors, setErrors] = useState({ name: "", contactNo: "", email: "", regNo: "", line1: "", line2:"", city:"", certificate: "" });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -45,6 +46,7 @@ export const Register = () => {
       email,
       line1,
       line2,
+      city,
       contactNo,
     };
 
@@ -53,35 +55,133 @@ export const Register = () => {
         .post("http://localhost:4000/api/user/userExists", formData)
         .then((res) => {
           if (res.data.status) {
-            console.log(res);
-            console.log("nnnnnn");
             toast.error("Email Already exist");
             return;
           } else {
-            if (name.trim().length !== 0 && contactNo.trim().length !== 0) {
-              navigate("/RegisterTwo", { state: formData });
+            let error = false;
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              name: "",
+              contactNo: "",
+              email: "",
+              regNo: "",
+              line1: "",
+              line2: "",
+              city: "",
+              certificate: "",
+            }));
 
-              // Reset the form after submission
+            if(name.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                name: "User Name Required",   
+              }));
+              error = true;
+            }else if((/^[A-Za-z ]+$/).test(name.trim()) === false){    
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                name: "Username should only contain letters",   
+              }));
+              error = true;
+            }
+            if(regNo.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                regNo: "Register Number Required", 
+              }));
+              error = true;
+            }
+            if(line1.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                line1: "Address Required", 
+              }));
+              error = true;
+            }
+            if(certificate.length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                certificate: "Certificate Required", 
+              }));
+              error = true;
+            }
+            if(email.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                email: "Email Required", 
+              }));
+              error = true;
+            }else if((/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/).test(email.trim()) === false){
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email: "Invalid Email",
+              }));
+              error = true;
+            }
+            if(contactNo.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                contactNo: "Fixed Number Required", 
+              })); 
+              error = true; 
+            }else if((/^[0-9]{10}$/).test(contactNo.trim()) === false){
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                contactNo: "Invalid Number",
+              }));
+              error = true;
+            }
+            if(line2.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                line2: "Address Required", 
+              }));
+              error = true;
+            }
+            if(city.trim().length === 0){
+              setErrors((prevErrors) => ({
+                ...prevErrors,    
+                city: "City Required", 
+              }));
+              error = true;
+            }
+            if(error === false){
+              navigate("/RegisterTwo", { state: formData });
               setName("");
               setRegNo("");
               setEmail("");
               setLine1("");
-              setLine2("");
               setContactNo("");
-              setErrors({ name: "", contactNo: "" });
-            } else {
-              setErrors({
-                name: name.trim().length === 0 ? "User Name Required" : "",
-                contactNo:
-                  contactNo.trim().length === 0 ? "Fixed Number Required" : "",
-                regNo:
-                  regNo.trim().length === 0 ? "Register Number Required" : "",
-                line1: line1.trim().length === 0 ? "Address Required" : "",
-                email: email.trim().length === 0 ? "Email Required" : "",
-                certificate: !certificate.file ? "Certificate Required" : "",
-              });
+              setLine2("");
+              setCity("");
+              setCertificate({});
+
             }
-          }
+            
+
+            // if (name.trim().length !== 0 && contactNo.trim().length !== 0) {
+            //   navigate("/RegisterTwo", { state: formData });
+
+            //   // Reset the form after submission
+            //   setName("");
+            //   setRegNo("");
+            //   setEmail("");
+            //   setLine1("");
+            //   setContactNo("");
+            //   setErrors({ name: "", contactNo: "" });
+            // } else {
+            //   setErrors({
+            //     name: name.trim().length === 0 ? "User Name Required" : "",
+            //     contactNo:
+            //       contactNo.trim().length === 0 ? "Fixed Number Required" : "",
+            //     regNo:
+            //       regNo.trim().length === 0 ? "Register Number Required" : "",
+            //     line1: line1.trim().length === 0 ? "Address Required" : "",
+            //     email: email.trim().length === 0 ? "Email Required" : "",
+            //     certificate: !certificate.file ? "Certificate Required" : "",
+            //   });
+            // }
+            }
         });
     } catch (err) {
       toast.error(err.response.data.error);
@@ -130,7 +230,7 @@ export const Register = () => {
                 placeholder="Company Name"
                 name="name"
                 value={name}
-                onChange={handleChange}
+                onChange={(e) => setName(e.target.value)}
               />
               {errors.name && <div className="error">{errors.name}</div>}
               <label>Company Register Number</label>
@@ -175,7 +275,7 @@ export const Register = () => {
               <input
                 className="p-2"
                 type="text"
-                placeholder="Address Line 1"
+                placeholder="Address"
                 name="line1"
                 value={line1}
                 onChange={(e) => setLine1(e.target.value)}
@@ -190,6 +290,17 @@ export const Register = () => {
                 value={line2}
                 onChange={(e) => setLine2(e.target.value)}
               />
+              {errors.line2 && <div className="error">{errors.line2}</div>}
+              <br />
+              <input
+                className="p-2"
+                type="text"
+                placeholder="City"
+                name="city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+              {errors.city && <div className="error">{errors.city}</div>}
               <label>Fixed Line Number</label>
               <input
                 className="p-2"
@@ -197,7 +308,7 @@ export const Register = () => {
                 type="tel"
                 name="contactNo"
                 value={contactNo}
-                onChange={handleNumber}
+                onChange={(e) =>  setContactNo(e.target.value)}
               />
               {errors.contactNo && (
                 <div className="error">{errors.contactNo}</div>

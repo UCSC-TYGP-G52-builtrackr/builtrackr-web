@@ -1,8 +1,8 @@
-import react from "react";
+import React, { PureComponent } from "react";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { json, useLocation } from "react-router-dom";
-import Navbar from "../../components/CompanyAdmin/NavBar";
+import NavBar from "../../components/CompanyAdmin/NavBar";
 import SideBar from "../../components/CompanyAdmin/SideBar";
 import ChatSpace from "../../components/CompanyAdmin/ChatSpace";
 import { decryptData } from "../../encrypt";
@@ -23,6 +23,21 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { IoIosArrowDropleft } from "react-icons/io";
+import { AiOutlinePlus } from "react-icons/ai";
+import Table from "@mui/joy/Table";
+import Sheet from "@mui/joy/Sheet";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 import "./adminHome.css";
 import { imageListClasses } from "@mui/material";
@@ -85,7 +100,7 @@ const phoneRegex = /^[0]+[0-9]{9}$/;
 //   "Request Inventory",
 // ];
 
-const AdminHome = () => {
+const AdminUserRole = () => {
   const {
     setCurrentColor,
     setCurrentMode,
@@ -96,14 +111,12 @@ const AdminHome = () => {
   } = useStateContext();
 
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
-  console.log(name);
 
-  // const company_id = parseInt(
-  //   decryptData(JSON.parse(localStorage.getItem("company_id")))
-  // );
-  // console.log(company_id);
+  const company_id = parseInt(
+    decryptData(JSON.parse(localStorage.getItem("company_id")))
+  );
+  console.log(company_id);
 
-  const company_id = 1;
   const [displayForm, setDisplayForm] = useState(false);
   const [selectedPrivileges, setSelectedPrivileges] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -124,8 +137,6 @@ const AdminHome = () => {
     setSelectedList(no);
     setSelectedListErr("");
   };
-  console.log(selectedList);
-  console.log(roleImage);
 
   // Empolyee add from
   const [fName, setFName] = useState("");
@@ -139,6 +150,12 @@ const AdminHome = () => {
 
   const [address, setAddress] = useState("");
   const [addressErr, setAddressErr] = useState("");
+
+  const [address2, setAddress2] = useState("");
+  const [address2Err, setAddress2Err] = useState("");
+
+  const [city, setCity] = useState("");
+  const [cityErr, setCityErr] = useState("");
 
   const [id, setId] = useState("");
   const [idErr, setIdErr] = useState("");
@@ -161,215 +178,38 @@ const AdminHome = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
 
+  const [image, setImage] = useState({});
+  const [imageName, setImageName] = useState("");
+  const [imageErr, setImageErr] = useState("");
+
   const [confirmationModal1, setConfirmationModal1] = useState(false);
 
-  const displayConfirmationModal1 = () => {
-    setConfirmationModal1(true);
-  };
-  const closeConfirmationModal1 = () => {
-    setConfirmationModal1(false);
-  };
-  const [confirmationModal2, setConfirmationModal2] = useState(false);
+  const displayConfirmationModal1 = async () => {
+    let hasErrors = false;
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
+    const digitRegex = /\d/;
 
-  const displayConfirmationModal2 = () => {
-    setConfirmationModal2(true);
-  };
-  const closeConfirmationModal2 = () => {
-    setConfirmationModal2(false);
-  };
+    const hasUppercase = uppercaseRegex.test(password);
+    const hasLowercase = lowercaseRegex.test(password);
+    const hasSpecialChar = specialCharRegex.test(password);
+    const hasDigit = digitRegex.test(password);
 
-  // Handle Created and not created user roles privileges lists
-  let addedList2;
-  let addedList3;
-  let addedList4;
-  let addedList5;
-  userRoles.filter((el) => el.type === 2).map((el) => (addedList2 = true));
-  userRoles.filter((el) => el.type === 3).map((el) => (addedList3 = true));
-  userRoles.filter((el) => el.type === 4).map((el) => (addedList4 = true));
-  userRoles.filter((el) => el.type === 5).map((el) => (addedList5 = true));
-
-  let allRoleAdded =
-    addedList2 && addedList3 && addedList4 && addedList5 ? true : false;
-
-  console.log(allRoleAdded);
-
-  const handleCloseEmployeeForm = () => {
-    setEmployeeAddForm(false);
-    setFName("");
+    setImageErr("");
     setFNameErr("");
-    setLName("");
     setLNameErr("");
-    setNic("");
     setNicErr("");
-    setPhone("");
     setPhoneErr("");
-    setId("");
     setIdErr("");
-    setEmail("");
     setEmailErr("");
-    setAddress("");
     setAddressErr("");
-    setPassword("");
     setPasswordErr("");
-    setConfirmPassword("");
     setConfirmPasswordErr("");
-    setDob("");
     setDobErr("");
-    setRegisterDate("");
     setRegisterDateErr("");
-  };
 
-  const [selectedRole, setSelectedRole] = useState(0);
-  console.log(selectedRole);
-
-  const backToAdminHome = () => {
-    setSelectedRole(0);
-    setSelectedEmployee([]);
-  };
-
-  const displayRole = (type) => {
-    setSelectedRole(type);
-  };
-
-  const [selectedEmployee, setSelectedEmployee] = useState([]);
-  const selectUserRoleDetails = userRoles.filter(
-    (item) => item.type === selectedRole
-  );
-  console.log(selectUserRoleDetails);
-  const style = {
-    position: "absolute",
-    marginLeft: "150px",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    p: 4,
-  };
-  const closeRoleAddForm = () => {
-    setDisplayForm(false);
-    setSelectedList(0);
-    setRoleName("");
-    setRoleNameErr("");
-    setSelectedListErr("");
-  };
-
-  useEffect(() => {
-    const viewUserRoles = async () => {
-      try {
-        const data = await fetch(
-          "http://localhost:4000/api/user/getUserRoles",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: company_id }),
-          }
-        );
-        if (data.status === 200) {
-          const jsonData = await data.json();
-          console.log(jsonData);
-          setUserRoles(jsonData);
-        } else {
-          console.log(data.status);
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    viewUserRoles();
-  }, [displayForm]);
-
-  useEffect(() => {
-    const viewEmployees = async () => {
-      try {
-        const data = await fetch(
-          "http://localhost:4000/api/employee/getEmployees",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: company_id, type: selectedRole }),
-          }
-        );
-        if (data.status === 200) {
-          const jsonData = await data.json();
-          console.log(jsonData);
-          setSelectedEmployee(jsonData);
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    viewEmployees();
-  }, [selectedRole]);
-
-  const handelSubmitRoleAdd = async (e) => {
-    e.preventDefault();
-    let hasErrors = false;
-    setRoleNameErr("");
-
-    if (roleName === "") {
-      setRoleNameErr("Enter User Role Name");
-      hasErrors = true;
-    }
-    if (selectedList === 0) {
-      setSelectedListErr("Please select a privilege list");
-      hasErrors = true;
-    }
-    if (hasErrors) {
-      setConfirmationModal2(false);
-      return;
-    } else {
-      try {
-        const data = await fetch("http://localhost:4000/api/user/addUserRole", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: roleName,
-            type: selectedList,
-            company_id: company_id,
-          }),
-        });
-
-        if (data.status === 200) {
-          const jsonData = await data.json();
-          console.log(jsonData);
-          toast.success(`${roleName} user role created suuessfuly`);
-        }
-      } catch (err) {
-        console.log("3");
-        console.error(err.message);
-      }
-      setDisplayForm(false);
-      setSelectedPrivileges([]);
-      setRoleName("");
-      setRoleImage("");
-      setConfirmationModal2(false);
-      setRoleNameErr("");
-      setSelectedList(0);
-    }
-  };
-
-  const handelSubmitEmployyeAdd = async (e) => {
-    e.preventDefault();
-    let hasErrors = false;
-
-    setFNameErr("");
-    setLNameErr("");
-    setEmailErr("");
-    setNicErr("");
-    setIdErr("");
-    setPhoneErr("");
-    setAddressErr("");
-    setPasswordErr("");
-    setConfirmPasswordErr("");
+    setIsLoadingConfirmation(true);
 
     if (fName.length === 0) {
       setFNameErr("Enter Employee First Name");
@@ -411,8 +251,21 @@ const AdminHome = () => {
       setAddressErr("Enter address");
       hasErrors = true;
     }
+    if (image.name === undefined) {
+      setImageErr("Select a image");
+      hasErrors = true;
+    }
+
     if (password.length === 0) {
       setPasswordErr("Enter password");
+      hasErrors = true;
+    } else if (password.length < 8) {
+      setPasswordErr("Password Contains atleast 8 Characters");
+      hasErrors = true;
+    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
+      setPasswordErr(
+        "Password Contains atleast one Upercase, Lowercase, Special Character and Number"
+      );
       hasErrors = true;
     }
     if (confirmPassword.length === 0) {
@@ -422,39 +275,357 @@ const AdminHome = () => {
       setConfirmPasswordErr("Passowrds not matched");
     }
 
-    if (!hasErrors) {
-      const formData = {
-        fName: fName,
-        lName: lName,
-        nic: nic,
-        phone: phone,
-        id: id,
-        email: email,
-        dob: dob,
-        registerDate: registerDate,
-        address: address,
-        password: password,
-        company_id: company_id,
-        type: 1,
-      };
-      let emailErr = false;
+    try {
+      await axios
+        .post("http://localhost:4000/api/employee/employeeExists", {
+          email: email,
+        })
+        .then((res) => {
+          if (res.data.status) {
+            hasErrors = true;
+            setEmailErr("Email Already exist");
+          }
+        });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
 
+    try {
+      await axios
+        .post("http://localhost:4000/api/employee/EmployeeExistById", {
+          company_id: company_id,
+          employee_id: id,
+        })
+        .then((res) => {
+          if (res.data.status) {
+            hasErrors = true;
+            setIdErr("Employee Id Already exist");
+          }
+        });
+    } catch (err) {
+      console.error(err.response.data.error);
+    } finally {
+      setIsLoadingConfirmation(false);
+    }
+
+    if (!hasErrors) {
+      setConfirmationModal1(true);
+    } else {
+      return;
+    }
+  };
+
+  const closeConfirmationModal1 = () => {
+    setConfirmationModal1(false);
+  };
+  const [confirmationModal2, setConfirmationModal2] = useState(false);
+
+  const displayConfirmationModal2 = () => {
+    setConfirmationModal2(true);
+  };
+  const closeConfirmationModal2 = () => {
+    setConfirmationModal2(false);
+  };
+
+  // Handle Created and not created user roles privileges lists
+  let addedList2;
+  let addedList3;
+  let addedList4;
+  let addedList5;
+  userRoles.filter((el) => el.type === 2).map((el) => (addedList2 = true));
+  userRoles.filter((el) => el.type === 3).map((el) => (addedList3 = true));
+  userRoles.filter((el) => el.type === 4).map((el) => (addedList4 = true));
+  userRoles.filter((el) => el.type === 5).map((el) => (addedList5 = true));
+
+  let allRoleAdded =
+    addedList2 && addedList3 && addedList4 && addedList5 ? true : false;
+
+  const handleCloseEmployeeForm = () => {
+    setEmployeeAddForm(false);
+    setFName("");
+    setFNameErr("");
+    setLName("");
+    setLNameErr("");
+    setNic("");
+    setNicErr("");
+    setPhone("");
+    setPhoneErr("");
+    setId("");
+    setIdErr("");
+    setEmail("");
+    setEmailErr("");
+    setAddress("");
+    setAddressErr("");
+    setAddress2("");
+    setAddress2Err("");
+    setCity("");
+    setCityErr("");
+    setPassword("");
+    setPasswordErr("");
+    setConfirmPassword("");
+    setConfirmPasswordErr("");
+    setImage({});
+    setImageErr("");
+    setImageName("");
+    setDob("");
+    setDobErr("");
+    setRegisterDate("");
+    setRegisterDateErr("");
+  };
+
+  const [selectedRole, setSelectedRole] = useState(0);
+
+  const backToAdminHome = () => {
+    setSelectedRole(0);
+    setSelectedEmployee([]);
+  };
+
+  const displayRole = (type) => {
+    setSelectedRole(type);
+  };
+
+  const [selectedEmployee, setSelectedEmployee] = useState([]);
+  const selectUserRoleDetails = userRoles.filter(
+    (item) => item.type === selectedRole
+  );
+
+  const [employeeCount, setEmployeeCount] = useState([]);
+
+  const style = {
+    position: "absolute",
+    marginLeft: "150px",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
+    borderRadius: "10px",
+    p: 4,
+  };
+  const closeRoleAddForm = () => {
+    setDisplayForm(false);
+    setSelectedList(0);
+    setRoleName("");
+    setRoleNameErr("");
+    setSelectedListErr("");
+  };
+
+  const [hrAdded, setHrAdded] = useState(false);
+  const [isLoadingRoles, setIsLoadingRoles] = useState(false);
+  const [isLoadingCount, setIsLoadingCount] = useState(false);
+  const [isLoadingError, setIsLoadingError] = useState(false);
+  const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
+
+  useEffect(() => {
+    const isHrAdded = async () => {
       try {
-        await axios
-          .post("http://localhost:4000/api/employee/employeeExists", formData)
-          .then((res) => {
-            if (res.data.status) {
-              emailErr = true;
-              toast.error("Email Already exist");
-              setConfirmationModal1(false)
-              return;
-            }
-          });
+        const data = await fetch(
+          "http://localhost:4000/api/employee/employeeExist",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: company_id, type: 1 }),
+          }
+        );
+        if (data.status) {
+          setHrAdded(true);
+        } else {
+          console.log(data.status);
+        }
       } catch (err) {
-        toast.error(err.response.data.error);
-        return;
+        console.error(err.message);
       }
-      if (!emailErr) {
+    };
+    isHrAdded();
+  }, []);
+
+  useEffect(() => {
+    setIsLoadingRoles(true);
+    const viewUserRoles = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/user/getUserRoles",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: company_id }),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          setUserRoles(jsonData);
+        } else {
+          console.log(data.status);
+        }
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setIsLoadingRoles(false);
+      }
+    };
+    viewUserRoles();
+  }, [displayForm]);
+
+  useEffect(() => {
+    setIsLoadingCount(true);
+    const viewEmployeeCount = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/employee/employeeCount",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: company_id }),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          setEmployeeCount(jsonData);
+          console.log(jsonData);
+          console.log(employeeCount);
+        }
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setIsLoadingCount(false);
+      }
+    };
+    viewEmployeeCount();
+  }, [selectedRole, confirmationModal1, displayForm, confirmationModal2]);
+
+  useEffect(() => {
+    const viewEmployees = async () => {
+      if (selectedRole === 6) {
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/getLabourers",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: company_id }),
+            }
+          );
+          if (data.status === 200) {
+            const jsonData = await data.json();
+            setSelectedEmployee(jsonData);
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
+      } else {
+        try {
+          const data = await fetch(
+            "http://localhost:4000/api/employee/getEmployees",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: company_id, type: selectedRole }),
+            }
+          );
+          if (data.status === 200) {
+            const jsonData = await data.json();
+            setSelectedEmployee(jsonData);
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+    };
+    viewEmployees();
+  }, [selectedRole]);
+
+  const handelSubmitRoleAdd = async (e) => {
+    e.preventDefault();
+    let hasErrors = false;
+    setRoleNameErr("");
+
+    if (roleName === "") {
+      setRoleNameErr("Enter User Role Name");
+      hasErrors = true;
+    }
+    if (selectedList === 0) {
+      setSelectedListErr("Please select a privilege list");
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      setConfirmationModal2(false);
+      return;
+    } else {
+      try {
+        const data = await fetch("http://localhost:4000/api/user/addUserRole", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: roleName,
+            type: selectedList,
+            company_id: company_id,
+          }),
+        });
+
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          toast.success(`${roleName} user role created suuessfuly`);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+      setDisplayForm(false);
+      setSelectedPrivileges([]);
+      setRoleName("");
+      setRoleImage("");
+      setConfirmationModal2(false);
+      setRoleNameErr("");
+      setSelectedList(0);
+    }
+  };
+  const handelSubmitEmployyeAdd = async (e) => {
+    const formData = {
+      fName: fName,
+      lName: lName,
+      nic: nic,
+      phone: phone,
+      id: id,
+      email: email,
+      dob: dob,
+      registerDate: registerDate,
+      address: address,
+      password: password,
+      company_id: company_id,
+      type: 1,
+      imageName: imageName,
+    };
+    setIsLoadingError(true);
+
+    try {
+      const formDataImage = new FormData();
+      formDataImage.append("image", image);
+      const photoUpload = await axios.post(
+        "http://localhost:4000/api/upload/employee",
+        formDataImage,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (photoUpload.status === 200) {
+        console.log(photoUpload.data);
+        setImageName(photoUpload.data);
+        formData.imageName = photoUpload.data;
+        console.log(imageName);
         try {
           const data = await fetch(
             "http://localhost:4000/api/employee/registerEmployee",
@@ -469,19 +640,30 @@ const AdminHome = () => {
 
           if (data.status === 200) {
             const jsonData = await data.json();
-            console.log(jsonData);
-            toast.success("HR Manager registed successfuly");
+            toast.success(
+              "HR Manager registed successfuly. Email was sent to the employee"
+            );
+          } else if (data.status === 201) {
+            toast.success(
+              "HR Manager registed successfuly. But email was not sent to the employee"
+            );
           }
         } catch (err) {
           console.error(err.message);
+        } finally {
+          setIsLoadingError(false);
         }
-        closeConfirmationModal1(false);
-        handleCloseEmployeeForm();
       }
-    } else {
-      setConfirmationModal1(false);
-      return;
+    } catch (err) {
+      console.log(err);
+      closeConfirmationModal1(false);
+      toast.error("Employee register not succes. Please try again later");
+    } finally {
+      setIsLoadingError(false);
     }
+
+    closeConfirmationModal1(false);
+    handleCloseEmployeeForm();
   };
 
   return (
@@ -501,7 +683,7 @@ const AdminHome = () => {
       </div>
       <div className="ml-72">
         <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
-          <Navbar/>
+          <NavBar />
         </div>
         {themeSettings && <ChatSpace />}
         <div
@@ -529,11 +711,12 @@ const AdminHome = () => {
                 {selectedRole === 1 && (
                   <h1 className="role-title">HR Manager's all privileges</h1>
                 )}
-                {selectUserRoleDetails
-                  .filter((element) => element.type !== 1)
-                  .map((el) => (
-                    <h1 className="role-title">{`${el.role_name}'s all privileges`}</h1>
-                  ))}
+                {selectedRole !== 6 &&
+                  selectUserRoleDetails
+                    .filter((element) => element.type !== 1)
+                    .map((el) => (
+                      <h1 className="role-title">{`${el.role_name}'s all privileges`}</h1>
+                    ))}
 
                 <div className="privileges-box">
                   {selectedRole === 1 &&
@@ -562,8 +745,37 @@ const AdminHome = () => {
 
               {selectedEmployee.length !== 0 ? (
                 <>
-                  <div>
-                    <table className="employee-table">
+                  <div className="employee-table">
+                    <Sheet sx={{ height: 550, overflow: "auto" }}>
+                      <Table
+                        aria-label="table with sticky header"
+                        stickyHeader
+                        stripe="odd"
+                        hoverRow
+                      >
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Employee No</th>
+                            <th>Register date</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedEmployee.map((element) => (
+                            <tr>
+                              <td>{element.f_name}</td>
+                              <td>{element.id}</td>
+                              <td>{element.register_date}</td>
+                              <td>Edit Privileges</td>
+                              <td>Working</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Sheet>
+                    {/* <table className="employee-table">
                       <thead>
                         <tr>
                           <td>Name</td>
@@ -584,11 +796,11 @@ const AdminHome = () => {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </table> */}
                   </div>
                 </>
               ) : (
-                <h1>No emplyees</h1>
+                <h1 style={{ textAlign: "center" }}>No empolyees</h1>
               )}
             </div>
           )}
@@ -599,6 +811,9 @@ const AdminHome = () => {
                 onClick={() => setDisplayForm(true)}
               >
                 Add user roles
+                <AiOutlinePlus
+                  style={{ marginLeft: "10px", marginTop: "5px" }}
+                />
               </button>
             </div>
           )}
@@ -613,19 +828,83 @@ const AdminHome = () => {
                   }}
                   selectRole={displayRole}
                 />
-                <span className="link " onClick={handleOpenEmployeeForm}>
-                  Click here to add an employee
-                </span>
+                {!hrAdded && (
+                  <span className="link " onClick={handleOpenEmployeeForm}>
+                    Click here to add a HR MAnager
+                  </span>
+                )}
               </div>
 
-              {userRoles.map((element, i) => (
+              {isLoadingRoles ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                userRoles.map((element, i) => (
+                  <UserRole
+                    role={element}
+                    key={element.role_id}
+                    selectRole={displayRole}
+                  />
+                ))
+              )}
+              <div className="">
                 <UserRole
-                  role={element}
-                  key={element.role_id}
+                  role={{
+                    photo_path: "labourer.jpeg",
+                    role_name: "Labourer",
+                    type: 6,
+                  }}
                   selectRole={displayRole}
                 />
-              ))}
+              </div>
             </div>
+          )}
+          {isLoadingCount ? (
+            <div
+              className="loading"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "30px",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          ) : (
+            employeeCount &&
+            selectedRole === 0 && (
+              <div className="anlyatic-box">
+                <div className="left-side">
+                  <BarChart
+                    width={600}
+                    height={350}
+                    data={employeeCount}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="role_name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="count" fill="#ffcc00" />
+                    {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
+                  </BarChart>
+                </div>
+              </div>
+            )
           )}
 
           {/* {displayForm && ( */}
@@ -653,23 +932,6 @@ const AdminHome = () => {
                         onChange={(e) => setRoleName(e.target.value)}
                         helperText={roleNameErr !== "" && roleNameErr}
                       />
-                      {/* <div style={{ display: "flex" }}>
-                        <div className="image-button">
-                          <input
-                            id="file-upload"
-                            type="file"
-                            hidden
-                            onChange={(e) => setRoleImage(e.target.files[0])}
-                          />
-                          <label htmlFor="file-upload" className="image-upload">
-                            {" "}
-                            Select Image <InsertPhotoIcon />
-                          </label>
-                        </div>
-                        <span style={{ marginTop: "6px", paddingLeft: "20px" }}>
-                          {roleImage.name}
-                        </span>
-                      </div> */}
 
                       <div className="select-privilages-box">
                         <div className="select-privilages">
@@ -782,177 +1044,7 @@ const AdminHome = () => {
               submit={handelSubmitRoleAdd}
             />
           </>
-          {/* )} */}
         </div>
-        {emplyeeAddForm && (
-          <div className="employye-add-form">
-            <Modal
-              open={emplyeeAddForm}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style} style={{ width: "550px" }}>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-                  Add employee details
-                </h2>
-                <form>
-                  <div className="two-inputs">
-                    <TextField
-                      error={fNameErr !== "" && true}
-                      className="outlined-basic"
-                      label="First Name"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={fName}
-                      onChange={(e) => setFName(e.target.value)}
-                      helperText={fNameErr !== "" && fNameErr}
-                    />
-                    <TextField
-                      error={lNameErr !== "" && true}
-                      className="outlined-basic"
-                      label="Last Name"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={lName}
-                      onChange={(e) => setLName(e.target.value)}
-                      helperText={lNameErr !== "" && lNameErr}
-                    />
-                  </div>
-                  <div className="two-inputs">
-                    <TextField
-                      className="outlined-basic"
-                      label="NIC"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={nic}
-                      onChange={(e) => setNic(e.target.value)}
-                      error={nicErr !== "" && true}
-                      helperText={nicErr !== "" && nicErr}
-                    />
-                    <TextField
-                      className="outlined-basic"
-                      label="Contact No"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      error={phoneErr !== "" && true}
-                      helperText={phoneErr !== "" && phoneErr}
-                    />
-                  </div>
-                  <div className="two-inputs">
-                    <TextField
-                      className="outlined-basic"
-                      label="Employee Id"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={id}
-                      onChange={(e) => setId(e.target.value)}
-                      error={idErr !== "" && true}
-                      helperText={idErr !== "" && idErr}
-                    />
-                    <TextField
-                      className="outlined-basic"
-                      label="Email"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      error={emailErr !== "" && true}
-                      helperText={emailErr !== "" && emailErr}
-                    />
-                  </div>
-                  <div className="two">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
-                          label="Date of Birth"
-                          slotProps={{ textField: { size: "small" } }}
-                          value={dob}
-                          onChange={(newValue) => setDob(newValue)}
-                          disableFuture
-                        />
-                        <DatePicker
-                          label="Registered Date"
-                          slotProps={{ textField: { size: "small" } }}
-                          value={registerDate}
-                          onChange={(newValue) => setRegisterDate(newValue)}
-                          disableFuture
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </div>
-                  <TextField
-                    className="outlined-basic"
-                    label="Address"
-                    variant="outlined"
-                    size="small"
-                    style={{ margin: "20px 0" }}
-                    sx={{ width: "100%" }}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    error={addressErr !== "" && true}
-                    helperText={addressErr !== "" && addressErr}
-                  />
-                  <div className="two-inputs">
-                    <TextField
-                      className="outlined-basic"
-                      label="Paasowrd"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      type={"password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      error={passwordErr !== "" && true}
-                      helperText={passwordErr !== "" && passwordErr}
-                    />
-                    <TextField
-                      className="outlined-basic"
-                      label="Password Confirm"
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "50%" }}
-                      type={"password"}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      error={confirmPasswordErr !== "" && true}
-                      helperText={
-                        confirmPasswordErr !== "" && confirmPasswordErr
-                      }
-                    />
-                  </div>
-                  <div className="two-btns">
-                    <Buttons
-                      type={"button"}
-                      color={"red"}
-                      text={"Cancel"}
-                      onClick={handleCloseEmployeeForm}
-                    />
-                    <Buttons
-                      type={"button"}
-                      color={"green"}
-                      text={"Create"}
-                      onClick={displayConfirmationModal1}
-                    />
-                  </div>
-                </form>
-              </Box>
-            </Modal>
-          </div>
-        )}
-        <ConfirmationdModal
-          confirmModal={confirmationModal1}
-          text={`Are you sure want add ${fName} as a HR Manager`}
-          closeConfirmationModal={closeConfirmationModal1}
-          submit={handelSubmitEmployyeAdd}
-        />
 
         {emplyeeAddForm && (
           <div className="employye-add-form">
@@ -1070,10 +1162,46 @@ const AdminHome = () => {
                     error={addressErr !== "" && true}
                     helperText={addressErr !== "" && addressErr}
                   />
-                  <div className="two-inputs">
+
+                  <div className="image-button">
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={(e) => setImage(e.target.files[0])}
+                    />
+                    <label htmlFor="file-upload" className="image-upload">
+                      Select Image <InsertPhotoIcon />
+                    </label>
+                  </div>
+                  {image.name !== undefined && (
+                    <h1
+                      style={{
+                        marginTop: "6px",
+                      }}
+                    >
+                      {image.name}
+                    </h1>
+                  )}
+
+                  {imageErr && (
+                    <>
+                      <span
+                        style={{
+                          color: "#d32f2f",
+                          fontSize: "13px",
+                          marginLeft: "14px",
+                        }}
+                      >
+                        {imageErr}
+                      </span>
+                    </>
+                  )}
+                  <div className="two-inputs" style={{ marginTop: "20px" }}>
                     <TextField
                       className="outlined-basic"
-                      label="Paasowrd"
+                      label="Password"
                       variant="outlined"
                       size="small"
                       sx={{ width: "50%" }}
@@ -1098,20 +1226,32 @@ const AdminHome = () => {
                       }
                     />
                   </div>
-                  <div className="two-btns">
-                    <Buttons
-                      type={"button"}
-                      color={"red"}
-                      text={"Cancel"}
-                      onClick={handleCloseEmployeeForm}
-                    />
-                    <Buttons
-                      type={"button"}
-                      color={"green"}
-                      text={"Create"}
-                      onClick={displayConfirmationModal1}
-                    />
-                  </div>
+                  {isLoadingConfirmation ? (
+                    <div
+                      style={{
+                        marginTop: "20px",
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <CircularProgress />
+                    </div>
+                  ) : (
+                    <div className="two-btns">
+                      <Buttons
+                        type={"button"}
+                        color={"red"}
+                        text={"Cancel"}
+                        onClick={handleCloseEmployeeForm}
+                      />
+                      <Buttons
+                        type={"button"}
+                        color={"green"}
+                        text={"Create"}
+                        onClick={displayConfirmationModal1}
+                      />
+                    </div>
+                  )}
                 </form>
               </Box>
             </Modal>
@@ -1122,6 +1262,7 @@ const AdminHome = () => {
           text={`Are you sure want add ${fName} as a HR Manager`}
           closeConfirmationModal={closeConfirmationModal1}
           submit={handelSubmitEmployyeAdd}
+          loading={isLoadingError}
         />
       </div>
     </>
@@ -1203,6 +1344,7 @@ function ConfirmationdModal({
   text,
   closeConfirmationModal,
   submit,
+  loading,
 }) {
   const style = {
     position: "absolute",
@@ -1224,33 +1366,39 @@ function ConfirmationdModal({
           aria-labelledby="child-modal-title"
           aria-describedby="child-modal-description"
         >
-          <Box sx={style}>
-            <h1
-              style={{
-                textAlign: "center",
-                fontSizeAdjust: "16px",
-                fontWeight: "600",
-              }}
-              id="child-modal-description"
-            >
-              {text}{" "}
-            </h1>
-            <div className="two-btns">
-              <Buttons
-                type={"button"}
-                color={"red"}
-                text={"Cancel"}
-                onClick={closeConfirmationModal}
-              />
-              <Buttons
-                type={"button"}
-                color={"green"}
-                text={"Create"}
-                onClick={submit}
-              />
+          {loading ? (
+            <div className="loading_err" style={{}}>
+              <CircularProgress />
             </div>
-            {/* <Button onClick={handleClose}>Close Child Modal</Button> */}
-          </Box>
+          ) : (
+            <Box sx={style}>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSizeAdjust: "16px",
+                  fontWeight: "600",
+                }}
+                id="child-modal-description"
+              >
+                {text}{" "}
+              </h1>
+              <div className="two-btns">
+                <Buttons
+                  type={"button"}
+                  color={"red"}
+                  text={"Cancel"}
+                  onClick={closeConfirmationModal}
+                />
+                <Buttons
+                  type={"button"}
+                  color={"green"}
+                  text={"Create"}
+                  onClick={submit}
+                />
+              </div>
+              {/* <Button onClick={handleClose}>Close Child Modal</Button> */}
+            </Box>
+          )}
         </Modal>
       </div>
     </>
@@ -1265,4 +1413,4 @@ function OnePrivilege({ privilege }) {
   );
 }
 
-export default AdminHome;
+export default AdminUserRole;

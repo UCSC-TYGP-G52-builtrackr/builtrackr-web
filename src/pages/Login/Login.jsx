@@ -2,10 +2,12 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { React, useState } from "react";
 import { Validation } from "./validation";
 import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { alignProperty } from "@mui/material/styles/cssUtils";
 import { encryptData } from "../../encrypt";
+
 export function Login() {
   const [values, setValues] = useState({
     email: "",
@@ -18,21 +20,23 @@ export function Login() {
     const newObj = { ...values, [event.target.name]: event.target.value };
     setValues(newObj);
   }
-  console.log(values.type);
+  const [isLoading, setIsLoading] = useState(false);
   async function handleValidation(event) {
     event.preventDefault();
+    setErrors({});
     const error = Validation(values);
     setErrors(error);
-    console.log(errors);
-    if (!error) {
-      console.log(error);
+    if (Object.keys(error).length !== 0) {
       return;
     } else {
+      setIsLoading(true);
       if (values.type === "Employee") {
         try {
           await axios
             .post("http://localhost:4000/api/employee/loginEmployee", values)
             .then((res) => {
+              console.log(res.data);
+              setIsLoading(false);
               toast.success("Login Successfull");
               localStorage.setItem(
                 "user_type",
@@ -54,62 +58,57 @@ export function Login() {
                 "is_loged",
                 JSON.stringify(encryptData("yes"))
               );
-
+              localStorage.setItem(
+                "role_name",
+                JSON.stringify(encryptData(res.data.role_name))
+              );
+              console.log(res.data);
+              setIsLoading(false);
               if (res.data.type === 1) {
                 localStorage.setItem(
                   "home_page",
                   JSON.stringify(encryptData("hrmanager/user roles"))
                 );
-                setTimeout(() => {
-                  navigate("/hrmanager/user roles");
-                }, 2000);
+                navigate("/hrmanager/user roles");
               } else if (res.data.type === 2) {
                 localStorage.setItem(
                   "home_page",
-                  JSON.stringify(encryptData("inventorymanager/dashboard"))
+                  JSON.stringify(encryptData("/inventorymanager/Equipments"))
                 );
-                setTimeout(() => {
-                  navigate("/inventorymanager/dashboard");
-                }, 2000);
+                navigate("/inventorymanager/Equipments");
               } else if (res.data.type === 3) {
                 localStorage.setItem(
                   "home_page",
                   JSON.stringify(encryptData("chiefEngineer/sites"))
                 );
-                setTimeout(() => {
-                  navigate("/chiefEngineer/sites");
-                }, 2000);
+                navigate("/chiefEngineer/sites");
               } else if (res.data.type === 4) {
                 localStorage.setItem(
                   "home_page",
                   JSON.stringify(encryptData("sitemanager/dashboard"))
                 );
-                setTimeout(() => {
-                  navigate("/sitemanager/dashboard");
-                }, 2000);
+                navigate("/sitemanager/dashboard");
               } else if (res.data.type === 5) {
                 localStorage.setItem(
                   "home_page",
                   JSON.stringify(encryptData("Supervisor/KanbanBoard"))
                 );
-                setTimeout(() => {
-                  navigate("/Supervisor/KanbanBoard");
-                }, 2000);
+
+                navigate("/Supervisor/KanbanBoard");
               }
             });
         } catch (err) {
+          setIsLoading(false);
           console.log(err);
           toast.error(err.response.data.error);
         }
-
-      } else {
+      } else if (values.type === "Admin") {
         try {
           await axios
             .post("http://localhost:4000/api/user/auth", values)
             .then((res) => {
               const adminType = 0;
               console.log(res);
-              toast.success("Login Successfull");
               localStorage.setItem(
                 "user_type",
                 JSON.stringify(encryptData(adminType.toString()))
@@ -124,16 +123,14 @@ export function Login() {
               );
               localStorage.setItem(
                 "home_page",
-                JSON.stringify(encryptData("Admin"))
+                JSON.stringify(encryptData("admin/dashboard"))
               );
               localStorage.setItem(
                 "is_loged",
                 JSON.stringify(encryptData("yes"))
               );
-
-              setTimeout(() => {
-                navigate("/admin");
-              }, 2000);
+              setIsLoading(false);
+              navigate("/admin/dashboard");
             });
         } catch (err) {
           console.log(err);
@@ -178,6 +175,7 @@ export function Login() {
             >
               Log In
             </h2>
+
             <div className="form-info">
               <label>User Name</label>
               <input
@@ -204,7 +202,7 @@ export function Login() {
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
-              <label>Login As</label>
+              <label>Role</label>
               <select
                 className="login-type-select"
                 value={values.type}
@@ -221,21 +219,36 @@ export function Login() {
                   Admin
                 </option>
               </select>
-              {errors.type && <p style={{ color: "red" }}>{errors.type}</p>}
+              {errors.typeErr && (
+                <p style={{ color: "red" }}>{errors.typeErr}</p>
+              )}
               <br />
               <a href="forgotPassword">Forgot Password?</a> <br />
-              <button
-                className="next_button"
-                type="submit"
-                style={{
-                  backgroundColor: "#ffcc00",
-                  marginTop: "10px",
-                  fontWeight: "700",
-                }}
-              >
-                {" "}
-                Login
-              </button>
+              {isLoading ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                <button
+                  className="next_button"
+                  type="submit"
+                  style={{
+                    backgroundColor: "#ffcc00",
+                    marginTop: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {" "}
+                  Login
+                </button>
+              )}
             </div>
           </form>
         </div>

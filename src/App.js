@@ -1,4 +1,6 @@
-import AdminHome from "./pages/CompanyAdmin/AdminHome";
+import AdminUserRole from "./pages/CompanyAdmin/AdminUserRole";
+import AdminDashboard from "./pages/CompanyAdmin/AdminDashboard"
+import Subscription from "./pages/CompanyAdmin/Subscription"
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatSpace from "./components/CompanyAdmin/ChatSpace";
@@ -63,6 +65,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+      <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
@@ -74,7 +77,9 @@ function App() {
 
         {/* Compnay Admin  */}
         <Route element={<ProtectedRoutes type={0} />}>
-          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard/>} />
+          <Route path="/admin/userRoles" element={<AdminUserRole />} />
+          <Route path="/admin/Subscription" element={<Subscription/>}/>
         </Route>
         {/* <Route path="/admin" element={<AdminHome />} /> */}
         {/* HR Manager */}
@@ -84,7 +89,15 @@ function App() {
         <Route path="/hrmanager/leave" element={<LeaveDetails />} />
         <Route path="/hrmanager/performance review" element={<Performance />} />
         {/* Inventory Manager */}
-        <Route element={<ProtectedRoutes type={2} />}></Route>
+        <Route element={<ProtectedRoutes type={2} />}>
+          <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
+          <Route path="InventoryManger/Equipments/List" element={<ItemList />} />
+          <Route path="InventoryManger/Materials/List" element={<ItemList />} />
+          <Route path="/inventorymanager/Materials" element={<Material />} />
+          <Route path="/inventorymanager/documents" element={<FileUpload />} />
+          <Route path="/inventorymanager/Reports" element={<Analytics />} />
+
+        </Route>
 
         {/* Cheif Engineer */}
         <Route element={<ProtectedRoutes type={3} />}>
@@ -119,7 +132,7 @@ function App() {
           <Route path="/Equipments/List" element={<ItemList />} />
           <Route path="/Materials" element={<Material />} />
           <Route path="/Materials/List" element={<ItemList />} />
-          <Route path="/Supervisor/Documents" element={<FileUpload />} />
+          <Route path="/Supervisor/Documents" element={<SMDocuments />} />
           <Route path="/Supervisor/Analytics" element={<Analytics />} />
         </Route>
       </Routes>

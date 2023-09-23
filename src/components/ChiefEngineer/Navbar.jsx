@@ -28,11 +28,11 @@ const Navbar = () => {
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -99,13 +99,16 @@ const Navbar = () => {
       <CustomerRegisterButton/>
       {/* {shouldShowCustomerRegisterButton && <CustomerRegisterButton />} */}
       <div className="flex gap-2">
-        <div className='text-4xl cursor-pointer'onClick={() => handleClick('notification')}>
+        <div
+          className="text-4xl cursor-pointer"
+          onClick={() => handleClick("notification")}
+        >
           <NotificationsNoneIcon fontSize="inherit" />
         </div>
         {/* <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('notification')} icon={<RiNotification3Line style={{ color: 'black', fontSize: '28px' }}/>} /> */}
         <div
           className="flex items-center gap-2 p-1 rounded-lg cursor-pointer hover:bg-light-gray"
-          onClick={() => handleClick('userProfile')}
+          onClick={() => handleClick("userProfile")}
         >
           <p>
             <div><span className="ml-1 text-[16px] font-bold text-black">
@@ -122,8 +125,8 @@ const Navbar = () => {
           />
         </div>
 
-        {isClicked.notification && (<Notification />)}
-        {isClicked.userProfile && (<UserProfile />)}
+        {isClicked.notification && <Notification />}
+        {isClicked.userProfile && <UserProfile />}
       </div>
     </div>
     ) : (

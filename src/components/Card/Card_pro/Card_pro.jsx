@@ -50,7 +50,7 @@ export const CardFirst = () => {
     
     return (
       <React.Fragment>
-        <button onClick={handleOpen}>{modalContent?.request}</button>
+        <button onClick={handleOpen} style  = {{backgroundColor:"#FFCC00" , padding:"4%" ,width:"200px" , marginTop:"15%"  , boxShadow:"none"}} >{modalContent?.request}</button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -72,7 +72,7 @@ export const CardFirst = () => {
            <Input type = "number"  placeholder='Name'  min = '0' />
             </FormControl><br/><br/>
             <FormControl mt={4}>
-              <button class = 'ml-40'>Send</button>
+              <button class = 'ml-40' style  = {{backgroundColor:"#FFCC00" , padding:"5%" ,width:"150px" , boxShadow:"none"}}>Send</button>
             </FormControl>
           </Box>
         </Modal>

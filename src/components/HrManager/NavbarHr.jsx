@@ -28,6 +28,7 @@ import { decryptData } from '../../encrypt';
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
 
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const Navbar = () => {
             <div><span className="ml-1 text-[16px] font-bold text-black">
               {name}
             </span></div>
-            <span className='float-right text-sm'>Hr Manager</span>
+            <span className='float-right text-sm'>{roleName}</span>
           </p>
           <MdKeyboardArrowDown className="text-gray-400 text-14" />
           <img

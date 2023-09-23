@@ -120,12 +120,12 @@ export const DashboardW = () => {
           <Typography id="alert-dialog-modal-description" textColor="text.tertiary">
             Are you sure you want to delete item?
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 1 }}>
             <button  onClick={() => setOpen(false)}>
               Cancel
             </button>
             <div className="delete">
-            <button variant="solid" color='danger' onClick={() => setOpen(false)} size='xs' >
+            <button variant="solid" color='danger' onClick={() => setOpen(false)} size='xs' padding = '5' >
              Delete Item
             </button></div>
           </Box>
@@ -183,11 +183,11 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }  }   />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '100px', marginLeft: '20%' }}>
-              <img src="./drill.png" alt="drill" width="15px" height="15px" />
+              <img src="/drill.png" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
-          <Link to = "/Equipments/List"> Drills</Link>
+          <Link to = "/InventoryManger/Equipments/List"> Drills</Link>
           </Typography>
           <Typography color="textSecondary" gutterBottom>
             Available Quantity: 10
@@ -211,7 +211,7 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '100px', marginLeft: '25%' }}>
-              <img src="./OIP.jpg" alt="drill" width="15px" height="15px" />
+              <img src="/OIP.jpg" alt="drill" width="100px" height="100px"/>
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -239,7 +239,7 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '120px', marginLeft: '25%' }}>
-              <img src="./mixture.webp" alt="drill" width="20px" height="20px" />
+              <img src="/mixture.webp" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -267,7 +267,7 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '90px', marginLeft: '10%' }}>
-              <img src="./saw.jpg" alt="drill" width="15px" height="15px" />
+              <img src="/saw.jpg" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -295,7 +295,7 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '140px', marginLeft: '10%' }}>
-              <img src="./spirit.jpg" alt="drill" width="15px" height="15px" />
+              <img src="/spirit.jpg" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -323,7 +323,7 @@ export const DashboardW = () => {
           <Card style={{ width: 100 }} />
           <CardContent style={{ backgroundColor: 'lightgrey' }}>
             <div className="image_drill" style={{ width: '100px', marginLeft: '20%' }}>
-              <img src="./rollers.webp" alt="drill" width="15px" height="15px" />
+              <img src="/rollers.webp" alt="drill" width="100px" height="100px" />
             </div>
           </CardContent>
           <Typography variant="h5" component="h2">
@@ -390,7 +390,7 @@ export const DashboardW = () => {
               />
               </FormControl><br/>
               <FormControl>
-              <button onClick={handleSubmitModal}>Create Card</button>
+              <button onClick={handleSubmitModal} style = {{backgroundColor:'#FFCC00' , marginTop:"%", padding:"4%" , width:"150px"}}>Create Card</button>
               </FormControl>
             </div>
             </Box>

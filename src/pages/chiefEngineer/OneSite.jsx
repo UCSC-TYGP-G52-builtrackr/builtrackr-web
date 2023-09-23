@@ -113,19 +113,19 @@ const OneSite = () => {
                   <div className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
                       <dt className="text-base leading-7 text-gray-600">Laborers At Work</dt>
                       <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        11
+                        0
                       </dd>
                     </div>
                     <div className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
                       <dt className="text-base leading-7 text-gray-600">Tasks To Complete</dt>
                       <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        5
+                        0
                       </dd>
                     </div>
                     <div className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
                       <dt className="text-base leading-7 text-gray-600">Days Spent</dt>
                       <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        16
+                        0
                       </dd>
                     </div>
                 </dl>
