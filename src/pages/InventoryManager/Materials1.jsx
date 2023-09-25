@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { URData } from "../../data/HrManager/URData";
 import Header from "../../components/InventoryManager/HeaderIM";
 import Navbar from "../../components/InventoryManager/NavbarIM";
-import Sidebar from "../../components/Sidebar";
 import SidebarIM from "../../components/InventoryManager/SidebarIM";
 import ChatSpace from "../../components/ChatSpace";
 import { BsChatDots } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { decryptData } from "../../encrypt";
 import "../../App.css";
 
 import Card from '@material-ui/core/Card';
@@ -20,7 +16,6 @@ import CardActions from '@material-ui/core/CardActions';
 import { Edit2, Trash2 } from 'react-feather';
 import { Modal, Input, InputLabel, FormControl } from '@mui/material';
 import Box from '@mui/material/Box';
-import Divider from '@mui/joy/Divider';
 import ModalDialog from '@mui/joy/ModalDialog';
 import EditModal from './EditModal';
 import AddModal from './AddModal';
@@ -29,8 +24,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRight}from "@fortawesome/free-solid-svg-icons";
 
 import MaterialDetailModal from "./MaterialDetailModal";
+import ReactPaginate from 'react-paginate';
 
 const style = {
   position: 'absolute',
@@ -53,6 +51,8 @@ const Materials1 = () => {
   const [editCategory, setEditCategory] = useState(null);
   const [materialData, setMaterialData] = useState([]);
   const { themeSettings, setThemeSettings } = useStateContext();
+  const [currentPage, setCurrentPage] = useState(0);
+  const perPage = 3; // Number of items per page
 
   const openDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -122,6 +122,8 @@ const Materials1 = () => {
     setModalType(null);
   };
 
+  const paginatedMaterialData = materialData.slice(currentPage * perPage, (currentPage + 1) * perPage);
+
   return (
     <>
       <div className="">
@@ -156,121 +158,148 @@ const Materials1 = () => {
             </div>
             <br/>
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
-  <thead className="bg-gray-100">
-    <tr>
-      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-        Material ID
-      </th>
-      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-        Item Name
-      </th>
-      {/* Uncomment the following lines if you want to include an Image column */}
-      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-        Image
-      </th> */}
-      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-        Available Quantity
-      </th>
-      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-        Actions
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    {materialData.map((material) => (
-      <tr
-        key={material.material_id}
-        style={{
-          backgroundColor: material.quantity <= 5 ? '#FF5555' : 'white', // Use a deeper red color (#FF5555)
-        }}
-      >
-        <td className="px-6 py-4 whitespace-nowrap">{material.material_id}</td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          {/* <Link
-            to={`/InventoryManger/Equipments/List/${material.material_id}`}
-            className="text-indigo-600 hover:text-indigo-900"
-          > */}
-          {material.item_name}
-          {/* </Link> */}
-        </td>
-        {/* Uncomment the following lines if you want to include an Image column */}
-        {/* <td className="px-6 py-4 whitespace-nowrap">
-          <div className="flex items-center">
-            <div className="flex-shrink-0 h-12 w-12">
-              <img
-                className="h-12 w-12 rounded-full"
-                src={material.photo_path}
-                alt={material.item_name}
-              />
-            </div>
-          </div>
-        </td> */}
-        <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <button
-            onClick={() => handleViewClick(material)}
-            className="mr-3"
-          >
-            <FontAwesomeIcon icon={faEye} />
-          </button>
-          <button
-            onClick={() => handleOpenEditModal(material)}
-            className="mr-3"
-          >
-            <FontAwesomeIcon icon={faPencilAlt} />
-          </button>
-          <button
-            onClick={() => handleOpenDeleteModal(material)}
-            className=""
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Material ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Item Name
+                  </th>
+                  {/* Uncomment the following lines if you want to include an Image column */}
+                  {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Image
+                  </th> */}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Available Quantity
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedMaterialData.map((material) => (
+                  <tr
+                    key={material.material_id}
+                    style={{
+                      backgroundColor: material.quantity <= 5 ? '#FF5555' : 'white', // Use a deeper red color (#FF5555)
+                    }}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">{material.material_id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {/* <Link
+                        to={`/InventoryManger/Equipments/List/${material.material_id}`}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      > */}
+                      {material.item_name}
+                      {/* </Link> */}
+                    </td>
+                    {/* Uncomment the following lines if you want to include an Image column */}
+                    {/* <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-12 w-12">
+                          <img
+                            className="h-12 w-12 rounded-full"
+                            src={material.photo_path}
+                            alt={material.item_name}
+                          />
+                        </div>
+                      </div>
+                    </td> */}
+                    <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleViewClick(material)}
+                        className="mr-3"
+                      >
+                        <FontAwesomeIcon icon={faEye} />
+                      </button>
+                      <button
+                        onClick={() => handleOpenEditModal(material)}
+                        className="mr-3"
+                      >
+                        <FontAwesomeIcon icon={faPencilAlt} />
+                      </button>
+                      <button
+                        onClick={() => handleOpenDeleteModal(material)}
+                        className=""
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-
-
-
-
-            {addModalOpen && (
-              <AddModal isOpen={addModalOpen} onClose={closeAddModal} setMaterialData={setMaterialData} />
-            )}
-            {modalType === "detail" && selectedMaterial && (
-              <MaterialDetailModal material={selectedMaterial} onClose={handleCloseModal} />
-            )}
-            {deleteModalOpen && (
-              <DeleteModal
-                isOpen={deleteModalOpen}
-                onClose={closeDeleteModal}
-                materialData={selectedMaterial}
-                onDelete={() => {
-                  // Handle deletion logic here
-                  // Update materialData if needed
-                  // Then, close the modal
-                  closeDeleteModal();
-                }}
-              />
-            )}
-            <EditModal
-              isOpen={editModalOpen}
-              onClose={() => setEditModalOpen(false)}
-              materialData={editCategory}
-              setMaterialData={(updatedData) => {
-                const updatedMaterialData = materialData.map((material) => {
-                  if (material.material_id === updatedData.material_id) {
-                    return updatedData;
-                  }
-                  return material;
-                });
-                setMaterialData(updatedMaterialData);
-              }}
-            />
+            <ReactPaginate
+  previousLabel={
+    <div className="flex items-center space-x-2">
+      <span className="text-gray-600">
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </span>
+      <span className="hidden md:block">Previous</span>
+    </div>
+  }
+  nextLabel={
+    <div className="flex items-center space-x-2">
+      <span className="hidden md:block">Next</span>
+      <span className="text-gray-600">
+        <FontAwesomeIcon icon={faArrowRight} />
+      </span>
+    </div>
+  }
+  breakLabel={<span className="text-gray-600 px-2 py-1 rounded-md hover:bg-gray-100">...</span>}
+  pageCount={Math.ceil(materialData.length / perPage)}
+  marginPagesDisplayed={2}
+  pageRangeDisplayed={5}
+  onPageChange={(data) => {
+    setCurrentPage(data.selected);
+  }}
+  containerClassName={'flex justify-center mt-5 space-x-2'}
+  pageClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+  activeClassName={'bg-blue-500 text-white px-3 py-1 rounded-md'}
+  previousClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+  nextClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+/>
           </div>
         </div>
       </div>
+
+      {addModalOpen && (
+        <AddModal isOpen={addModalOpen} onClose={closeAddModal} setMaterialData={setMaterialData} />
+      )}
+      {modalType === "detail" && selectedMaterial && (
+        <MaterialDetailModal material={selectedMaterial} onClose={handleCloseModal} />
+      )}
+      {deleteModalOpen && (
+        <DeleteModal
+          isOpen={deleteModalOpen}
+          onClose={closeDeleteModal}
+          materialData={selectedMaterial}
+          onDelete={() => {
+            // Handle deletion logic here
+            // Update materialData if needed
+            // Then, close the modal
+            closeDeleteModal();
+          }}
+        />
+      )}
+      <EditModal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        materialData={editCategory}
+        setMaterialData={(updatedData) => {
+          const updatedMaterialData = materialData.map((material) => {
+            if (material.material_id === updatedData.material_id) {
+              return updatedData;
+            }
+            return material;
+          });
+          setMaterialData(updatedMaterialData);
+        }}
+      />
     </>
   );
 };
