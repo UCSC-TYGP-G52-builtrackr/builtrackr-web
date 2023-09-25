@@ -109,12 +109,12 @@
 //     }
 //   };
 
-//   const [editModalOpen, setEditEModalOpen] = useState(false);
+//   const [editEModalOpen, setEditEModalOpen] = useState(false);
 //   const [editCategory, setEditCategory] = useState(null);
 //   // Function to open the Edit modal and set the data of the category being edited
-//   // const handleOpenEditModal = (category) => {
+//   // const handleOpenEditEModal = (category) => {
 //   //   setEditCategory(category);
-//   //   setEditModalOpen(true);
+//   //   setEditEModalOpen(true);
 //   // };
 
 //   //new code..............................................................................
@@ -306,7 +306,7 @@
 //           </div>
 //         )}
 //       <EditEModal
-//         isOpen={editModalOpen}
+//         isOpen={editEModalOpen}
 //         onClose={() => setEditEModalOpen(false)}
 //         equipmentData={editCategory}
 //         setEquipmentData={(updatedData) => {
@@ -422,9 +422,9 @@ import { Modal, Input, InputLabel, FormControl } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/joy/Divider';
 import ModalDialog from '@mui/joy/ModalDialog';
-import EditModal from './EditModal';
+import EditEModal from './EditEModal';
 import AddEModal from './AddEModal';
-import DeleteModal from './DeleteModal';
+import DeleteEModal from './DeleteEModal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -446,20 +446,20 @@ const style = {
 
 const Equipments1 = () => {
   const [modalType, setModalType] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteEModalOpen, setDeleteEModalOpen] = useState(false);
   const [addEModalOpen, setAddEModalOpen] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editEModalOpen, setEditEModalOpen] = useState(false);
   const [editCategory, setEditCategory] = useState(null);
   const [equipmentData, setEquipmentData] = useState([]);
   const { themeSettings, setThemeSettings } = useStateContext();
 
-  const openDeleteModal = () => {
-    setDeleteModalOpen(true);
+  const openDeleteEModal = () => {
+    setDeleteEModalOpen(true);
   };
 
-  const closeDeleteModal = () => {
-    setDeleteModalOpen(false);
+  const closeDeleteEModal = () => {
+    setDeleteEModalOpen(false);
   };
 
   const openAddEModal = () => {
@@ -498,18 +498,18 @@ const Equipments1 = () => {
     fetchEquipmentData();
   }, []);
 
-  const handleOpenEditModal = (equipment) => {
+  const handleOpenEditEModal = (equipment) => {
     setEditCategory(equipment);
-    setEditModalOpen(true);
+    setEditEModalOpen(true);
   };
 
-  const handleOpenDeleteModal = (equipment) => {
+  const handleOpenDeleteEModal = (equipment) => {
     setSelectedEquipment(equipment);
-    setDeleteModalOpen(true);
+    setDeleteEModalOpen(true);
   };
 
-  const handleCloseDeleteModal = () => {
-    setDeleteModalOpen(false);
+  const handleCloseDeleteEModal = () => {
+    setDeleteEModalOpen(false);
   };
 
   const handleOpenModal = (equipment, type) => {
@@ -614,13 +614,13 @@ const Equipments1 = () => {
             <FontAwesomeIcon icon={faEye} />
           </button>
           <button
-            onClick={() => handleOpenEditModal(equipment)}
+            onClick={() => handleOpenEditEModal(equipment)}
             className="mr-3"
           >
             <FontAwesomeIcon icon={faPencilAlt} />
           </button>
           <button
-            onClick={() => handleOpenDeleteModal(equipment)}
+            onClick={() => handleOpenDeleteEModal(equipment)}
             className=""
           >
             <FontAwesomeIcon icon={faTrashAlt} />
@@ -641,22 +641,22 @@ const Equipments1 = () => {
             {modalType === "detail" && selectedEquipment && (
               <MaterialDetailModal equipment={selectedEquipment} onClose={handleCloseModal} />
             )}
-            {deleteModalOpen && (
-              <DeleteModal
-                isOpen={deleteModalOpen}
-                onClose={closeDeleteModal}
+            {deleteEModalOpen && (
+              <DeleteEModal
+                isOpen={deleteEModalOpen}
+                onClose={closeDeleteEModal}
                 equipmentData={selectedEquipment}
                 onDelete={() => {
                   // Handle deletion logic here
                   // Update equipmentData if needed
                   // Then, close the modal
-                  closeDeleteModal();
+                  closeDeleteEModal();
                 }}
               />
             )}
-            <EditModal
-              isOpen={editModalOpen}
-              onClose={() => setEditModalOpen(false)}
+            <EditEModal
+              isOpen={editEModalOpen}
+              onClose={() => setEditEModalOpen(false)}
               equipmentData={editCategory}
               setEquipmentData={(updatedData) => {
                 const updatedEquipmentData = equipmentData.map((equipment) => {
