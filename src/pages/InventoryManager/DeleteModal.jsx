@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Typography, Button, Box } from "@mui/material";
 
 const style = {
@@ -14,12 +14,11 @@ const style = {
 };
 
 const DeleteModal = ({ isOpen, onClose, materialData, onDelete }) => {
-  // Check if materialData is null or undefined
-  if (!materialData) {
-    return null; // or return a message or an empty modal
-  }
+  const [deleting, setDeleting] = useState(false);
 
   const handleDelete = () => {
+    setDeleting(true);
+
     // Make an HTTP request to delete the material data
     fetch(`http://localhost:4000/api/material/deleteMaterial/${materialData.material_id}`, {
       method: "DELETE",
@@ -34,10 +33,11 @@ const DeleteModal = ({ isOpen, onClose, materialData, onDelete }) => {
       .catch((error) => {
         console.error("Error deleting material:", error);
         // Handle the error gracefully, e.g., show an error message to the user.
+      })
+      .finally(() => {
+        setDeleting(false);
+        onClose();
       });
-
-    // Close the modal
-    onClose();
   };
 
   return (
@@ -53,8 +53,9 @@ const DeleteModal = ({ isOpen, onClose, materialData, onDelete }) => {
           variant="contained"
           color="secondary"
           sx={{ marginRight: "10px" }}
+          disabled={deleting}
         >
-          Delete
+          {deleting ? "Deleting..." : "Delete"}
         </Button>
         <Button onClick={onClose} variant="outlined" color="primary">
           Cancel

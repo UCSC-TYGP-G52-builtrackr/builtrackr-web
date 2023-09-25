@@ -28,6 +28,8 @@ import DeleteModal from './DeleteModal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 import MaterialDetailModal from "./MaterialDetailModal";
 
 const style = {
@@ -152,64 +154,87 @@ const Materials1 = () => {
                 Add New Material
               </button>
             </div>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Item Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Image
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Available Quantity
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {materialData.map((material) => (
-                  <tr key={material.material_id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Link
-                        to={`/InventoryManger/Equipments/List/${material.material_id}`}
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        {material.item_name}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-12 w-12">
-                          <img
-                            className="h-12 w-12 rounded-full"
-                            src={material.photo_path}
-                            alt={material.item_name}
-                          />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button onClick={() => handleViewClick(material)}>
-                        <FontAwesomeIcon icon={faEye} />
-                      </button>
-                      <button
-                        onClick={() => handleOpenEditModal(material)}
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        <Edit2 />
-                      </button>
-                      <button onClick={() => handleOpenDeleteModal(material)}>
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <br/>
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+  <thead className="bg-gray-100">
+    <tr>
+      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+        Material ID
+      </th>
+      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+        Item Name
+      </th>
+      {/* Uncomment the following lines if you want to include an Image column */}
+      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+        Image
+      </th> */}
+      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+        Available Quantity
+      </th>
+      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+        Actions
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {materialData.map((material) => (
+      <tr
+        key={material.material_id}
+        style={{
+          backgroundColor: material.quantity <= 5 ? '#FF5555' : 'white', // Use a deeper red color (#FF5555)
+        }}
+      >
+        <td className="px-6 py-4 whitespace-nowrap">{material.material_id}</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          {/* <Link
+            to={`/InventoryManger/Equipments/List/${material.material_id}`}
+            className="text-indigo-600 hover:text-indigo-900"
+          > */}
+          {material.item_name}
+          {/* </Link> */}
+        </td>
+        {/* Uncomment the following lines if you want to include an Image column */}
+        {/* <td className="px-6 py-4 whitespace-nowrap">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 h-12 w-12">
+              <img
+                className="h-12 w-12 rounded-full"
+                src={material.photo_path}
+                alt={material.item_name}
+              />
+            </div>
+          </div>
+        </td> */}
+        <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <button
+            onClick={() => handleViewClick(material)}
+            className="mr-3"
+          >
+            <FontAwesomeIcon icon={faEye} />
+          </button>
+          <button
+            onClick={() => handleOpenEditModal(material)}
+            className="mr-3"
+          >
+            <FontAwesomeIcon icon={faPencilAlt} />
+          </button>
+          <button
+            onClick={() => handleOpenDeleteModal(material)}
+            className=""
+          >
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+
+
+
+
             {addModalOpen && (
               <AddModal isOpen={addModalOpen} onClose={closeAddModal} setMaterialData={setMaterialData} />
             )}

@@ -13,34 +13,34 @@ const style = {
   p: 4,
 };
 
-const AddModal = ({ isOpen, onClose, setMaterialData }) => {
-  const [materialName, setMaterialName] = useState('');
-  const [materialDescription, setMaterialDescription] = useState('');
-  const [materialQty, setMaterialQty] = useState('');
-  const [materialImage, setMaterialImage] = useState(null);
+const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
+  const [equipmentName, setEquipmentName] = useState('');
+  const [equipmentDescription, setEquipmentDescription] = useState('');
+  const [equipmentQty, setEquipmentQty] = useState('');
+  const [equipmentImage, setEquipmentImage] = useState(null);
 
   const handleSubmitModal = () => {
     // Input validation
-    if (!materialName || !materialDescription || isNaN(materialQty) || materialQty <= 0) {
+    if (!equipmentName || !equipmentDescription || isNaN(equipmentQty) || equipmentQty <= 0) {
       alert('Please enter valid data.');
       return;
     }
 
-    // Prepare the new material data
-    const newMaterial = {
-      item_name: materialName,
-      description: materialDescription,
-      quantity: materialQty,
-      photo_path: materialImage ? materialImage.name : '',
+    // Prepare the new equipment data
+    const newEquipment = {
+      item_name: equipmentName,
+      description: equipmentDescription,
+      quantity: equipmentQty,
+      photo_path: equipmentImage ? equipmentImage.name : '',
     };
 
-    // Make an HTTP request to add the material data
-    fetch('http://localhost:4000/api/material/addMaterial', {
+    // Make an HTTP request to add the equipment data
+    fetch('http://localhost:4000/api/equipment/addEquipment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newMaterial),
+      body: JSON.stringify(newEquipment),
     })
       .then((response) => {
         if (!response.ok) {
@@ -49,11 +49,11 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
         return response.json();
       })
       .then((data) => {
-        // Update the material data in the state with the added data
-        setMaterialData((prevMaterialData) => [...prevMaterialData, data]);
+        // Update the equipment data in the state with the added data
+        setEquipmentData((prevEquipmentData) => [...prevEquipmentData, data]);
       })
       .catch((error) => {
-        console.error('Error adding material data:', error);
+        console.error('Error adding equipment data:', error);
       });
 
     // Close the modal
@@ -64,33 +64,33 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h4" style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold' }}>
-          Add Material
+          Add Equipment
         </Typography>
         <form>
           <div style={{ marginBottom: '20px' }}>
-            <InputLabel htmlFor="materialName">Material Name</InputLabel>
+            <InputLabel htmlFor="equipmentName">Equipment Name</InputLabel>
             <Input
-              value={materialName}
-              onChange={(e) => setMaterialName(e.target.value)}
-              placeholder="Enter material name"
+              value={equipmentName}
+              onChange={(e) => setEquipmentName(e.target.value)}
+              placeholder="Enter equipment name"
               sx={{ width: '100%' }}
             />
           </div>
           <div style={{ marginBottom: '20px' }}>
-            <InputLabel htmlFor="materialDescription">Material Description</InputLabel>
+            <InputLabel htmlFor="equipmentDescription">Equipment Description</InputLabel>
             <Input
-              value={materialDescription}
-              onChange={(e) => setMaterialDescription(e.target.value)}
+              value={equipmentDescription}
+              onChange={(e) => setEquipmentDescription(e.target.value)}
               placeholder="Enter Description"
               sx={{ width: '100%' }}
             />
           </div>
           <div style={{ marginBottom: '20px' }}>
-            <InputLabel htmlFor="materialQty">Material Quantity</InputLabel>
+            <InputLabel htmlFor="equipmentQty">Equipment Quantity</InputLabel>
             <Input
               type="number"
-              value={materialQty}
-              onChange={(e) => setMaterialQty(e.target.value)}
+              value={equipmentQty}
+              onChange={(e) => setEquipmentQty(e.target.value)}
               placeholder="Enter Quantity"
               sx={{ width: '100%' }}
             />
@@ -99,20 +99,20 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
             <InputLabel>Choose an image</InputLabel>
             <Input
               type="file"
-              onChange={(e) => setMaterialImage(e.target.files[0])}
+              onChange={(e) => setEquipmentImage(e.target.files[0])}
               accept=".jpg, .png, .jpeg"
               sx={{ width: '100%' }}
             />
           </div>
-          {materialImage && (
-            <Typography>Selected file: {materialImage.name}</Typography>
+          {equipmentImage && (
+            <Typography>Selected file: {equipmentImage.name}</Typography>
           )}
           <Button
             onClick={handleSubmitModal}
             variant="contained"
             color="secondary"
           >
-            Add Material
+            Add Equipment
           </Button>
         </form>
       </Box>
@@ -120,4 +120,4 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
   );
 };
 
-export default AddModal;
+export default AddEModal;
