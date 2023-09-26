@@ -110,7 +110,7 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
           <Button
             onClick={handleSubmitModal}
             variant="contained"
-            color="secondary"
+            style={{ backgroundColor: "#f59e0b" }}
           >
             Add Material
           </Button>

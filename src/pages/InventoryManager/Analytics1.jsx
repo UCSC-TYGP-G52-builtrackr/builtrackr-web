@@ -65,6 +65,7 @@ const Analytics1 = () => {
               <thead>
                 <tr className="bg-green-600 text-white">
                   <th className="w-1/6 py-2">Request ID</th>
+                  <th className="w-1/6 py-2">Employee ID</th>
                   <th className="w-1/6 py-2">Material ID</th>
                   <th className="w-1/6 py-2">Quantity</th>
                   <th className="w-1/6 py-2">Unit</th>

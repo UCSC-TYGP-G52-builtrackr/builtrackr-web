@@ -130,13 +130,17 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
           {materialImage && (
             <Typography sx={{ width: '100%' }}>Selected file: {materialImage.name}</Typography>
           )}
-          <Button
-            onClick={handleSubmitModal}
-            variant="contained"
-            color="secondary"
-          >
-            Save Changes
-          </Button>
+ <Button
+  onClick={handleSubmitModal}
+  variant="contained"
+  style={{ backgroundColor: "#f59e0b" }} // Replace with the correct color code
+>
+  Save Changes
+</Button>
+
+
+
+
         </form>
       </Box>
     </Modal>

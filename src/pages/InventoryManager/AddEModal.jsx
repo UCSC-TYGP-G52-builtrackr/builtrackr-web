@@ -110,7 +110,7 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
           <Button
             onClick={handleSubmitModal}
             variant="contained"
-            color="secondary"
+            style={{ backgroundColor: "#f59e0b" }} 
           >
             Add Equipment
           </Button>

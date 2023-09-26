@@ -51,7 +51,7 @@ const DeleteEModal = ({ isOpen, onClose, equipmentData, onDelete }) => {
         <Button
           onClick={handleDelete}
           variant="contained"
-          color="secondary"
+          style={{ backgroundColor: "#f59e0b" }} 
           sx={{ marginRight: "10px" }}
           disabled={deleting}
         >
