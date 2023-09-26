@@ -115,7 +115,7 @@ const Reports1 = () => {
             <div className='grid grid-cols-4 gap-[20px] mt-[25px] pb-[15px]'>
                 <div className='border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#B589DF] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
                     <div>
-                        <h2 className='text-[#B589DF] text-sm font-bold'>Schedule Performance <br/>Index</h2>
+                        <h2 className='text-[#B589DF] text-sm font-bold'>Current Stock <br/>Full Report</h2>
                         <h1 className='text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]'>1.2</h1>
                     </div>
                     <FaRegCalendarMinus fontSize={28} color="" />
@@ -124,7 +124,7 @@ const Reports1 = () => {
                 <div className='border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#1CC88A] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
                     <div>
                         <h2 className='text-[#1cc88a] text-sm font-bold'>
-                            Cost Performance <br/>Index</h2>
+                            Num of Materials under <br/>Pre-Oreder Level</h2>
                         <h1 className='text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]'>4.2</h1>
                     </div>
                     <div className='text-4xl'>

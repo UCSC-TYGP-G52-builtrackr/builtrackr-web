@@ -96,16 +96,16 @@ function App() {
         <Route element={<ProtectedRoutes type={2} />}>
 
 
-        <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
+        {/* <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
           <Route path="InventoryManger/Equipments/List" element={<ItemList />} />
           <Route path="InventoryManger/Materials/List" element={<ItemList />} />
           <Route path="/inventorymanager/Materials" element={<Material />} />
           <Route path="/inventorymanager/documents" element={<FileUpload />} />
-          <Route path="/inventorymanager/Reports" element={<Analytics />} />
-<Route path="/inventorymanager/Equipments1" element={<Equipments1/>} />
-        <Route path="/inventorymanager/Materials1" element={<Materials1 />} />
-        <Route path="/inventorymanager/Reports1" element={<Reports1 />} />
-        <Route path="/inventorymanager/Analytics1" element={<Analytics1 />} />
+          <Route path="/inventorymanager/Reports" element={<Analytics />} /> */}
+<Route path="/inventorymanager/Equipments" element={<Equipments1/>} />
+        <Route path="/inventorymanager/Materials" element={<Materials1 />} />
+        <Route path="/inventorymanager/Reports" element={<Reports1 />} />
+        <Route path="/inventorymanager/Analytics" element={<Analytics1 />} />
 
 
 

@@ -44,7 +44,7 @@ const SidebarIM = () => {
                     to={`/inventorymanager/${link.name}`}
                     isActive={(match, location) => {
                       const { pathname } = location;
-                      return pathname === '/inventorymanager' || pathname.startsWith('/inventorymanager/equipments1');
+                      return pathname === '/inventorymanager' || pathname.startsWith('/inventorymanager/equipments');
                     }}
                   
                     key={link.name}
