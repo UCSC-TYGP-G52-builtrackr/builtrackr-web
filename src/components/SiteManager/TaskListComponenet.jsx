@@ -17,6 +17,7 @@ import {
   Tr,
   ModalFooter,
   Link,
+  Input,
   ChakraProvider,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -26,7 +27,21 @@ import React from "react";
 const TaskListCard = ({ taskList }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSite, setSelectedSite] = useState(null); // Add state for selected site
+  const [searchInput, setSearchInput] = useState(""); // Add state for search input
+  const [filteredTasks, setFilteredTasks] = useState([]); // Add state for filtered tasks
   
+  const filterTasksByTaskName = () => {
+    const filtered = taskList.filter((task) =>
+      task.taskname.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setFilteredTasks(filtered);
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+    filterTasksByTaskName();
+  };
 
   const handleViewTask = (task) => {
     setSelectedTask(task);
@@ -55,10 +70,30 @@ const TaskListCard = ({ taskList }) => {
         console.error("Error deleting task:", error);
       });
   };
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   };
+
+  // Function to filter tasks by site
+  const filterTasksBySite = (site) => {
+    if (site === selectedSite) {
+      // If the same site is clicked again, clear the filter
+      setSelectedSite(null);
+    } else {
+      // Filter tasks based on the selected site
+      setSelectedSite(site);
+    }
+  };
+  const clearSiteFilter = () => {
+    setSelectedSite(null);
+  };
+  // Filter the taskList based on the selectedSite
+  const filteredTaskList = selectedSite
+    ? taskList.filter((task) => task.site === selectedSite)
+    : taskList;
+
   return (
     <ChakraProvider>
       <Box borderWidth="1px" borderRadius="md" p={4} mb={4}>
@@ -84,26 +119,76 @@ const TaskListCard = ({ taskList }) => {
             Add Task
           </Button>
         </div>
+        <div style={{display:"flex", gap:"20px",width: "80%", marginLeft: "40%"}}> 
+        <Button onClick={clearSiteFilter} variant={selectedSite ? "outline" : "solid"} w="120px" style={{
+    backgroundColor: "#ffcc00",
+    border: "none",
+    color: "black",
+    padding: "10px 20px",
+    fontSize: "16px",
+    borderRadius: "4px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+    cursor: "pointer",
+    transition: "background-color 0.3s, box-shadow 0.3s",
+    marginBottom: "20px",
+  }}>
+           Tasks
+          </Button>
+          <Button
+            onClick={() => filterTasksBySite("Site 1")}
+            variant={selectedSite === "Site 1" ? "solid" : "outline"}
+            w="120px"
+            style={{
+              backgroundColor: "#ffcc00",
+              border: "none",
+              color: "black",
+              padding: "10px 20px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              cursor: "pointer",
+              transition: "background-color 0.3s, box-shadow 0.3s",
+              marginBottom: "20px",
+            }}
+          >
+            Site 1
+          </Button>
+          <Button
+            onClick={() => filterTasksBySite("Site 2")}
+            variant={selectedSite === "Site 2" ? "solid" : "outline"}
+            w="120px"
+            style={{
+              backgroundColor: "#ffcc00",
+              border: "none",
+              color: "black",
+              padding: "10px 20px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              cursor: "pointer",
+              transition: "background-color 0.3s, box-shadow 0.3s",
+              marginBottom: "20px",
+            }}
+          >
+            Site 2
+          </Button>
+        </div>
         <Grid
           templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
           gap={4}
-          style={{ width: "80%", marginLeft: "18%" }}
+          style={{ width: "80%", marginLeft: "18%", marginTop: "5%"}}
         >
-          {taskList.map((task) => (
+          {filteredTaskList.map((task) => (
             <Box key={task.task_id} borderWidth="1px" borderRadius="md" p={4}>
               <Table variant="striped" mt={4}>
                 <Thead>
                   <Tr>
-                    <Th><b> Task Name</b></Th>
-                    {/* <Th>Special Information</Th>
-                  <Th>Due Date</Th> */}
+                    <Th><b> Task ID : {task.task_id}</b></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   <Tr>
                     <Td>{task.taskname}</Td>
-                    {/* <Td>{task.specialinformation}</Td>
-                  <Td>{task.duedate}</Td> */}
                   </Tr>
                 </Tbody>
               </Table>

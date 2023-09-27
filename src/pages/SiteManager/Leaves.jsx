@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
+  Grid,
   Table,
+  TableCaption,
   Thead,
   Tbody,
   Tr,
@@ -15,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Text,
 } from "@chakra-ui/react";
 import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
@@ -136,7 +139,16 @@ function LaborLeaveTable() {
       <Sidebar/>
       <div style={{ display: "flex", alignItems: "center"}}>
         
-        <Table variant="unstyled">
+      <Grid
+          templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+          gap={4}
+          style={{ width: "80%", marginLeft: "50%", marginTop: "10%"}}
+        >
+          
+        <Table variant="simple" size='lg'>
+        <TableCaption placement="top"><Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
+          Labour Leave Requests
+        </Text></TableCaption>
           <Thead>
             <Tr>
               <Th>Labor Name</Th>
@@ -160,15 +172,17 @@ function LaborLeaveTable() {
           colorScheme="green"
           onClick={() => handleApprove(row.labor_id)}
           isDisabled={row.approval === "approved"} // Disable the button if status is approved
+          w="120px"
         >
           Approve
-        </Button>
+        </Button> <br></br><br></br>
         <Button
           colorScheme="red"
           onClick={() => handleDecline(row.labor_id)}
           isDisabled={row.approval === "approved"} // Disable the button if status is approved
+          w="120px"
         >
-          Decline
+          Decline  
         </Button>
       </Td>
                 <Td>{row.approval}</Td>
@@ -176,6 +190,7 @@ function LaborLeaveTable() {
             ))}
           </Tbody>
         </Table>
+        </Grid>
       </div>
       {/* AlertDialog */}
       <AlertDialog
