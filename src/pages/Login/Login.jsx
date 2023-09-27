@@ -12,7 +12,6 @@ export function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
-    type: "",
   });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -22,22 +21,21 @@ export function Login() {
   }
   const [isLoading, setIsLoading] = useState(false);
   async function handleValidation(event) {
+    console.log("Hell");
     event.preventDefault();
     setErrors({});
     const error = Validation(values);
     setErrors(error);
-    if (Object.keys(error).length !== 0) {
+    if (error.email !== "" || error.password !== "") {
       return;
     } else {
       setIsLoading(true);
-      if (values.type === "Employee") {
-        try {
-          await axios
-            .post("http://localhost:4000/api/employee/loginEmployee", values)
-            .then((res) => {
-              console.log(res.data);
-              setIsLoading(false);
-              toast.success("Login Successfull");
+      console.log("Hello");
+      try {
+        await axios
+          .post("http://localhost:4000/api/user/auth", values)
+          .then((res) => {
+            if (res.data.type === 0) {
               localStorage.setItem(
                 "user_type",
                 JSON.stringify(encryptData(res.data.type.toString()))
@@ -45,6 +43,33 @@ export function Login() {
               localStorage.setItem(
                 "name",
                 JSON.stringify(encryptData(res.data.name))
+              );
+              localStorage.setItem(
+                "company_id",
+                JSON.stringify(encryptData(res.data.id.toString()))
+              );
+              localStorage.setItem(
+                "home_page",
+                JSON.stringify(encryptData("admin/dashboard"))
+              );
+              localStorage.setItem(
+                "is_loged",
+                JSON.stringify(encryptData("yes"))
+              );
+              setIsLoading(false);
+              navigate("/admin/dashboard");
+            } else {
+              localStorage.setItem(
+                "user_type",
+                JSON.stringify(encryptData(res.data.type.toString()))
+              );
+              localStorage.setItem(
+                "name",
+                JSON.stringify(encryptData(res.data.name))
+              );
+              localStorage.setItem(
+                "photo",
+                JSON.stringify(encryptData(res.data.photo))
               );
               localStorage.setItem(
                 "company_id",
@@ -93,49 +118,14 @@ export function Login() {
                   "home_page",
                   JSON.stringify(encryptData("Supervisor/KanbanBoard"))
                 );
-
                 navigate("/Supervisor/KanbanBoard");
               }
-            });
-        } catch (err) {
-          setIsLoading(false);
-          console.log(err);
-          toast.error(err.response.data.error);
-        }
-      } else if (values.type === "Admin") {
-        try {
-          await axios
-            .post("http://localhost:4000/api/user/auth", values)
-            .then((res) => {
-              const adminType = 0;
-              console.log(res);
-              localStorage.setItem(
-                "user_type",
-                JSON.stringify(encryptData(adminType.toString()))
-              );
-              localStorage.setItem(
-                "name",
-                JSON.stringify(encryptData(res.data.name))
-              );
-              localStorage.setItem(
-                "company_id",
-                JSON.stringify(encryptData(res.data.id.toString()))
-              );
-              localStorage.setItem(
-                "home_page",
-                JSON.stringify(encryptData("admin/dashboard"))
-              );
-              localStorage.setItem(
-                "is_loged",
-                JSON.stringify(encryptData("yes"))
-              );
-              setIsLoading(false);
-              navigate("/admin/dashboard");
-            });
-        } catch (err) {
-          console.log(err);
-          toast.error(err.response.data.error);
-        }
+            }
+          });
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
+        toast.error(err.response.data.error);
       }
     }
   }
@@ -201,26 +191,6 @@ export function Login() {
               <br />
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
-              )}
-              <label>Role</label>
-              <select
-                className="login-type-select"
-                value={values.type}
-                onChange={handleInput}
-                name="type"
-              >
-                <option className="login-option" value="" disabled>
-                  Select Login Type
-                </option>
-                <option className="login-option" value="Employee">
-                  Employee
-                </option>
-                <option className="login-option" value="Admin">
-                  Admin
-                </option>
-              </select>
-              {errors.typeErr && (
-                <p style={{ color: "red" }}>{errors.typeErr}</p>
               )}
               <br />
               <a href="forgotPassword">Forgot Password?</a> <br />

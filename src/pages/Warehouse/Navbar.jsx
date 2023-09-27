@@ -25,11 +25,6 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   </button>
 );
 
-// const name = decryptData(JSON.parse(localStorage.getItem("name")));
-// const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
-const name = "Nilshan ";
-const roleName = "Inventory Manager";
-
 const Navbar = () => {
   const {
     currentColor,
@@ -60,6 +55,9 @@ const Navbar = () => {
   }, [screenSize]);
 
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
+  const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
 
   return (
     <div className="relative flex gap-10 justify-end p-1.5 md:ml-10 md:mr-1">
@@ -89,7 +87,7 @@ const Navbar = () => {
           <MdKeyboardArrowDown className="text-gray-400 text-14" />
           <img
             className="w-10 h-10 rounded-full"
-            src={avatar}
+            src={`http://localhost:4000/employees/${photo}`}
             alt="user-profile"
           />
         </div>

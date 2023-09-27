@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
 import axios from "axios";
-import { AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlinePlus } from "react-icons/ai";
+import { io } from "socket.io-client";
+import { decryptData } from "../../encrypt";
 
 import {
   Box,
@@ -36,12 +38,28 @@ const SMDashboard = () => {
     specialInformation: "",
     dueDate: "",
   });
+
+  const employeeNo = decryptData(JSON.parse(localStorage.getItem("no")));
+  const [socket, setSocket] = useState(null);
+
   const toast = useToast();
   const navigate = useNavigate();
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [isErrorAlertOpen, setIsErrorAlertOpen] = useState(false);
 
+  useEffect(() => {
+    setSocket(io("http://localhost:4000/"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("newUser", employeeNo);
+  }, [socket]);
+
   const AddTask = async (e) => {
+    socket.emit("sendTaskNotification", {
+      reciver: 23,
+      sender: employeeNo,
+    });
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -63,9 +81,9 @@ const SMDashboard = () => {
           isClosable: true,
         });
         setTask({
-          taskName: '',
-          specialInformation: '',
-          dueDate: '',
+          taskName: "",
+          specialInformation: "",
+          dueDate: "",
         });
 
         onclose();
@@ -217,12 +235,14 @@ const SMDashboard = () => {
                   <div className="flex items-center justify-center">
                     <button
                       className="text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-10"
-                      style={{ backgroundColor: "#FFCC00" , display:"flex"}}
+                      style={{ backgroundColor: "#FFCC00", display: "flex" }}
                       type="button"
                       onClick={(e) => AddTask(e)}
                     >
                       Add Task
-                      <AiOutlinePlus  style={{marginTop:"4px", marginLeft:"10px"}}/>
+                      <AiOutlinePlus
+                        style={{ marginTop: "4px", marginLeft: "10px" }}
+                      />
                     </button>
                   </div>
                 </div>

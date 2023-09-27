@@ -64,10 +64,10 @@ const Employees = () => {
   const [sortingRoleDetails, setSortingRoleDetails] = useState([]);
 
   const changeUserRole = (e) => {
-    setSortingRole(e.target.value);
     const sort = e.target.value;
     setSortingRoleDetails(employees.filter((el) => el.type === sort));
   };
+  
   console.log(sortingRoleDetails);
   const displayConfirmation = () => {};
   const handleDeleteClick = (employee) => {
