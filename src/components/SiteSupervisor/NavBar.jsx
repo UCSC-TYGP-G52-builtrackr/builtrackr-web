@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FiShoppingCart } from "react-icons/fi";
 import { BsChatLeft } from "react-icons/bs";
@@ -12,6 +12,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { deDE } from "@mui/x-date-pickers";
 // import { decryptData } from "../../encrypt";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
 // const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 //     <button
@@ -37,7 +38,13 @@ const NavBar = () => {
     setScreenSize,
     screenSize,
   } = useStateContext();
-  const name = (JSON.parse(localStorage.getItem("name")));
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
+  const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
+  const employeeNo = decryptData(JSON.parse(localStorage.getItem("no")));
+
+  const [socket, setSocket] = useState(null);
+  const [notification, setNotification] = useState([]);
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -48,6 +55,23 @@ const NavBar = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    setSocket(io("http://localhost:4000/"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("newUser", employeeNo);
+  }, [socket]);
+
+  useEffect(() => {
+    console.log("Hammmeeee");
+    socket?.on("getTaskNotification", (data) => {
+      setNotification((prev) => [...prev, data]);
+    });
+  }, [socket]);
+
+  console.log(notification);
 
   useEffect(() => {
     if (screenSize <= 900) {
@@ -78,12 +102,12 @@ const NavBar = () => {
         >
           <p style={{ display: "flex", flexDirection: "column" }}>
             <span className="text-[16px] font-bold text-black">{name}</span>
-            <span className="float-right text-sm">Site Supervisor</span>
+            <span className="float-right text-sm">{roleName}</span>
           </p>
           <MdKeyboardArrowDown className="text-gray-400 text-14" />
           <img
             className="w-10 h-10 rounded-full"
-            src={avatar}
+            src={`http://localhost:4000/employees/${photo}`}
             alt="user-profile"
           />
         </div>

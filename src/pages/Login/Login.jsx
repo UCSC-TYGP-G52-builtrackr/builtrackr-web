@@ -2,15 +2,17 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { React, useState } from "react";
 import { Validation } from "./validation";
 import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { alignProperty } from "@mui/material/styles/cssUtils";
+import { encryptData } from "../../encrypt";
+
 // import { encryptData } from "../../encrypt";
 export function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
-    type: "",
   });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -18,24 +20,23 @@ export function Login() {
     const newObj = { ...values, [event.target.name]: event.target.value };
     setValues(newObj);
   }
-  console.log(values.type);
+  const [isLoading, setIsLoading] = useState(false);
   async function handleValidation(event) {
+    console.log("Hell");
     event.preventDefault();
-    setErrors({})
+    setErrors({});
     const error = Validation(values);
-    console.log(error);
-    setErrors(error)
-    console.log(errors);
-    if (!errors) {
-      console.log(error);
+    setErrors(error);
+    if (error.email !== "" || error.password !== "") {
       return;
     } else {
-      if (values.type === "Employee") {
-        try {
-          await axios
-            .post("http://localhost:4000/api/employee/loginEmployee", values)
-            .then((res) => {
-              toast.success("Login Successfull");
+      setIsLoading(true);
+      console.log("Hello");
+      try {
+        await axios
+          .post("http://localhost:4000/api/user/auth", values)
+          .then((res) => {
+            if (res.data.type === 0) {
               localStorage.setItem(
                 "user_type",
                 // JSON.stringify(encryptData(res.data.type.toString()))
@@ -46,7 +47,30 @@ export function Login() {
               );
               localStorage.setItem(
                 "company_id",
-                // JSON.stringify(encryptData(res.data.company_id.toString()))
+                JSON.stringify(encryptData(res.data.id.toString()))
+              );
+              localStorage.setItem(
+                "home_page",
+                JSON.stringify(encryptData("admin/dashboard"))
+              );
+              localStorage.setItem(
+                "is_loged",
+                JSON.stringify(encryptData("yes"))
+              );
+              setIsLoading(false);
+              navigate("/admin/dashboard");
+            } else {
+              localStorage.setItem(
+                "user_type",
+                JSON.stringify(encryptData(res.data.type.toString()))
+              );
+              localStorage.setItem(
+                "name",
+                JSON.stringify(encryptData(res.data.name))
+              );
+              localStorage.setItem(
+                "company_id",
+                JSON.stringify(encryptData(res.data.company_id.toString()))
               );
               localStorage.setItem(
                 "no",
@@ -56,91 +80,49 @@ export function Login() {
                 "is_loged",
                 // JSON.stringify(encryptData("yes"))
               );
-
+              localStorage.setItem(
+                "role_name",
+                JSON.stringify(encryptData(res.data.role_name))
+              );
+              console.log(res.data);
+              setIsLoading(false);
               if (res.data.type === 1) {
                 localStorage.setItem(
                   "home_page",
                   // JSON.stringify(encryptData("hrmanager/user roles"))
                 );
-                setTimeout(() => {
-                  navigate("/hrmanager/user roles");
-                }, 2000);
+                navigate("/hrmanager/user roles");
               } else if (res.data.type === 2) {
                 localStorage.setItem(
                   "home_page",
                   // JSON.stringify(encryptData("/inventorymanager/Equipments"))
                 );
-                setTimeout(() => {
-                  navigate("/inventorymanager/Equipments");
-                }, 2000);
+                navigate("/inventorymanager/Equipments");
               } else if (res.data.type === 3) {
                 localStorage.setItem(
                   "home_page",
                   // JSON.stringify(encryptData("chiefEngineer/sites"))
                 );
-                setTimeout(() => {
-                  navigate("/chiefEngineer/sites");
-                }, 2000);
+                navigate("/chiefEngineer/sites");
               } else if (res.data.type === 4) {
                 localStorage.setItem(
                   "home_page",
                   // JSON.stringify(encryptData("sitemanager/dashboard"))
                 );
-                setTimeout(() => {
-                  navigate("/sitemanager/dashboard");
-                }, 2000);
+                navigate("/sitemanager/dashboard");
               } else if (res.data.type === 5) {
                 localStorage.setItem(
                   "home_page",
                   // JSON.stringify(encryptData("Supervisor/KanbanBoard"))
                 );
-                setTimeout(() => {
-                  navigate("/Supervisor/KanbanBoard");
-                }, 2000);
+                navigate("/Supervisor/KanbanBoard");
               }
-            });
-        } catch (err) {
-          console.log(err);
-          toast.error(err.response.data.error);
-        }
-
-      } else {
-        try {
-          await axios
-            .post("http://localhost:4000/api/user/auth", values)
-            .then((res) => {
-              const adminType = 0;
-              console.log(res);
-              toast.success("Login Successfull");
-              localStorage.setItem(
-                "user_type",
-                // JSON.stringify(encryptData(adminType.toString()))
-              );
-              localStorage.setItem(
-                "name",
-                // JSON.stringify(encryptData(res.data.name))
-              );
-              localStorage.setItem(
-                "company_id",
-                // JSON.stringify(encryptData(res.data.id.toString()))
-              );
-              localStorage.setItem(
-                "home_page",
-                // JSON.stringify(encryptData("Admin"))
-              );
-              localStorage.setItem(
-                "is_loged",
-                // JSON.stringify(encryptData("yes"))
-              );
-
-              setTimeout(() => {
-                navigate("/admin");
-              }, 2000);
-            });
-        } catch (err) {
-          console.log(err);
-          toast.error(err.response.data.error);
-        }
+            }
+          });
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
+        toast.error(err.response.data.error);
       }
     }
   }
@@ -180,6 +162,7 @@ export function Login() {
             >
               Log In
             </h2>
+
             <div className="form-info">
               <label>User Name</label>
               <input
@@ -206,38 +189,33 @@ export function Login() {
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
-              <label>Role</label>
-              <select
-                className="login-type-select"
-                value={values.type}
-                onChange={handleInput}
-                name="type"
-              >
-                <option className="login-option" value="" disabled>
-                  Select Login Type
-                </option>
-                <option className="login-option" value="Employee">
-                  Employee
-                </option>
-                <option className="login-option" value="Admin">
-                  Admin
-                </option>
-              </select>
-              {errors.typeErr && <p style={{ color: "red" }}>{errors.typeErr}</p>}
               <br />
               <a href="forgotPassword">Forgot Password?</a> <br />
-              <button
-                className="next_button"
-                type="submit"
-                style={{
-                  backgroundColor: "#ffcc00",
-                  marginTop: "10px",
-                  fontWeight: "700",
-                }}
-              >
-                {" "}
-                Login
-              </button>
+              {isLoading ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                <button
+                  className="next_button"
+                  type="submit"
+                  style={{
+                    backgroundColor: "#ffcc00",
+                    marginTop: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {" "}
+                  Login
+                </button>
+              )}
             </div>
           </form>
         </div>
