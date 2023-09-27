@@ -10,6 +10,10 @@ import jsPDF from "jspdf";
 import { FaRegCalendarMinus } from "react-icons/fa";
 import { ContextProvider } from "../../contexts/ContextProvider";
 import { Pie, Line, Doughnut } from "react-chartjs-2";
+import { AiOutlinePlus } from "react-icons/ai";
+import { io } from "socket.io-client";
+import { decryptData } from "../../encrypt";
+
 import {
   CircularProgress,
   CircularProgressLabel,
@@ -223,6 +227,70 @@ const SMDashboard = () => {
         console.error("Error fetching site count:", error);
       });
   }, []);
+  const [task, setTask] = useState({
+    taskName: "",
+    specialInformation: "",
+    dueDate: "",
+  });
+
+  const employeeNo = decryptData(JSON.parse(localStorage.getItem("no")));
+  const [socket, setSocket] = useState(null);
+
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
+  const [isErrorAlertOpen, setIsErrorAlertOpen] = useState(false);
+
+  useEffect(() => {
+    setSocket(io("http://localhost:4000/"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("newUser", employeeNo);
+  }, [socket]);
+
+  const AddTask = async (e) => {
+    socket.emit("sendTaskNotification", {
+      reciver: 23,
+      sender: employeeNo,
+    });
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/task/addtask",
+        {
+          taskName: task.taskName,
+          specialInformation: task.specialInformation,
+          dueDate: task.dueDate,
+        }
+      );
+
+      if (response.status === 201) {
+        setIsSuccessAlertOpen(true);
+        toast({
+          title: "Task Added.",
+          description: "Added Task Succesfully.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        setTask({
+          taskName: "",
+          specialInformation: "",
+          dueDate: "",
+        });
+
+        onclose();
+        setTimeout(() => {
+          navigate("/sitemanager/dashboard");
+        }, 2000);
+      } else {
+        setIsErrorAlertOpen(true);
+      }
+    } catch (error) {
+      setIsErrorAlertOpen(true);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -346,7 +414,7 @@ const SMDashboard = () => {
               <div className="w-1/2 flex items-center p-3 justify-center">
                 <Line options={options} data={data3} />
               </div>
-              {/* <button onClick={generatePDF}>Download as PDF</button> */}
+              
             </div>
           </div>
         </div>

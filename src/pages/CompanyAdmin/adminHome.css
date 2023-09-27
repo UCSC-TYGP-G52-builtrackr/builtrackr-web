@@ -1,4 +1,3 @@
-
 ::-webkit-scrollbar {
   width: 5px; /* width of the scrollbar */
 }
@@ -21,6 +20,8 @@
   padding: 8px;
   border: 2px solid #000;
   margin-right: 20px;
+  display: flex;
+  margin-top: 20px;
 }
 .user-role-create-from {
   width: 500px;
@@ -145,6 +146,11 @@ input ::placeholder {
   border-radius: 50%;
   border: 3px solid #000;
 }
+.user-role img:hover {
+  transition: all 0.3s ease;
+  transform: scale(0.98);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
+}
 .hr-role .link {
   cursor: pointer;
   color: #0d00ff;
@@ -177,7 +183,6 @@ input ::placeholder {
   border-radius: 5px;
   width: fit-content;
   gap: 15px;
-  margin-bottom: 20px;
 }
 .image-upload {
   cursor: pointer;
@@ -262,62 +267,34 @@ input ::placeholder {
   border: 1.5px solid #d32f2f;
 }
 
-
-.main{
+.main {
   height: 100vh;
   background-color: #fff;
-
 }
-.topic{
+.topic {
   text-align: center;
   margin-top: 10px;
 }
-.role-privileges{
+.role-privileges {
   padding: 20px;
 }
-.privileges-box{
+.privileges-box {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   height: fit-content;
 }
-.privilege{
+.privilege {
   background-color: #efefef;
   padding: 5px 12px;
   border-radius: 10px;
 }
-.employee-table{
-  margin: 10px auto;
+.employee-table {
+  margin: 20px auto;
+  padding: 0 20px;
 }
-.employee-table thead{
-  background-color: #ffcc00;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-.employee-table thead td{
-  padding: 6px 10px;
-  text-align: center;
-}
-.employee-table tbody td{
-  padding: 6px 10px;
-  text-align: center;
-}
-.employee-table tbody tr:nth-child(even){
-  background-color: #efefef;
-}
-.employee-table tbody tr {
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-.employee-table tbody tr:nth-child(odd){
-  background-color: #fff;
-}
-.employee-table tbody td button{
-  background-color: #ffcc00;
-  border-radius: 10px;
-  padding: 4px 8px;
-  font-size: 12px;
-}
-.user-privilege-form{
+
+.user-privilege-form {
   width: 400px;
   position: absolute;
   top: 250px;
@@ -328,15 +305,33 @@ input ::placeholder {
   padding: 50px;
   z-index: 999;
   background-color: #fff;
-  
+
   border-radius: 10px;
 }
-.inactive{
-  background-color: rgba(0,0,0,0.9);
+.inactive {
+  background-color: rgba(0, 0, 0, 0.9);
   /* background-color: rgba(255, 255, 255, 0.1); */
   z-index: -1;
   pointer-events: none;
 }
-.role-title{
+.role-title {
   margin-bottom: 20px;
+}
+.anlyatic-box {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  padding-left: 10px;
+}
+.loading_err {
+  position: absolute;
+  margin-left: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    
+    
 }

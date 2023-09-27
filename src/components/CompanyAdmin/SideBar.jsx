@@ -5,8 +5,9 @@ import { MdOutlineCancel } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import "../../CSS/dashboard.css";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { CiHome } from "react-icons/ci";
-import { BiSolidCreditCard } from "react-icons/bi";
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 
 
 import logo from "../../assets/images/BuilTracker.png";
@@ -14,29 +15,32 @@ import logo from "../../assets/images/BuilTracker.png";
 const links = [
   {
     title: "Dashboard",
+    links: [],
+  },
+
+  {
+    title: "Pages",
     links: [
       {
-        name: "admin",
-        icon: <CiHome />,
+        name: "Dashboard",
+        icon: <SpaceDashboardIcon />,
+      },
+      {
+        name: "UserRoles",
+        icon: <PeopleAltIcon />,
+      },
+      {
+        name: "Subscription",
+        icon: <LocalAtmIcon />,
       },
     ],
   },
-  // {
-  //   title: "Subscription",
-  //   links: [
-  //     {
-  //       name: "subscription",
-  //       icon: <BiSolidCreditCard />,
-  //     },
-  //   ],
-  // },
 ];
 
 const SideBar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
 
-    
   const navigate = useNavigate();
 
   const handleCloseSideBar = () => {
@@ -84,7 +88,7 @@ const SideBar = () => {
                 {item.links.map((link, i) => (
                   <div className="my-4">
                     <NavLink
-                      to={`/${link.name}`}
+                      to={`/admin/${link.name}`}
                       key={i}
                       onClick={handleCloseSideBar}
                       style={({ isActive }) => ({
