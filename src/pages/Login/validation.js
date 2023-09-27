@@ -1,5 +1,4 @@
 export function Validation(values) {
-  console.log(values);
   const errors = {};
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^s@]{2,6}$/;
