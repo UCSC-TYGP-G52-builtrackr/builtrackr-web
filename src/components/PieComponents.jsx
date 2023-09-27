@@ -1,15 +1,11 @@
 
 
-import React, { PureComponent } from 'react';
+import React, {useState,useEffect } from 'react';
 import { PieChart, Pie, Sector, Cell,  } from 'recharts';
-const data = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
-];
+import axios from 'axios';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const COLORS = ['#088f8f', ' #ff6347'];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
@@ -24,6 +20,51 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     );
 };
 const PieComponent = () => {
+const [taskcards, settaskCards] = useState([]);
+
+
+ //get task
+
+useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/card/viewTaskname');
+         // Replace with your API endpoint to fetch card data
+
+        if (response.status === 200) {
+            settaskCards(response.data);
+        }
+
+      } catch (error) {
+        console.error("Error fetching card data:", error);
+      }
+    };
+ fetchCards();
+  }, []);
+
+  const calculatePercent = () => {
+
+    const filterCardTask =taskcards.filter((card) => card.completed === 1)
+    if (!filterCardTask.length) return 0;
+    const completed = filterCardTask.length;
+    const totalTasks = taskcards.length;
+    return (completed / totalTasks) * 100;
+  };
+
+const filterCardTask =taskcards.filter((card) => card.completed === 1)
+const persent = calculatePercent();
+console.log(persent);
+const perecentage  = 100-persent
+console.log(perecentage);
+
+const data = [
+    { name: 'Ongoing', value: perecentage},
+    { name: 'Completed', value: persent },
+
+];
+
+
+
     return (
         <div>
      
@@ -60,14 +101,11 @@ const PieComponent = () => {
 
                   </div>
                          ))
-  
+
                     }
-                  
+
 
                 </div>
-                
-                
-        
 
         </div>
     )

@@ -37,7 +37,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  font-size: 12px;
+  font-size: 8px;
   line-height: 6px;
 
 }
@@ -45,7 +45,7 @@
 .card_top_labels  label {
  height: 16px;
  border-radius: 20px;
- padding: 4px 8px 0px 10px;
+ padding: 4px 8px 0px 20px;
  background-color: gray;
  color: #fff;
  width: fit-content;
