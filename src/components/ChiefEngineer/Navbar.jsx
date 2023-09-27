@@ -33,6 +33,7 @@ const Navbar = () => {
   const storedEmployeeNo = localStorage.getItem("no");
   const decryptedNo = decryptData(JSON.parse(storedEmployeeNo));
   const employeeNo = parseInt(decryptedNo, 10);
+  const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -181,8 +182,7 @@ const Navbar = () => {
           <MdKeyboardArrowDown className="text-gray-400 text-14" />
           <img
             className="w-10 h-10 rounded-full"
-            // src={avatar}
-            src={`http://localhost:4000/employees/${navbarDetails.length > 0 ? navbarDetails[0].photo_path : ''}`}
+            src={`http://localhost:4000/employees/${photo}`}
             alt="user-profile"
           />
         </div>
