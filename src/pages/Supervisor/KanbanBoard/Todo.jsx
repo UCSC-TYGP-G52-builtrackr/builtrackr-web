@@ -43,7 +43,7 @@ export const Todo = (props) =>{
      fetchCards();
       }, []);
 
-      console.log(cards);
+
   return (
     
     <>
@@ -103,8 +103,8 @@ export const Todo = (props) =>{
 
 {cards.map((item) => (
           <TodoCard
-            key={item.task_id}
-            card={[item.task_id ,item.taskname]}
+            key={item.id}
+            card={[item.id ,item.f_name]}
             removeCard={props.removeCard}
             boardId={props.board?.task_id}
             dragEnded={props.dragEnded}

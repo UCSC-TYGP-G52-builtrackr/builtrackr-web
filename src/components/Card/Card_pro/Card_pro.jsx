@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { Button} from '@chakra-ui/react';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -73,6 +74,8 @@ const rows = labourArray.map((labour) => {
     id: labour.id,
     fullName: labour.name,
     Category: labour.Category,
+    available: labour.available,
+    Release: `<button onclick="releaseLabour(${labour.id})">Release</button>`,
 
   }});
 
@@ -82,8 +85,17 @@ const rows = labourArray.map((labour) => {
       id: equipment.id,
       Category: equipment.name,
       Number: equipment.id,
+      Release: <button onclick={releaseEquipment(`${equipment.id}`)}>Release</button>,
 
     }});
+    
+    function releaseLabour(labourId) {
+      // Implement the logic to release the labor with the given `labourId`.
+    }
+    
+    function releaseEquipment(equipmentId) {
+      // Implement the logic to release the equipment with the given `equipmentId`.
+    }
 
 
 
@@ -108,8 +120,7 @@ return(
 );
 }
 
-const equipmetArray=[ 'Drills', 'Concreate Mixture' , 'Spirit Level'];
-const equipmentCounts = [10, 2, 8];
+
 const columns: GridColDef[] = [
 
   {
@@ -117,14 +128,59 @@ const columns: GridColDef[] = [
     headerName: 'Full name',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
-    width: 160,
+    width: 150,
   },
   {
     field: 'Category',
     headerName: 'Category',
-    width: 90,
+    width: 120,
+  },
+  {
+    field: 'available',
+    headerName: 'Available',
+    type: 'number',
+    width: 120,
+  },
+  {
+    field: 'Release',
+    headerName: 'Release',
+    width: 150,
+    renderCell: (params) => (
+      <Button 
+      colorScheme="blue"
+            style={{
+              backgroundColor: "#ffcc00",
+              border: "none",
+              color: "black",
+              padding: "5px 10px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              cursor: "pointer",
+              transition: "background-color 0.3s, box-shadow 0.3s",
+              marginLeft: "8%",
+              marginTop: "5%",
+            }}
+      
+      onClick={() => handleRelease(params.row.id)}>Release</Button>
+    ),
   },
 ];
+
+const CustomDataGrid = ({ rows }) => {};
+  const handleRelease = (itemId) => {
+    console.log(itemId);
+    const data  = {itemId}
+    axios
+    .post(`http://localhost:4000/api/labour/updateemployee`,data)
+    .then(() => {
+      console.log("success");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 
 const column: GridColDef[] = [
 
@@ -141,7 +197,44 @@ const column: GridColDef[] = [
     type: 'number',
     width: 90,
   },
+  {
+    field: 'Release',
+    headerName: 'Release',
+    width: 150,
+    renderCell: (params) => (
+      <Button 
+      colorScheme="blue"
+            style={{
+              backgroundColor: "#ffcc00",
+              border: "none",
+              color: "black",
+              padding: "5px 10px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              cursor: "pointer",
+              transition: "background-color 0.3s, box-shadow 0.3s",
+              marginLeft: "8%",
+              marginTop: "5%",
+            }}
+      
+      onClick={() => handleReleaseEquipment(params.row.id)}>Release</Button>
+    ),
+  },
 ];
+
+const handleReleaseEquipment = (itemId) => {
+  console.log(itemId);
+  const data  = {itemId}
+  axios
+  .post(`http://localhost:4000/api/equipment//updateEquipmentAvailable`,data)
+  .then(() => {
+    console.log("success");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
 
 
 
@@ -153,7 +246,7 @@ const column: GridColDef[] = [
   aria-labelledby="parent-modal-title"
   aria-describedby="parent-modal-description"
 >
-  <Box sx={{ ...style, width: 600 }}>
+  <Box sx={{ ...style, width: 750 }}>
     <h2 class = "text-2xl font-extrabold dark:text-black" style  ={{marginTop:"-18%"}}>{modalContent?.title}</h2><br/>
    {modalContent?.title === "Workers of the day" && (
     <div style={{ height: 300, width: '100%' }}>

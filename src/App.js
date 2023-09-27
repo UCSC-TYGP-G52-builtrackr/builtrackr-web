@@ -22,7 +22,6 @@ import PaymentPlan from "./pages/SignUp/PaymentPlan";
 import Sites from "./pages/chiefEngineer/Sites";
 import { Board } from "./pages/Supervisor/KanbanBoard/Board";
 import { Drop } from "./components/DropDown/Drop";
-import { Test } from "./components/Comment/test";
 import { DashboardW } from "./pages/Warehouse/DashboardW";
 import ItemList from "./pages/Warehouse/ItemList";
 import { Material } from "./pages/Warehouse/Material";
@@ -39,6 +38,8 @@ import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
 import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
+import ImageUpload from "./pages/Supervisor/imageUpload";
+
 
 
 function App() {
@@ -69,13 +70,15 @@ function App() {
       <Route path  = "/Supervisor/KanbanBoard/Leaves" element = {<LeaveForm /> } />
       <Route path="/Supervisor/Analytics" element={<Analytics />} />
       <Route path="/Supervisor/Documents" element={<FileUpload />} />
+      <Route path="/Supervisor/imageUpload" element={<ImageUpload />} />
+
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route path="/paymentplan" element={<PaymentPlan />} />
+        {/* <Route path="/paymentplan" element={<PaymentPlan />} /> */}
         <Route path="*" element={<Home />} />
 
         {/* Compnay Admin  */}
@@ -123,7 +126,7 @@ function App() {
           {/* <Route path="/Supervisor/KanbanBoard" element={<Board />} /> */}
 
           <Route path="/dropdown" element={<Drop />} />
-          <Route path="/test" element={<Test />} />
+          
 
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/tasks" element={<Sites />} />

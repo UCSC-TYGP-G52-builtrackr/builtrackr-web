@@ -10,7 +10,7 @@ export const DropE = () => {
   useEffect(() => {
     const fetchSelect = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/drop/dropdownE');
+        const response = await axios.get('http://localhost:4000/api/drop/dropdownE');
         // Replace with your API endpoint to fetch card data
 
         if (response.status === 200) {
