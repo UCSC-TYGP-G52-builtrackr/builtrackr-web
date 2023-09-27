@@ -117,8 +117,6 @@ const Sites = () => {
         setSiteClient('');
         setSiteAddr('');
       }
-      
-      
     }
 
   useEffect(() => {

@@ -3,36 +3,230 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
 import axios from "axios";
+
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+import { FaRegCalendarMinus } from "react-icons/fa";
+import { ContextProvider } from "../../contexts/ContextProvider";
+import { Pie, Line, Doughnut } from "react-chartjs-2";
 import { AiOutlinePlus } from "react-icons/ai";
 import { io } from "socket.io-client";
 import { decryptData } from "../../encrypt";
 
 import {
+  CircularProgress,
+  CircularProgressLabel,
   Box,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Alert,
-  AlertIcon,
   useToast,
-  ModalCloseButton,
   ChakraProvider,
+  Table,
+  TableCaption,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
   Grid,
   Image,
   Text,
 } from "@chakra-ui/react";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+} from "chart.js";
 
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import BrokenImageIcon from "@mui/icons-material/BrokenImage";
-import { FaRegCalendarMinus } from "react-icons/fa";
-import { ContextProvider } from "../../contexts/ContextProvider";
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend
+);
 
 const SMDashboard = () => {
+  const [taskData, setTaskData] = useState([]);
+  const [completion, setCompletion] = useState(0);
+  const [siteCount, setSiteCount] = useState(0);
+  const [taskCount, setTaskCount] = useState(0);
+  const [leaveCount, setLeaveCount] = useState(0);
+  const [data1, setData1] = useState(null);
+  const [llcount, setLLCount] = useState(0);
+  const [laborData, setLabourData] = useState([]);
+
+  // const [data3, setData3] = useState(null);
+
+  const generatePDF = () => {
+    const input = document.body; // Capture the entire page
+    const pdf = new jsPDF("p", "px", "a4");
+
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "PNG", 0, 0);
+      pdf.save("page.pdf");
+    });
+  };
+
+  const DetailBox = ({ title, value, borderColor, onClick }) => {
+    // Define styles for the container
+    const boxStyles = {
+      width: "200px",
+      height: "200px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "2rem",
+      border: `2px solid ${borderColor}`, // Border color is passed as a prop
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "1rem",
+      borderRadius: "10px",
+      boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+      transition: "border-color 0.5s", // Smooth color transition for the border
+      cursor: "pointer", // Add a pointer cursor for interaction
+    };
+
+    // Define styles for the title and value
+    const titleStyles = {
+      fontSize: "24px",
+      fontWeight: "bold",
+    };
+
+    const valueStyles = {
+      fontSize: "48px",
+      fontWeight: "bold",
+    };
+
+    return (
+      <div
+        style={boxStyles}
+        onClick={onClick} // Handle the click event
+      >
+        <h1 style={valueStyles}>{value}</h1>
+        <h2 style={titleStyles}>{title}</h2>
+      </div>
+    );
+  };
+
+  // Array of background colors
+  const borderColors = ["#4169e1", "#fbec5d", "red", "lightgreen"];
+
+  // State to track the current border color index
+  const [currentColorIndex, setCurrentColorIndex] = useState(0);
+
+  // Function to handle border color change
+  const handleBorderColorChange = () => {
+    // Cycle through the borderColor array
+    setCurrentColorIndex((prevIndex) => (prevIndex + 1) % borderColors.length);
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Chart.js Line Chart",
+      },
+    },
+  };
+
+  const labels = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+  ];
+
+ 
+  const data3 = {
+    labels,
+    datasets: [
+      {
+        label: "Approved",
+        data: [300, 50, 100, 200, 500, 250, 400],
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+      {
+        label: "Rejected",
+        data: [100, 200, 150, 50, 200, 100, 300],
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+    ],
+  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/labor/data")
+      .then((response) => {
+        setLabourData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/task/completion")
+      .then((response) => {
+        console.log(response.data.count);
+        setCompletion(response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching task completion:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/labourleave/leavecount")
+      .then((response) => {
+        setLLCount(response.data.count);
+        console.log("countl", response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching leave count:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/labourleave/leavedata") // Replace with your actual backend API endpoint for leave count
+      .then((response) => {
+        // Assuming your API response contains the leave count
+        setLeaveCount(response.data.count);
+        console.log("count", response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching leave count:", error);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/sitemanager/countsites")
+      .then((response) => {
+        setSiteCount(response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching site count:", error);
+      });
+  }, []);
   const [task, setTask] = useState({
     taskName: "",
     specialInformation: "",
@@ -98,9 +292,58 @@ const SMDashboard = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setTask({ ...task, [e.target.name]: e.target.value });
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/task/taskcount")
+      .then((response) => {
+        setTaskCount(response.data.count);
+        console.log(response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching task count:", error);
+      });
+  }, []);
+
+  const data = {
+    labels: ["Completed", "Pending"],
+    datasets: [
+      {
+        label: "Task Dataset",
+        data: [ taskCount - completion,taskCount], // Removed .toString()
+        backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
+       
+        borderColor: [ "rgb(75, 192, 192)","rgb(255, 99, 132)"],
+        borderWidth: 1,
+      },
+    ],
   };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/task/taskcount")
+      .then((response) => {
+        setTaskCount(response.data.count);
+        console.log(response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching task count:", error);
+      });
+  }, []);
+
+  const data2 = {
+    labels: ["Completed", "Pending"],
+    datasets: [
+      {
+        label: "Task Dataset",
+        data: [taskCount - completion,taskCount], // Removed .toString()
+        backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
+       
+        borderColor: [ "rgb(75, 192, 192)","rgb(255, 99, 132)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+  
   function getCurrentDate() {
     const now = new Date();
     const year = now.getFullYear();
@@ -115,140 +358,124 @@ const SMDashboard = () => {
     return `${year}-${month}-${day}`;
   }
 
+  
   return (
     <>
       <ChakraProvider>
         <Navbar />
         <div className="flex">
+          {/* {taskData.length > 0 ? (
+              <Doughnut data={data} />
+            ) : (
+              <p>Loading data...</p>
+            )} */}
           <Sidebar />
-          <div className="flex ml-[300px] w-full items-center justify-center h-full p-2 mt-[80px]">
-            <div className="mt-2 flex flex-col w-full h-full justify-start items-center">
-              <div className="flex w-full justify-around my-8">
-                <div className="border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#B589DF] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out">
-                  <div>
-                    <h2 className="text-[#B589DF] text-sm font-bold">
-                      Current Site Count
-                      <br />
-                    </h2>
-                    <h1 className="text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]">
-                      4
-                    </h1>
-                  </div>
-                  <FaRegCalendarMinus fontSize={28} color="" />
-                </div>
-                <div className="border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#1CC88A] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out">
-                  <div>
-                    <h2 className="text-[#1cc88a] text-sm font-bold">
-                      Current Task Count <br />
-                    </h2>
-                    <h1 className="text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]">
-                      4.2
-                    </h1>
-                  </div>
-                  <div className="text-4xl">
-                    <AttachMoneyIcon fontSize="inherit" />
-                  </div>
-                </div>
-                <div className="border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#36B9CC] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out">
-                  <div>
-                    <h2 className="text-[#36B9CC] text-sm font-bold">
-                      Safety Incident <br />
-                      Rate
-                    </h2>
-                    <h1 className="text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]">
-                      11%
-                    </h1>
-                  </div>
-                  <div className="text-4xl">
-                    <EngineeringIcon fontSize="inherit" />
-                  </div>
-                </div>
-                <div className="border-t-1 border-r-1 border-b-1 h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#F6C23E] flex items-center justify-between px-[10px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out">
-                  <div>
-                    <h2 className="text-[#F6C23E] text-sm font-bold">
-                      Defects Per <br />
-                      Unit
-                    </h2>
-                    <h1 className="text-[20px] leading-[24px] font-bold text-[#5a5c69] mt-[5px]">
-                      2
-                    </h1>
-                  </div>
-                  <div className="text-4xl">
-                    <BrokenImageIcon fontSize="inherit" />
-                  </div>
-                </div>
-              </div>
-              <div className="text-2xl font-bold mb-2 mt-10"> Add a Task </div>
-              <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
-                <div class="mb-4">
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
-                  >
-                    Task Name
-                  </label>
-                  <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="taskName"
-                    id="username"
-                    type="text"
-                    placeholder="Task Name"
-                    value={task.taskName}
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div class="mb-4">
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
-                  >
-                    Special Information
-                  </label>
-                  <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
-                    type="text"
-                    placeholder="Info"
-                    name="specialInformation"
-                    value={task.specialInformation}
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div class="mb-4">
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
-                  >
-                    Due Date
-                  </label>
-                  <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
-                    type="date"
-                    placeholder="Due Date"
-                    name="dueDate"
-                    value={task.dueDate}
-                    min={getCurrentDate()}
-                    onChange={(e) => handleChange(e)}
-                  />
+          <div className="flex flex-col w-full items-center justify-center ml-[400px]">
+            <div className="flex w-full items-center justify-evenly p-5 mt-16 mx-4">
+              <DetailBox
+                backgroundColor={borderColors[0]}
+                borderColor="green"
+                onClick={handleBorderColorChange}
+                title="Site Count"
+                value={siteCount.toString()}
+              />
+              <DetailBox
+                title="Total Tasks"
+                borderColor="orange"
+                value={taskCount.toString()}
+                backgroundColor={borderColors[0]}
+                onClick={handleBorderColorChange}
+              />
 
-                  <div className="flex items-center justify-center">
-                    <button
-                      className="text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-10"
-                      style={{ backgroundColor: "#FFCC00", display: "flex" }}
-                      type="button"
-                      onClick={(e) => AddTask(e)}
-                    >
-                      Add Task
-                      <AiOutlinePlus
-                        style={{ marginTop: "4px", marginLeft: "10px" }}
-                      />
-                    </button>
+              <DetailBox
+                title="Completed Tasks"
+                value={completion}
+                borderColor="blue"
+                backgroundColor={borderColors[0]}
+                onClick={handleBorderColorChange}
+              />
+              <DetailBox
+                title="Number of Leaves"
+                value={llcount.toString()}
+                backgroundColor={borderColors[0]}
+                borderColor="red"
+                onClick={handleBorderColorChange}
+              />
+            </div>
+            <div className="flex w-full gap-2 items-center justify-evenly">
+              <div className="w-1/2 flex items-center justify-center mt-4">
+                <div className="flex gap-4 flex-col w-2/5 items-center justify-center  mt-6">
+                  <h1 className="text-2xl font-bold">Site Havelock</h1>
+                  <div className="w-80 h-80">
+                    {" "}
+                    {/* Adjust the width and height as needed */}
+                    <Doughnut data={data} options={options} />
                   </div>
                 </div>
-              </form>
+                <div className="flex gap-4 flex-col w-2/5 items-center justify-center ml-10 mt-6 ">
+                  <h1 className="text-2xl font-bold">Site Kumbuka</h1>
+                  <div className="w-80 h-80">
+                    {" "}
+                    {/* Adjust the width and height as needed */}
+                    <Doughnut data={data2} options={options} />
+                  </div>
+                </div>
+                {/* <div className="flex gap-2 flex-col w-2/5 items-center justify-center">
+                  <h1 className="text-2xl font-bold">Site 2</h1>
+                  <Pie data={data2} className="w-1/2" />
+                </div> */}
+              </div>
+              <div className="w-1/2 flex items-center p-3 justify-center">
+                <Line options={options} data={data3} />
+              </div>
+              
             </div>
           </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Grid
+            templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+            gap={4}
+            style={{ width: "70%", marginLeft: "25%", marginTop: "5%" }}
+          >
+            <Table variant="simple" size="lg">
+              <TableCaption placement="top">
+                <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
+                  Site Labour Details
+                </Text>
+              </TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Labor Name</Th>
+                  <Th>Labor Type</Th>
+                  <Th>Site Name</Th>
+                  <Th>Emergency Contact</Th>
+                  <Th>Leave Status</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {laborData.map((row) => (
+                  <Tr key={row.labor_id}>
+                    <Td>{row.labourname}</Td>
+                    <Td>{row.labourtype}</Td>
+                    <Td>{row.site_id}</Td>
+                    <Td>{row.site_id}</Td>
+                    <Td>{row.site_id}</Td>
+
+                    <Td>
+                      <Button
+                        colorScheme="green"
+                        // Disable the button if status is approved
+                        w="120px"
+                      >
+                        View
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Grid>
         </div>
       </ChakraProvider>
     </>

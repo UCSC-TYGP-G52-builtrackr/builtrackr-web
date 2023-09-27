@@ -16,7 +16,7 @@ import SMDocuments from "./pages/SiteManager/Documents";
 import ForgotPassword from "./pages/Login/Forgotpassword";
 import ResetPassword from "./pages/Login/ResetPassword";
 import Task from "./pages/SiteManager/Task";
-// import Analytics from "./pages/SiteManager/Analytics";
+
 import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
@@ -24,7 +24,6 @@ import PaymentPlan from "./pages/SignUp/PaymentPlan";
 import Sites from "./pages/chiefEngineer/Sites";
 import { Board } from "./pages/Supervisor/KanbanBoard/Board";
 import { Drop } from "./components/DropDown/Drop";
-import { Test } from "./components/Comment/test";
 import { DashboardW } from "./pages/Warehouse/DashboardW";
 import ItemList from "./pages/Warehouse/ItemList";
 import { Material } from "./pages/Warehouse/Material";
@@ -42,6 +41,13 @@ import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 import SitesCommon from './pages/chiefEngineer/SitesCommon'
 import Warehouses from './pages/chiefEngineer/Warehouses'
 import OneWarehouse from "./pages/chiefEngineer/OneWarehouse";
+import LaborLeaveTable from "./pages/SiteManager/Leaves";
+import Payment from "./pages/Payment/Payment";
+import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
+import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
+import ImageUpload from "./pages/Supervisor/imageUpload";
+
+
 
 function App() {
   const {
@@ -67,14 +73,21 @@ function App() {
     <div className="App">
       <Routes>
       <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
+      <Route path  = "/Supervisor/KanbanBoard/RequestForm" element = {<RequestForm /> } />
+      <Route path  = "/Supervisor/KanbanBoard/Leaves" element = {<LeaveForm /> } />
+      <Route path="/Supervisor/Analytics" element={<Analytics />} />
+      <Route path="/Supervisor/Documents" element={<FileUpload />} />
+      <Route path="/Supervisor/imageUpload" element={<ImageUpload />} />
+
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route path="/paymentplan" element={<PaymentPlan />} />
+        {/* <Route path="/paymentplan" element={<PaymentPlan />} /> */}
         <Route path="*" element={<Home />} />
+        <Route path="/paycheckout" element={<Payment />} />
 
         {/* Compnay Admin  */}
         <Route element={<ProtectedRoutes type={0} />}>
@@ -118,15 +131,16 @@ function App() {
           <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />
           <Route path="/sitemanager/documents" element={<SMDocuments />} />
           <Route path="/sitemanager/sites" element={<SiteDashboard />} />
-          <Route path="/sitemanager/analytics" element={<Analytics />} />
+        
+          <Route path="/sitemanager/labourleaves" element={<LaborLeaveTable />} />
         </Route>
 
         {/* Site Supervisor */}
         <Route element={<ProtectedRoutes type={5} />}>
-          <Route path="/Supervisor/KanbanBoard" element={<Board />} />
+          {/* <Route path="/Supervisor/KanbanBoard" element={<Board />} /> */}
 
           <Route path="/dropdown" element={<Drop />} />
-          <Route path="/test" element={<Test />} />
+          
 
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/tasks" element={<Sites />} />
@@ -135,7 +149,7 @@ function App() {
           <Route path="/Materials" element={<Material />} />
           <Route path="/Materials/List" element={<ItemList />} />
           <Route path="/Supervisor/Documents" element={<SMDocuments />} />
-          <Route path="/Supervisor/Analytics" element={<Analytics />} />
+          
         </Route>
       </Routes>
     </div>
