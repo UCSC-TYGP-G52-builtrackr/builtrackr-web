@@ -32,6 +32,8 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 // import FormSignup from '../components/formSignup';
 import { TextField, Container, Stack } from '@mui/material';
+import { decryptData } from '../../encrypt'
+
 
 const style = {
   position: 'absolute',
@@ -40,6 +42,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
+  borderRadius: "10px",
   // border: '2px solid #000',
   boxShadow: 24,
   p: 4,
@@ -48,6 +51,7 @@ const style = {
 const Sites = () => {
 
   const [siteData, setSiteData] = useState([]);
+  const [customerData, setCustomerData] = useState([]);
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
   const editing = { allowDeleting: true, allowEditing: true };
@@ -56,12 +60,28 @@ const Sites = () => {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const handleClose = () => setOpen(false);
+
+  const storedCompId = localStorage.getItem("company_id");
+  const decryptedValue = decryptData(JSON.parse(storedCompId));
+  const companyID = parseInt(decryptedValue, 10);
+  console.log("company's ID: ", companyID);
 
   const [siteType, setSiteType] = useState('');
   const [siteClient, setSiteClient] = useState('');
   const [siteName, setSiteName] = useState('');
   const [siteDesc, setSiteDesc] = useState('');
+  const [siteAddr, setSiteAddr] = useState('');
+
+  const handleClose = () => {
+    setOpen(false);
+    // Reset the form values when the form is closed
+    setSiteName('');
+    setSiteDesc('');
+    setSiteType('');
+    setSiteClient('');
+    setSiteAddr('');
+  };
  
   async function handleSubmit(e) {
       e.preventDefault();
@@ -72,6 +92,8 @@ const Sites = () => {
         siteClient: siteClient,
         siteName: siteName,
         siteDesc: siteDesc,
+        siteAddr: siteAddr,
+        companyID: companyID,
       };
 
       const data = await fetch(
@@ -93,12 +115,18 @@ const Sites = () => {
         setSiteDesc('');
         setSiteType('');
         setSiteClient('');
+        setSiteAddr('');
       }
     }
 
   useEffect(() => {
     const viewSitesAll = async () => {
       try {
+
+        const formData = {
+          companyID: companyID,
+        };
+
         const data = await fetch(
           "http://localhost:4000/api/site/getSites",
           {
@@ -106,6 +134,7 @@ const Sites = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            body: JSON.stringify(formData),
           }
         );
         if (data.status === 200) {
@@ -121,6 +150,34 @@ const Sites = () => {
     };
     viewSitesAll();
   }, [open]);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/site/getCustomers",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          console.log(jsonData);
+          setCustomerData(jsonData);
+        } else {
+          console.log(data.status);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    fetchCustomers();
+  }, []);
+
+  
 
 
   return (
@@ -139,7 +196,7 @@ const Sites = () => {
         <SidebarCE />
       </div>
       <div className='ml-72'>
-            <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
+            <div className="">
               <Navbar />
             </div>
             {themeSettings && (<ChatSpace />)}
@@ -187,17 +244,18 @@ const Sites = () => {
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
                     open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                      backdrop: {
-                        timeout: 500,
-                      },
-                    }}
+                    // onClose={handleClose}
+                    // closeAfterTransition
+                    disableBackdropClick
+                    // slots={{ backdrop: Backdrop }}
+                    // slotProps={{
+                    //   backdrop: {
+                    //     timeout: 500,
+                    //   },
+                    // }}
                   >
                     <Fade in={open}>
-                      <Box sx={style}>
+                      <Box sx={style} style={{ width: "500px" }}>
                         {/* <Typography id="transition-modal-title" variant="h6" component="h2">
                           Text in a modal
                         </Typography>
@@ -205,10 +263,10 @@ const Sites = () => {
                           Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
                         </Typography> */}
                         
-                        <h2>Create New Site</h2>
+                        <h2 className='text-lg font-bold text-center'>Create New Site</h2>
                         
                         <form onSubmit={handleSubmit} className='mt-5'>
-                            <Stack spacing={2} direction="row" sx={{marginBottom: 4}}>
+                            <Stack spacing={1} direction="row" sx={{marginBottom: 1}}>
                                 <TextField
                                     type="text"
                                     variant='outlined'
@@ -219,18 +277,17 @@ const Sites = () => {
                                     fullWidth
                                     required
                                 />
-                                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                                <FormControl sx={{ m: 1, minWidth: 200 }}>
                                   <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
                                   <Select
                                     labelId="demo-simple-select-autowidth-label"
                                     id="demo-simple-select-autowidth"
                                     value={siteType}
                                     onChange={(e) => setSiteType(e.target.value)}
-                                    autoWidth
+                                    fullWidth
                                     required
                                     label="siteType"
-                                  >
-                                    
+                                  >  
                                     <MenuItem value='Residential'>Residential</MenuItem>
                                     <MenuItem value='Industrial'>Industrial</MenuItem>
                                     <MenuItem value='Commercial'>Commercial</MenuItem>
@@ -239,8 +296,8 @@ const Sites = () => {
                               </FormControl>
                             </Stack>
                             
-                              <FormControl sx={{ width: '100%', mb: 4 }}>
-                                  <InputLabel id="demo-simple-select-autowidth-label">Site Client</InputLabel>
+                              <FormControl sx={{ width: '100%', mb: 1 }}>
+                                  <InputLabel id="demo-simple-select-autowidth-label">Site Customer</InputLabel>
                                   <Select
                                     labelId="demo-simple-select-autowidth-label"
                                     id="demo-simple-select-autowidth"
@@ -253,12 +310,36 @@ const Sites = () => {
                                     <MenuItem value="">
                                       <em>None</em>
                                     </MenuItem>
-                                    <MenuItem value='Andros'>Andros</MenuItem>
+                                    {/* <MenuItem value='Andros'>Andros</MenuItem>
                                     <MenuItem value='Pedro'>Pedro</MenuItem>
-                                    <MenuItem value='Murphy'>Murphy</MenuItem>
+                                    <MenuItem value='Murphy'>Murphy</MenuItem> */}
+                                    {customerData.map((customer) => (
+                                      <MenuItem key={customer.cust_id} value={customer.cust_id}>
+                                        {customer.cust_name}
+                                      </MenuItem>
+                                    ))}
                                   </Select>
                               </FormControl>
-                            
+                              <TextField
+                                multiline
+                                variant='outlined'
+                                color='secondary'
+                                label="Address"
+                                onChange={(e) => setSiteAddr(e.target.value)}
+                                value={siteAddr}
+                                fullWidth
+                                sx={{mb: 1}}
+                              />
+                              {/* <TextField
+                                multiline
+                                variant='outlined'
+                                color='secondary'
+                                label="Address Line 2"
+                                onChange={(e) => setSiteDesc(e.target.value)}
+                                value={siteDesc}
+                                fullWidth
+                                sx={{mb: 1}}
+                              /> */}
                             <TextField
                                 multiline
                                 variant='outlined'
@@ -270,7 +351,20 @@ const Sites = () => {
                                 rows={4}
                                 sx={{mb: 4}}
                             />
-                            <Button variant="outlined" color="secondary" type="submit">Create</Button>
+                            <div className='flex justify-between'>
+                            <Button size="small" onClick={handleClose} sx={{ color: 'red', backgroundColor: 'white', borderColor: 'red',':hover': {
+                              backgroundColor: 'red',
+                              color: 'white',
+                              borderColor: 'red'
+                              }}}>Cancel</Button>
+                              
+                              <Button size="small" type="submit" sx={{ color: 'green', backgroundColor: 'white', borderColor: 'green',':hover': {
+                              backgroundColor: 'green',
+                              color: 'white',
+                              borderColor: 'green'
+                              }}}>Create</Button>
+                              </div>
+                            {/* <Button variant="outlined" color="secondary" type="submit">Create</Button> */}
                         </form>
                         {/* <small>Already have an account? <Link to="/login">Login Here</Link></small> */}
                 

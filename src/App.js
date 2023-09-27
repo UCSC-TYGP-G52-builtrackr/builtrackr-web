@@ -38,6 +38,9 @@ import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
+import SitesCommon from './pages/chiefEngineer/SitesCommon'
+import Warehouses from './pages/chiefEngineer/Warehouses'
+import OneWarehouse from "./pages/chiefEngineer/OneWarehouse";
 import LaborLeaveTable from "./pages/SiteManager/Leaves";
 import Payment from "./pages/Payment/Payment";
 import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
@@ -92,6 +95,7 @@ function App() {
           <Route path="/admin/userRoles" element={<AdminUserRole />} />
           <Route path="/admin/Subscription" element={<Subscription/>}/>
         </Route>
+        {/* <Route path="/admin" element={<AdminHome />} /> */}
         {/* HR Manager */}
         <Route element={<ProtectedRoutes type={1} />}></Route>
         <Route path="/hrmanager/user roles" element={<Users />} />
@@ -113,11 +117,13 @@ function App() {
         <Route element={<ProtectedRoutes type={3} />}>
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
-          {/* <Route path="/chiefEngineer/analytics" element={<Analytics />} /> */}
           <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
+          <Route path="/chiefEngineer/warehouses/:id" element={<OneWarehouse />} />
           <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
           <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
+          <Route path="/chiefEngineer/warehouses" element={<Warehouses/>}/>
         </Route>
+
         {/* Site Manager */}
         <Route element={<ProtectedRoutes type={4} />}>
           <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
