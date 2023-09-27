@@ -1,9 +1,9 @@
-import Navbar from "../../components/SiteManager/Navbar";
+
 
 const ResetPassword = () => {
   return (
     <>
-      <Navbar />
+ 
 
       <div class="min-h-screen flex items-start justify-center bg-gray-100">
         <div class="max-w-md w-full px-6 py-8 mt-10 bg-white shadow-md">

@@ -25,7 +25,7 @@ const SiteCard = ({ site, imagePath }) => {
         <Image src={imagePath} alt="Site Image" h="150px" objectFit="cover" />
         <CardBody>
           <Text fontSize="xl" fontWeight="bold">
-            {site.name}
+            {site.sitename}
           </Text>
         </CardBody>
       </Card>

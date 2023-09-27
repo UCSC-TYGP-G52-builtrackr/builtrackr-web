@@ -1,5 +1,9 @@
 import React from 'react';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import IconButton from '@mui/material/IconButton';
+
 import { useParams } from 'react-router-dom';
 import { SiteData } from '../../data/SiteData';
 import { SiteManagers } from '../../data/SiteManagers';
@@ -17,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import { useState, useEffect } from "react";
 // import '../../App.css';
-import PopoverCE from '../../components/PopoverCE';
+import PopoverCE from '../../components/ChiefEngineer/PopoverCE';
 import SidebarCE from '../../components/ChiefEngineer/SidebarCE';
 
 const OneSite = () => {
@@ -36,7 +40,9 @@ const OneSite = () => {
   //   { id: 3, name: 'Days Spent', value: '16' },
   // ]
 
+  //go back to sites
   
+
 
   useEffect(() => {
     const fetchSiteData = async () => {
@@ -113,19 +119,19 @@ const OneSite = () => {
                   <div className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
                       <dt className="text-base leading-7 text-gray-600">Laborers At Work</dt>
                       <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        11
+                        0
                       </dd>
                     </div>
                     <div className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
                       <dt className="text-base leading-7 text-gray-600">Tasks To Complete</dt>
                       <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        5
+                        0
                       </dd>
                     </div>
                     <div className="flex flex-col items-center justify-center w-48 h-48 max-w-xs mx-auto bg-slate-50 gap-y-4">
                       <dt className="text-base leading-7 text-gray-600">Days Spent</dt>
                       <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        16
+                        0
                       </dd>
                     </div>
                 </dl>
@@ -133,7 +139,7 @@ const OneSite = () => {
               
               <div className="flex min-w-0 mt-8 gap-x-4">
                 <p className="mt-2 text-lg font-semibold leading-10 text-gray-900">Site Manager</p>
-                <PopoverCE/>
+                <PopoverCE siteId={id}/>
               </div>
 
               <div className='mt-5 text-start'>

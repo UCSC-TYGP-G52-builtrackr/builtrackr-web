@@ -1,5 +1,8 @@
 export function Validation(values) {
-  const errors = {};
+  const errors = {
+    email: "",
+    password: "",
+  };
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^s@]{2,6}$/;
 
@@ -15,17 +18,7 @@ export function Validation(values) {
   } else if (passwordPattern.test(values.password)) {
     errors.password = "Password is not in format";
   }
-  if (
-    values.regNo === "" ||
-    values.companyName === "" ||
-    values.line1 === "" ||
-    values.contactNo === ""
-    
-  ) {
-    errors.input = "Field is required";
-  }
-  if(values.type === ""){
-    errors.typeErr = "Select login type"
-  }
+
+  console.log(errors);
   return errors;
 }

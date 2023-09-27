@@ -8,10 +8,11 @@ import { AiOutlinePlus } from "react-icons/ai";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Buttons from "../../components/CompanyAdmin/Buttons";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
+import { decryptData } from "../../encrypt";
 
 const AdminDashboard = () => {
   const {
@@ -35,6 +36,9 @@ const AdminDashboard = () => {
     borderRadius: "10px",
     p: 4,
   };
+  const company_id = parseInt(
+    decryptData(JSON.parse(localStorage.getItem("company_id")))
+  );
 
   const [siteAddForm, setSiteAddForm] = useState(false);
   const handleCloseSiteAddForm = () => {
@@ -79,6 +83,33 @@ const AdminDashboard = () => {
   };
 
   const [paymentHistory, setPaymentHistory] = useState([]);
+  const [currentPayment, setCurrentPayment] = useState([]);
+  const [dueDate, setDueDate] = useState("");
+
+  useEffect(() => {
+    const viewCurrentePlan = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/payment/currentPayment",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ company_id: company_id }),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          setCurrentPayment(jsonData);
+          console.log(jsonData);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    viewCurrentePlan();
+  }, []);
 
   return (
     <>
@@ -116,11 +147,19 @@ const AdminDashboard = () => {
               <div className="key-words">
                 <span className="plan-word">Plan</span>
                 <span className="plan-word">No of Sites</span>
+                <span className="plan-word">Additonal Sites</span>
+                <span className="plan-word">Total Sites</span>                
                 <span className="plan-word">Remaning No of Sites</span>
               </div>
               <div className="values-of-keys">
-                <span className="plan-values">Standard</span>
-                <span className="plan-values">5</span>
+                <span className="plan-values">
+                  {currentPayment.sites === 5 && "Basic"}{" "}
+                  {currentPayment.sites === 10 && "Standard"}{" "}
+                  {currentPayment.sites === 20 && "Premium"}
+                </span>
+                <span className="plan-values">{currentPayment.sites}</span>
+                <span className="plan-values">3</span>
+                <span className="plan-values">{currentPayment.sites + 3}</span>
                 <span className="plan-values">1</span>
               </div>
             </div>
@@ -130,8 +169,16 @@ const AdminDashboard = () => {
                 <span className="plan-word">Next Subscription Date</span>
               </div>
               <div className="values-of-keys">
-                <span className="plan-values">2022.10.15</span>
-                <span className="plan-values">2023.10.14</span>
+                <span className="plan-values">
+                  {String(currentPayment.payment_date).split("T")[0]}{" "}
+                  {
+                    String(
+                      String(currentPayment.payment_date).split("T")[1]
+                    ).split(".")[0]
+                  }
+                </span>
+
+                <span className="plan-values"></span>
               </div>
             </div>
             <div className="third-box" onClick={() => setSiteAddForm(true)}>
@@ -140,7 +187,9 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="subscription-plans">
-            <div className="plan">
+            <div
+              className={currentPayment.sites === 5 ? "plan currente" : "plan"}
+            >
               <span
                 style={{
                   fontWeight: "600",
@@ -161,9 +210,15 @@ const AdminDashboard = () => {
               </span>
               <span className="yearly">Yearly</span>
               <span className="site-amount">5 Sites</span>
-              <button className="select-button">Downgrade</button>
+              <button className="select-button">
+                {currentPayment.sites === 20 && "Downgrade"}
+                {currentPayment.sites === 10 && "Downgrade"}
+                {currentPayment.sites === 5 && "Currente"}
+              </button>
             </div>
-            <div className="plan" style={{ backgroundColor: "#ffcc00" }}>
+            <div
+              className={currentPayment.sites === 10 ? "plan currente" : "plan"}
+            >
               <span
                 style={{
                   fontWeight: "600",
@@ -184,9 +239,15 @@ const AdminDashboard = () => {
               </span>
               <span className="yearly">Yearly</span>
               <span className="site-amount">10 Sites</span>
-              <button className="select-button">Currente Plan</button>
+              <button className="select-button">
+                {currentPayment.sites === 20 && "Downgrade"}
+                {currentPayment.sites === 10 && "Current"}
+                {currentPayment.sites === 5 && "Upgrade"}
+              </button>
             </div>
-            <div className="plan">
+            <div
+              className={currentPayment.sites === 20 ? "plan currente" : "plan"}
+            >
               <span
                 style={{
                   fontWeight: "600",
@@ -207,7 +268,11 @@ const AdminDashboard = () => {
               </span>
               <span className="yearly">Yearly</span>
               <span className="site-amount">20 Sites</span>
-              <button className="select-button">Upgrade</button>
+              <button className="select-button">
+                {currentPayment.sites === 20 && "Current"}
+                {currentPayment.sites === 10 && "Upgrade"}
+                {currentPayment.sites === 5 && "Upgrade"}
+              </button>
             </div>
           </div>
           <div className="payment-history">

@@ -13,7 +13,7 @@ export const FirstBoard = () => {
         <div className="board_top">
           <p className="board_top_title">
            Project Resources
-             <span> 3</span>
+             <span> 2</span>
           </p>
             
         </div>

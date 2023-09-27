@@ -24,6 +24,7 @@ export const TodoCard = (props) => {
 
           </div>
         </div>
+        <div className="card_main_title" >Task Id :{id}</div>
         <div className="card_main_title" >{title}</div>
 
       </div>

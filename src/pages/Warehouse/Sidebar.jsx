@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink ,useNavigate } from 'react-router-dom';
 import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 // import { TooltipComponent } from '@syncfusion/ej2-react-popups';
@@ -15,6 +15,12 @@ export const Sidebar = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
       setActiveMenu(false);
     }
+  };
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   const activeLink = 'flex items-center gap-5 pl-4 ml-8 pt-3 pb-2 mb-8 text-black bg-yellow-400 rounded-l-lg text-md';
@@ -46,7 +52,7 @@ export const Sidebar = () => {
                 </p> */}
                 {item.links.map((link) => (
                   <NavLink
-                    to={`/${link.name}`}
+                    to={`/inventorymanager/${link.name}`}
                     key={link.name}
                     onClick={handleCloseSideBar}
                     style={({ isActive }) => ({
@@ -62,7 +68,10 @@ export const Sidebar = () => {
               </div>
             ))}
 
-            <div className="flex items-center gap-2 pl-2  pt -35  rounded-l-lg text-md mt-64  text-red-600 "><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
+            <div className="flex items-center justify-center gap-5 pt-3 pb-2.5 rounded-l-lg text-md custom-mt-percentage text-white  "><FiLogOut onClick={logout} />
+              <span className="capitalize cursor-pointer" onClick={logout}>
+                Logout
+              </span></div>
           </div>
         </>
       )}

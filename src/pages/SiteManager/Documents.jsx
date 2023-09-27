@@ -77,13 +77,18 @@ const FileUpload = () => {
   const onDrop = useCallback(async (acceptedFiles) => {
     try {
       const formData = new FormData();
+      
       formData.append("document", acceptedFiles[0]);
+      
 
       await axios.post("http://localhost:4000/api/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          
         },
       });
+
+      console.log(formData);
 
       console.log("File uploaded successfully.");
     } catch (error) {

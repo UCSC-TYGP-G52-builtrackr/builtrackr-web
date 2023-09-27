@@ -854,16 +854,17 @@ export const SiteManagerLinks = [
         icon: <Book />,
         redirect: "sitemanager/sites",
       },
-      {
-        name: "Analytics",
-        icon: <BarChart />,
-        redirect: "sitemanager/analytics",
-      },
+      
       {
         name: "Documents",
         icon: <Folder />,
         redirect: "sitemanager/documents",
       },
+      {
+        name:"Labour Leaves",
+        icon:<Calendar/>,
+        redirect:"sitemanager/labourleaves"
+      }
     ],
   },
 

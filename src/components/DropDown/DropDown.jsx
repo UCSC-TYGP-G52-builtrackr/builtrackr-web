@@ -28,6 +28,7 @@ export const Dropdown = (props) => {
       className={`dropdown custom-scroll ${
         props.class ? props.class : ""
       }`}
+      style  ={{width:"100px" , height:"2px" , border:"1px solid red" , color:"red"}}
     >
  {props.children}
  
