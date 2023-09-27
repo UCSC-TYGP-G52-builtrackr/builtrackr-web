@@ -88,27 +88,14 @@ const {
     const t_cardIndex = boards[t_boardIndex]?.cards?.findIndex(
       (item) => item.id === targetCard.cid
     );
-    if (t_cardIndex < 0) return;
-
-    const tempBoards = [...boards];
-    const sourceCard = tempBoards[s_boardIndex].cards[s_cardIndex];
-    tempBoards[s_boardIndex].cards.splice(s_cardIndex, 1);
-    tempBoards[t_boardIndex].cards.splice(t_cardIndex, 0, sourceCard);
-    setBoards(tempBoards);
-
-    setTargetCard({
-      bid: "",
-      cid: "",
-    });
-  };
-
-  const dragEntered = (bid, cid) => {
-    if (targetCard.cid === cid) return;
-    setTargetCard({
-      bid,
-      cid,
-    });
-  };
+        console.log(response.data);
+        if (response.status === 200) {
+          setBoards(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
   const updateCard = (bid, cid, card) => {
     const boardIndex = boards.findIndex((item) => item.id === bid);
