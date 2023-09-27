@@ -22,6 +22,41 @@ const Analytics1 = () => {
   const selectionsettings = { persistSelection: true };
 
   const { themeSettings, setThemeSettings } = useStateContext();
+  const [materialRequestData, setMaterialRequestData] = useState([]);
+
+//..............................
+const fetchMaterialRequestData = () => {
+  fetch('http://localhost:4000/api/mrequest/getAllMaterialRequests')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setMaterialRequestData(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching material data:', error);
+    });
+};
+
+useEffect(() => {
+  fetchMaterialRequestData();
+}, []);
+
+//.................
+
+
+
+
+
+
+
+
+
+
+
 
   const handleApprove = (requestId) => {
     // Logic to handle approval for the given requestId
@@ -63,39 +98,49 @@ const Analytics1 = () => {
             <h2 className="text-2xl font-semibold"></h2>
             <table className="w-full table-fixed border-collapse border border-green-800">
               <thead>
-                <tr className="bg-green-600 text-white">
+                <tr className="bg-yellow-400 text-white">
                   <th className="w-1/6 py-2">Request ID</th>
                   <th className="w-1/6 py-2">Employee ID</th>
                   <th className="w-1/6 py-2">Material ID</th>
+                 
                   <th className="w-1/6 py-2">Quantity</th>
                   <th className="w-1/6 py-2">Unit</th>
+                  <th className="w-1/6 py-2">Status</th>
                   <th className="w-1/3 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {URData.map((item) => (
-                  <tr key={item.id} className="text-center border border-green-600">
-                    <td className="py-2">{item.request_id}</td>
-                    <td className="py-2">{item.material_id}</td>
-                    <td className="py-2">{item.quantity}</td>
-                    <td className="py-2">{item.unit}</td>
-                    <td className="py-2">
-                      <button
-                        className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                        onClick={() => handleApprove(item.request_id)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="px-2 py-1 ml-2 bg-red-600 text-white rounded hover:bg-red-700"
-                        onClick={() => handleReject(item.request_id)}
-                      >
-                        Reject
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+        {materialRequestData.map((mreq) => (
+          <tr key={mreq.id} className="text-center border border-green-600">
+            <td className="py-2">{mreq.request_id}</td>
+            <td className="py-2">{mreq.req_emp_id}</td>
+            <td className="py-2">{mreq.material_id}</td>
+            <td className="py-2">{mreq.req_quantity}</td>
+            <td className="py-2">{mreq.unit}</td>
+            <td className="py-2">{mreq.status}</td>
+            <td className="py-2">
+              <button
+                className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                onClick={() => handleApprove(mreq.request_id)}
+              >
+                Approve
+              </button>
+              <button
+                className="px-2 py-1 ml-2 bg-red-600 text-white rounded hover:bg-red-700"
+                onClick={() => handleReject(mreq.request_id)}
+              >
+                Reject
+              </button>
+              <button
+                className="px-2 py-1 ml-2 bg-blue-600 text-white rounded hover:bg-red-700"
+                onClick={() => handleReject(mreq.request_id)}
+              >
+                Close
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
             </table>
           </div>
           {/* End of Material Requests Table */}

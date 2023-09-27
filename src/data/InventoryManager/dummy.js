@@ -1,6 +1,8 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
 import PeopleIcon from '@mui/icons-material/People';
+import { Tool } from "react-feather";
+import { Package } from "react-feather";
 import PersonIcon from '@mui/icons-material/Person';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
@@ -528,11 +530,11 @@ export const linksIM = [
       
       {
         name: 'Equipments',
-        icon: <PersonIcon />,
+        icon: <Tool />,
       },
       {
         name: 'Materials',
-        icon: <PeopleIcon />,
+        icon: <Package />,
       },
       {
         name: 'Reports',
