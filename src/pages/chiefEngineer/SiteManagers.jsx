@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { SiteData } from '../../data/SiteData';
@@ -13,10 +14,12 @@ import Sidebar from '../../components/Sidebar';
 import SidebarCE from '../../components/ChiefEngineer/SidebarCE';
 import ChatSpace from '../../components/ChatSpace';
 import { BsChatDots } from 'react-icons/bs';
+import SMPopover from '../../components/ChiefEngineer/SMPopover';
 
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../App.css';
+import { decryptData } from '../../encrypt';
 
 const SiteManagers = () => {
   const selectionsettings = { persistSelection: true };
@@ -24,6 +27,41 @@ const SiteManagers = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const navigate = useNavigate();
   const { themeSettings, setThemeSettings } = useStateContext();
+  const [siteManagers, setSiteManagers] = useState([]);
+
+  const storedCompId = localStorage.getItem("company_id");
+  const decryptedValue = decryptData(JSON.parse(storedCompId));
+  const companyID = parseInt(decryptedValue, 10);
+
+  // useEffect(() => {
+  //   const viewAllManagers = async () => {
+  //     try {
+  //       const formData = {
+  //         companyID: companyID,
+  //       };
+  //       const data = await fetch(
+  //         "http://localhost:4000/api/site/getAllManagers",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(formData),
+  //         }
+  //       );
+  //       if (data.status === 200) {
+  //         const jsonData = await data.json();
+  //         console.log(jsonData);
+  //         setSiteManagers(jsonData);
+  //       } else {
+  //         console.log(data.status);
+  //       }
+  //     } catch (err) {
+  //       console.error(err.message);
+  //     }
+  //   };
+  //   viewAllManagers();
+  // }, []);
 
   return (
     <div className="">
@@ -51,13 +89,14 @@ const SiteManagers = () => {
               </div>
 
             {/* site managers grid */}
-            <div className='grid grid-cols-1 mt-6 gap-x-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
-                {SMs.map((sm) => (
+            {/* <div className='grid grid-cols-1 mt-6 gap-x-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
+                {siteManagers.map((sm) => (
                   <div key={sm.id} className="relative flex flex-col items-center justify-center group">
                     <div className="overflow-hidden bg-gray-200 rounded-full w-36 h-36 lg:aspect-none group-hover:opacity-75">
                       <img
-                        src={sm.imageUrl}
-                        alt={sm.name}
+                        // src={`http://localhost:4000/employees/${sm.photo_path}`}
+                        src={sm.photo_path ? `http://localhost:4000/employees/${sm.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'}
+                        alt={sm.f_name}
                         className="object-cover object-center rounded-full w-36 h-36 lg:h-36 lg:w-full"
                       />
                     </div>
@@ -67,14 +106,15 @@ const SiteManagers = () => {
                         <h3 className="text-sm text-gray-700">
                           <a href={'#'}>
                             <span aria-hidden="true" className="absolute inset-0" />
-                            {sm.name}
+                            {sm.f_name}
                           </a>
                         </h3>
                       </div>
                     </div>
                   </div>
                 ))}
-            </div>
+            </div> */}
+            <SMPopover/>
  
             {/* end of sites grid */}
 

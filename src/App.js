@@ -41,6 +41,7 @@ import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 import SitesCommon from './pages/chiefEngineer/SitesCommon'
 import Warehouses from './pages/chiefEngineer/Warehouses'
+import OneWarehouse from "./pages/chiefEngineer/OneWarehouse";
 
 function App() {
   const {
@@ -104,6 +105,7 @@ function App() {
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
           <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
+          <Route path="/chiefEngineer/warehouses/:id" element={<OneWarehouse />} />
           <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
           <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
           <Route path="/chiefEngineer/warehouses" element={<Warehouses/>}/>

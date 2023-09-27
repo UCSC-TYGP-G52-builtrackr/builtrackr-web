@@ -49,7 +49,7 @@ const style = {
 
 const Warehouses = () => {
 
-  const [siteData, setSiteData] = useState([]);
+  const [warehouseData, setWarehouseData] = useState([]);
   const [customerData, setCustomerData] = useState([]);
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
@@ -65,20 +65,16 @@ const Warehouses = () => {
   const decryptedValue = decryptData(JSON.parse(storedCompId));
   const companyID = parseInt(decryptedValue, 10);
 
-  const [siteType, setSiteType] = useState('');
-  const [siteClient, setSiteClient] = useState('');
-  const [siteName, setSiteName] = useState('');
-  const [siteDesc, setSiteDesc] = useState('');
-  const [siteAddr, setSiteAddr] = useState('');
+  const [warehouseName, setWarehouseName] = useState('');
+  const [warehouseAddr, setWarehouseAddr] = useState('');
+  const [warehousePhone, setWarehousePhone] = useState('');
 
   const handleClose = () => {
     setOpen(false);
     // Reset the form values when the form is closed
-    setSiteName('');
-    setSiteDesc('');
-    setSiteType('');
-    setSiteClient('');
-    setSiteAddr('');
+    setWarehouseName('');
+    setWarehousePhone('');
+    setWarehouseAddr('');
   };
  
   async function handleSubmit(e) {
@@ -86,16 +82,14 @@ const Warehouses = () => {
 
       // Create a JavaScript object with the form data
       const formData = {
-        siteType: siteType,
-        siteClient: siteClient,
-        siteName: siteName,
-        siteDesc: siteDesc,
-        siteAddr: siteAddr,
+        warehouseName: warehouseName,
+        warehousePhone: warehousePhone,
+        warehouseAddr: warehouseAddr,
         companyID: companyID,
       };
 
       const data = await fetch(
-        "http://localhost:4000/api/site/addSite",
+        "http://localhost:4000/api/warehouseCE/addWarehouse",
         {
           method: "POST",
           headers: {
@@ -109,32 +103,34 @@ const Warehouses = () => {
         const jsonData = await data.json();
         console.log(jsonData);
         handleClose();
-        setSiteName('');
-        setSiteDesc('');
-        setSiteType('');
-        setSiteClient('');
-        setSiteAddr('');
+        setWarehouseName('');
+        setWarehousePhone('');
+        setWarehouseAddr('');
       }
       
       
     }
 
   useEffect(() => {
-    const viewSitesAll = async () => {
+    const viewWarehousesAll = async () => {
       try {
+        const formData = {
+          companyID: companyID,
+        };
         const data = await fetch(
-          "http://localhost:4000/api/site/getSites",
+          "http://localhost:4000/api/warehouseCE/getWarehouses",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
+            body: JSON.stringify(formData),
           }
         );
         if (data.status === 200) {
           const jsonData = await data.json();
           console.log(jsonData);
-          setSiteData(jsonData);
+          setWarehouseData(jsonData);
         } else {
           console.log(data.status);
         }
@@ -142,38 +138,10 @@ const Warehouses = () => {
         console.error(err.message);
       }
     };
-    viewSitesAll();
+    viewWarehousesAll();
   }, [open]);
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const data = await fetch(
-          "http://localhost:4000/api/site/getCustomers",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (data.status === 200) {
-          const jsonData = await data.json();
-          console.log(jsonData);
-          setCustomerData(jsonData);
-        } else {
-          console.log(data.status);
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    fetchCustomers();
-  }, []);
-
   
-
-
   return (
     <div className="">
       <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
@@ -196,22 +164,22 @@ const Warehouses = () => {
             {themeSettings && (<ChatSpace />)}
             <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
               <div className="flex mb-8">
-                <Header title="Sites" category="gdfcgf"/>
+                <Header title="Warehouses" category="gdfcgf"/>
                 <Dropdown/>
               </div>
 
             {/* sites grid */}
             <div className='grid grid-cols-3 gap-x-20 gap-y-14'>
 
-            {siteData.map((site) => {
+            {warehouseData.map((warehouse) => {
               return (
                 <div className='relative h-[250px] w-[250px]'>
-                <div className='absolute inset-0 bg-center bg-cover shadow-2xl' style={{ backgroundImage: `url(/havelock.jpg)` }}></div>
+                <div className='absolute inset-0 bg-center bg-cover shadow-2xl' style={{ backgroundImage: `url(/warehouse_pic.jpg)` }}></div>
                 <div className='absolute inset-0 flex flex-col items-center justify-center bg-gray-300 bg-opacity-75'>
-                <div className='mt-12 text-3xl text-center'>{site.site_name}</div>
+                <div className='mt-12 text-3xl text-center'>{warehouse.name}</div>
 
                 <nav>
-                  <Link to={`/chiefEngineer/sites/${site.site_id}`}>
+                  <Link to={`/chiefEngineer/warehouses/${warehouse.warehouse_id}`}>
                     <div className='flex mx-16 mt-20 text-center border-black cursor-pointer border-1'>
                       <span className='ml-3'>More Info</span>
                       <span>
@@ -265,13 +233,13 @@ const Warehouses = () => {
                                     type="text"
                                     variant='outlined'
                                     color='secondary'
-                                    label="Site Name"
-                                    onChange={(e) => setSiteName(e.target.value)}
-                                    value={siteName}
+                                    label="Warehouse Name"
+                                    onChange={(e) => setWarehouseName(e.target.value)}
+                                    value={warehouseName}
                                     fullWidth
                                     required
                                 />
-                                <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
                                   <InputLabel id="demo-simple-select-autowidth-label">Type</InputLabel>
                                   <Select
                                     labelId="demo-simple-select-autowidth-label"
@@ -287,10 +255,10 @@ const Warehouses = () => {
                                     <MenuItem value='Commercial'>Commercial</MenuItem>
                                     <MenuItem value='Infrastructure'>Infrastructure</MenuItem>
                                   </Select>
-                              </FormControl>
+                              </FormControl> */}
                             </Stack>
                             
-                              <FormControl sx={{ width: '100%', mb: 1 }}>
+                              {/* <FormControl sx={{ width: '100%', mb: 1 }}>
                                   <InputLabel id="demo-simple-select-autowidth-label">Site Customer</InputLabel>
                                   <Select
                                     labelId="demo-simple-select-autowidth-label"
@@ -304,23 +272,20 @@ const Warehouses = () => {
                                     <MenuItem value="">
                                       <em>None</em>
                                     </MenuItem>
-                                    {/* <MenuItem value='Andros'>Andros</MenuItem>
-                                    <MenuItem value='Pedro'>Pedro</MenuItem>
-                                    <MenuItem value='Murphy'>Murphy</MenuItem> */}
                                     {customerData.map((customer) => (
                                       <MenuItem key={customer.cust_id} value={customer.cust_id}>
                                         {customer.cust_name}
                                       </MenuItem>
                                     ))}
                                   </Select>
-                              </FormControl>
+                              </FormControl> */}
                               <TextField
                                 multiline
                                 variant='outlined'
                                 color='secondary'
-                                label="Address"
-                                onChange={(e) => setSiteAddr(e.target.value)}
-                                value={siteAddr}
+                                label="Phone"
+                                onChange={(e) => setWarehousePhone(e.target.value)}
+                                value={warehousePhone}
                                 fullWidth
                                 sx={{mb: 1}}
                               />
@@ -338,11 +303,10 @@ const Warehouses = () => {
                                 multiline
                                 variant='outlined'
                                 color='secondary'
-                                label="Site Description"
-                                onChange={(e) => setSiteDesc(e.target.value)}
-                                value={siteDesc}
+                                label="Address"
+                                onChange={(e) => setWarehouseAddr(e.target.value)}
+                                value={warehouseAddr}
                                 fullWidth
-                                rows={4}
                                 sx={{mb: 4}}
                             />
                             <div className='flex justify-between'>

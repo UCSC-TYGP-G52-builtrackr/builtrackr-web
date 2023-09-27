@@ -54,7 +54,8 @@ export default function PopoverCE({ siteId }) {
     setSelectedPerson({
       name: person.f_name,
       full_name : person.full_name,
-      no: person.no, // Assuming the full name is stored in the `full_name` property
+      no: person.no,
+      photo_path: person.photo_path // Assuming the full name is stored in the `full_name` property
       // Other properties of the selected person...
     });
     setConfirmationModalOpen(true);
@@ -63,7 +64,7 @@ export default function PopoverCE({ siteId }) {
   };
 
   const handleClose = () => {
-    // setAnchorEl(null);
+    setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
@@ -84,7 +85,7 @@ export default function PopoverCE({ siteId }) {
   const updateIconAndTooltip = (person) => {
     // Update the icon and tooltip based on the selected person
     // For example, set the new icon and tooltip title
-    setSelectedIcon(<AccountCircleIcon fontSize="inherit" />);
+    setSelectedIcon(<img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={selectedPerson.photo_path ? `http://localhost:4000/employees/${selectedPerson.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />);
     setTooltipTitle(selectedPerson.full_name);
   };
 
@@ -116,7 +117,7 @@ export default function PopoverCE({ siteId }) {
           if (jsonData.length > 0) {
             // If someone is assigned, update the tooltip and selected icon
             setTooltipTitle(jsonData[0].full_name); 
-            setSelectedIcon(<AccountCircleIcon fontSize="inherit" />);
+            setSelectedIcon(<img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={jsonData[0].photo_path ? `http://localhost:4000/employees/${jsonData[0].photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />);
           }
         } else {
           console.log(data.status);
@@ -222,6 +223,7 @@ export default function PopoverCE({ siteId }) {
   
         if (response.status === 200) {
           // setSelectedIcon(<AddCircleOutlineIcon fontSize="inherit" />);
+          setSelectedIcon(null);
           setTooltipTitle('Not Assigned');
         } else {
           // Handle the case where the request was not successful
@@ -233,7 +235,6 @@ export default function PopoverCE({ siteId }) {
       } finally {
         // Close the confirmation modal regardless of the outcome
         closeUnassignConfirmationModal();
-        setSelectedIcon(<AddCircleOutlineIcon fontSize="inherit" />);
       }
   };
 
@@ -249,7 +250,8 @@ export default function PopoverCE({ siteId }) {
             onClick={handleClick}
           /> */}
           <div className="inline-block text-4xl cursor-pointer" onClick={handleClick}>
-            <AccountCircleIcon fontSize="inherit" />
+            {/* <AccountCircleIcon fontSize="inherit" /> */}
+            <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={selectedPerson.photo_path ? `http://localhost:4000/employees/${selectedPerson.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />
           </div>
           </Tooltip>
         ) : (
@@ -277,7 +279,7 @@ export default function PopoverCE({ siteId }) {
                 {siteManagers.map((person) => (
                     <li key={person.email} className="flex justify-between py-5 cursor-pointer gap-x-6" onClick={handleListItemClick(person)}>
                     <div className="flex min-w-0 gap-x-4">
-                        <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src="/havelock.jpg" alt="" />
+                    <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={person.photo_path ? `http://localhost:4000/employees/${person.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />
                         <div className="flex-auto min-w-0">
                         <p className="text-sm font-semibold leading-6 text-gray-900">{person.full_name}</p>
                         <p className="mt-1 text-xs leading-5 text-gray-500 truncate">{person.email}</p>
