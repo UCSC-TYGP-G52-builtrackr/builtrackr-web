@@ -10,6 +10,8 @@ const onSubmit  = event => {
     handleSubmit(text);
     setText('');
 }
+//after submit send data o datbase with cardid
+
   return (
     <div>
         <form onSubmit={onSubmit}>
