@@ -16,7 +16,7 @@ import SMDocuments from "./pages/SiteManager/Documents";
 import ForgotPassword from "./pages/Login/Forgotpassword";
 import ResetPassword from "./pages/Login/ResetPassword";
 import Task from "./pages/SiteManager/Task";
-// import Analytics from "./pages/SiteManager/Analytics";
+
 import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'
@@ -38,6 +38,8 @@ import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
+import LaborLeaveTable from "./pages/SiteManager/Leaves";
+import Payment from "./pages/Payment/Payment";
 import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
 import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
 import ImageUpload from "./pages/Supervisor/imageUpload";
@@ -82,6 +84,7 @@ function App() {
         <Route path="/resetPassword" element={<ResetPassword />} />
         {/* <Route path="/paymentplan" element={<PaymentPlan />} /> */}
         <Route path="*" element={<Home />} />
+        <Route path="/paycheckout" element={<Payment />} />
 
         {/* Compnay Admin  */}
         <Route element={<ProtectedRoutes type={0} />}>
@@ -122,7 +125,8 @@ function App() {
           <Route path="/sitemanager/supervisor" element={<SMSupervisor />} />
           <Route path="/sitemanager/documents" element={<SMDocuments />} />
           <Route path="/sitemanager/sites" element={<SiteDashboard />} />
-          <Route path="/sitemanager/analytics" element={<Analytics />} />
+        
+          <Route path="/sitemanager/labourleaves" element={<LaborLeaveTable />} />
         </Route>
 
         {/* Site Supervisor */}

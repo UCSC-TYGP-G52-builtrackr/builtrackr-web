@@ -26,7 +26,7 @@ import product8 from './product8.jpg';
 import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import { FiLogOut } from 'react-icons/fi';
-import { Clipboard, Book, Bell, BarChart, Home, Folder } from "react-feather";
+import { Clipboard, Book, Bell, BarChart, Home, Folder,Calendar } from "react-feather";
 
 
 export const gridOrderImage = (props) => (
@@ -854,16 +854,17 @@ export const SiteManagerLinks = [
         icon: <Book />,
         redirect: "sitemanager/sites",
       },
-      {
-        name: "Analytics",
-        icon: <BarChart />,
-        redirect: "sitemanager/analytics",
-      },
+      
       {
         name: "Documents",
         icon: <Folder />,
         redirect: "sitemanager/documents",
       },
+      {
+        name:"Labour Leaves",
+        icon:<Calendar/>,
+        redirect:"sitemanager/labourleaves"
+      }
     ],
   },
 

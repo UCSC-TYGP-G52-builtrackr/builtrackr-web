@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // You'll need to install axios if you haven't already
+import axios from "axios"; 
 import { Box, Grid, Image, Text, Button } from "@chakra-ui/react";
 import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
