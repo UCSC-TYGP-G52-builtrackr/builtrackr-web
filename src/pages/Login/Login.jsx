@@ -39,11 +39,11 @@ export function Login() {
             if (res.data.type === 0) {
               localStorage.setItem(
                 "user_type",
-                // JSON.stringify(encryptData(res.data.type.toString()))
+                JSON.stringify(encryptData(res.data.type.toString()))
               );
               localStorage.setItem(
                 "name",
-                // JSON.stringify(encryptData(res.data.name))
+                JSON.stringify(encryptData(res.data.name))
               );
               localStorage.setItem(
                 "company_id",
@@ -65,6 +65,10 @@ export function Login() {
                 JSON.stringify(encryptData(res.data.type.toString()))
               );
               localStorage.setItem(
+                "photo",
+                JSON.stringify(encryptData(res.data.type.toString()))
+              );
+              localStorage.setItem(
                 "name",
                 JSON.stringify(encryptData(res.data.name))
               );
@@ -74,11 +78,11 @@ export function Login() {
               );
               localStorage.setItem(
                 "no",
-                // JSON.stringify(encryptData(res.data.employee_id.toString()))
+                JSON.stringify(encryptData(res.data.employee_id.toString()))
               );
               localStorage.setItem(
                 "is_loged",
-                // JSON.stringify(encryptData("yes"))
+                JSON.stringify(encryptData("yes"))
               );
               localStorage.setItem(
                 "role_name",
@@ -89,31 +93,31 @@ export function Login() {
               if (res.data.type === 1) {
                 localStorage.setItem(
                   "home_page",
-                  // JSON.stringify(encryptData("hrmanager/user roles"))
+                  JSON.stringify(encryptData("hrmanager/user roles"))
                 );
                 navigate("/hrmanager/user roles");
               } else if (res.data.type === 2) {
                 localStorage.setItem(
                   "home_page",
-                  // JSON.stringify(encryptData("/inventorymanager/Equipments"))
+                  JSON.stringify(encryptData("/inventorymanager/Equipments"))
                 );
                 navigate("/inventorymanager/Equipments");
               } else if (res.data.type === 3) {
                 localStorage.setItem(
                   "home_page",
-                  // JSON.stringify(encryptData("chiefEngineer/sites"))
+                  JSON.stringify(encryptData("chiefEngineer/sites"))
                 );
                 navigate("/chiefEngineer/sites");
               } else if (res.data.type === 4) {
                 localStorage.setItem(
                   "home_page",
-                  // JSON.stringify(encryptData("sitemanager/dashboard"))
+                  JSON.stringify(encryptData("sitemanager/dashboard"))
                 );
                 navigate("/sitemanager/dashboard");
               } else if (res.data.type === 5) {
                 localStorage.setItem(
                   "home_page",
-                  // JSON.stringify(encryptData("Supervisor/KanbanBoard"))
+                  JSON.stringify(encryptData("Supervisor/KanbanBoard"))
                 );
                 navigate("/Supervisor/KanbanBoard");
               }
