@@ -69,7 +69,7 @@ getEquipmentData ();
 
 
 //assign labour array to rows
-const rows = labourArray.map((labour) => {
+const rows = labourArray && labourArray.map((labour) => {
   return {
     id: labour.id,
     fullName: labour.name,

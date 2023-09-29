@@ -46,11 +46,6 @@ import Payment from "./pages/Payment/Payment";
 import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
 import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
 import ImageUpload from "./pages/Supervisor/imageUpload";
-
-
-
-
-
 import Equipments1 from "./pages/InventoryManager/Equipments1";
 import Materials1 from "./pages/InventoryManager/Materials1";
 import Reports1 from "./pages/InventoryManager/Reports1";
@@ -92,7 +87,7 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        {/* <Route path="/paymentplan" element={<PaymentPlan />} /> */}
+        <Route path="/paymentplan" element={<PaymentPlan />} />
         <Route path="*" element={<Home />} />
         <Route path="/paycheckout" element={<Payment />} />
 

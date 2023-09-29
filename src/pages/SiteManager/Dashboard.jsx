@@ -151,7 +151,6 @@ const SMDashboard = () => {
     "July",
   ];
 
- 
   const data3 = {
     labels,
     datasets: [
@@ -216,7 +215,6 @@ const SMDashboard = () => {
       });
   }, []);
 
-
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/sitemanager/countsites")
@@ -244,6 +242,7 @@ const SMDashboard = () => {
   useEffect(() => {
     setSocket(io("http://localhost:4000/"));
   }, []);
+  console.log(socket);
 
   useEffect(() => {
     socket?.emit("newUser", employeeNo);
@@ -309,10 +308,10 @@ const SMDashboard = () => {
     datasets: [
       {
         label: "Task Dataset",
-        data: [ taskCount - completion,taskCount], // Removed .toString()
+        data: [taskCount - completion, taskCount], // Removed .toString()
         backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
-       
-        borderColor: [ "rgb(75, 192, 192)","rgb(255, 99, 132)"],
+
+        borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
         borderWidth: 1,
       },
     ],
@@ -335,15 +334,15 @@ const SMDashboard = () => {
     datasets: [
       {
         label: "Task Dataset",
-        data: [taskCount - completion,taskCount], // Removed .toString()
+        data: [taskCount - completion, taskCount], // Removed .toString()
         backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
-       
-        borderColor: [ "rgb(75, 192, 192)","rgb(255, 99, 132)"],
+
+        borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
         borderWidth: 1,
       },
     ],
   };
-  
+
   function getCurrentDate() {
     const now = new Date();
     const year = now.getFullYear();
@@ -358,7 +357,13 @@ const SMDashboard = () => {
     return `${year}-${month}-${day}`;
   }
 
-  
+  const sendNotification = () => {
+    socket.emit("sendTaskNotification", {
+      reciver: 3,
+      sender: employeeNo,
+    });
+  };
+
   return (
     <>
       <ChakraProvider>
@@ -402,6 +407,13 @@ const SMDashboard = () => {
                 onClick={handleBorderColorChange}
               />
             </div>
+            <button
+              style={{ marginLeft: "50px", height: "50px" }}
+              onClick={sendNotification}
+            >
+              Send Notification
+            </button>
+
             <div className="flex w-full gap-2 items-center justify-evenly">
               <div className="w-1/2 flex items-center justify-center mt-4">
                 <div className="flex gap-4 flex-col w-2/5 items-center justify-center  mt-6">
@@ -428,7 +440,6 @@ const SMDashboard = () => {
               <div className="w-1/2 flex items-center p-3 justify-center">
                 <Line options={options} data={data3} />
               </div>
-              
             </div>
           </div>
         </div>

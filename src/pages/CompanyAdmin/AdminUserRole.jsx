@@ -190,6 +190,7 @@ const AdminUserRole = () => {
     const lowercaseRegex = /[a-z]/;
     const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
     const digitRegex = /\d/;
+    
 
     const hasUppercase = uppercaseRegex.test(password);
     const hasLowercase = lowercaseRegex.test(password);

@@ -6,7 +6,7 @@ import Button from './Button';
 import { chatData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const Notification = () => {
+const Notification = ({notifications}) => {
   const { currentColor } = useStateContext();
   const { setIsClicked, initialState } = useStateContext();
 
