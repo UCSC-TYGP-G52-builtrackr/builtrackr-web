@@ -1,97 +1,72 @@
-'use client'
+import  "./payment.css";
 
-
-import {
-  Flex,
-  Heading,
-  VStack,
-  Stack,
-  Box,
-  Grid,
-  Text
-} from "@chakra-ui/react";
-import PricingBox from "./PricingBox";
-
-const prices = [
-  {
-    name: "pro",
-    price: "$12",
-    popular: true,
-    features: new Array(4).fill(null).map((e) => "Lorem iptsum dolor"),
-    info: "Fusce purus tellus, tristique quis libero sit amet..."
-  },
-  {
-    name: "business",
-    price: "$30",
-    features: new Array(5).fill(null).map((e) => "Lorem iptsum dolor"),
-    info: "Fusce purus tellus, tristique quis libero sit amet..."
-  },
-  {
-    name: "special",
-    price: "$180",
-    features: new Array(5).fill(null).map((e) => "Lorem iptsum dolor"),
-    info: "Fusce purus tellus, tristique quis libero sit amet..."
-  }
-];
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const App = () => (
-  <Flex
-    direction="column"
-    alignItems="center"
-    justifyContent="center"
-    minH="100vh"
-    w="full"
-    backgroundColor="gray.200"
-  >
-    <Stack
-    className="flex h-full justify-start items-center w-full"
-      spacing={5}
-      marginY={5}
-      justifyContent="flex-start"
-      alignItems="center"
-      maxWidth="1200px"
-      w="full"
-      paddingX={[5, 0]}
-    >
-      <VStack alignItems="center" w="full">
-        <Heading color="teal.300">Pricing</Heading>
-        <Text mb={5} textAlign="center">
-          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet
-        </Text>
-      </VStack>
-      <Stack
-        spacing={0}
-        isInline
-        border="1px solid"
-        borderColor="teal.300"
-        borderRadius="4px"
-        justifyContent="center"
-        alignItems="stretch"
-        display="flex"
-        width="fit-content"
-        backgroundColor="white"
-        mb={3}
-      >
-        <Box backgroundColor="teal.300" color="white" p=".3rem 1rem">
-          Monthly
-        </Box>
-        <Box p=".3rem 1rem">Annually</Box>
-      </Stack>
-      <div className="flex w-full justify-around my-8"
-        w="full"
-        gap={5}
-        justifyContent="center"
-        templateColumns={{
-          base: "inherit",
-          md: "repeat( auto-fit, 250px )"
-        }}
-      >
-        {prices.map((price) => (
-          <PricingBox key={price.name} {...price} />
-        ))}
+  <>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <div className="background">
+    <div className="container">
+      <div className="panel pricing-table">
+        <div className="pricing-plan">
+          <img
+            src="https://i.postimg.cc/mrcYNX5X/6895861.jpg"
+            alt=""
+            className="pricing-img"
+          />
+          <h2 className="pricing-header">Basic</h2>
+          <ul className="pricing-features">
+            <li className="pricing-features-item">Only 1 Site Mangement</li>
+            <li className="pricing-features-item">Future Addons</li>
+          </ul>
+          <span className="pricing-price">LKR 5000 </span>
+          <Link to="/paycheckout" className="pricing-button">
+            Proceed
+          </Link>
+        </div>
+        <div className="pricing-plan">
+          <img
+            src="https://i.postimg.cc/K8jBxpxG/4334841.jpg"
+            alt=""
+            className="pricing-img"
+          />
+          <h2 className="pricing-header">Recommended</h2>
+          <ul className="pricing-features">
+            <li className="pricing-features-item">5 Site Mangement</li>
+            <li className="pricing-features-item">24 / 7 Support </li>
+            <li className="pricing-features-item">Future Addons</li>
+          </ul>
+          <span className="pricing-price"> LKR 20000</span>
+          <Link to="/paycheckout" className="pricing-button">
+            Proceed
+          </Link>
+        </div>
+        <div className="pricing-plan">
+          <img
+            src="https://i.postimg.cc/NFTQwHj7/bridge-construction-amico-copy.png"
+            alt=""
+            className="pricing-img"
+            
+            
+          />
+          
+          <h2 className="pricing-header">Enterprise</h2>
+          <ul className="pricing-features">
+            <li className="pricing-features-item">Unlimited Site Management</li>
+            <li className="pricing-features-item">24 / 7 Support </li>
+          
+          </ul>
+          <span className="pricing-price">LKR 30000</span>
+          <Link to="/paycheckout" className="pricing-button">
+            Proceed
+          </Link>
+        </div>
       </div>
-    </Stack>
-  </Flex>
+    </div>
+  </div>
+</>
+
 );
 
 export default App;
