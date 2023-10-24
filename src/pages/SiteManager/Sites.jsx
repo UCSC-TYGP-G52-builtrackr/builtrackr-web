@@ -51,6 +51,7 @@ const SiteDashboard = () => {
   const [quantity, setQuantity] = useState(1); // Initialize quantity with 1
   const [equipmentList, setEquipmentList] = useState([]);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [materialList,setMaterialList] = useState([]);
 
 
 
@@ -427,12 +428,12 @@ const SiteDashboard = () => {
                       value={selectedEquipment}
                     >
                       <option value={null}>Select Equipment</option>
-                      {equipmentList.map((material) => (
+                      {equipmentList.map((equipment) => (
                         <option
-                          key={material.materialid}
-                          value={material.materialid}
+                          key={equipment.materialid}
+                          value={equipment.materialid}
                         >
-                          {material.materialname}
+                          {equipment.materialname}
                         </option>
                       ))}
                     </select>
@@ -453,13 +454,22 @@ const SiteDashboard = () => {
                       style={{ backgroundColor: "#FFCC00" }}
                       type="button"
                     >
-                      Assign Material to Site
+                      Assign Epquipment to Site
                     </button>
                   </div>
 
                   {/* Site selection dropdown */}
                   <div className="flex items-center justify-center flex-col">
                     {/* Labour selection dropdown */}
+                    <label
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      Select Labours
+                    </label>
                     <select
                       onChange={(e) => setSelectedLabour(e.target.value)}
                       value={selectedLabour}

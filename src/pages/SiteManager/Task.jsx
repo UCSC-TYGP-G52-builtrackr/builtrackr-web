@@ -81,7 +81,10 @@ const Task = () => {
   //   const date = new Date(dateStr);
   //   return date.toISOString().split("T")[0];
   // };
-
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toISOString().split("T")[0];
+  };
   useEffect(() => {
     const getRejected = async () => {
       try {
@@ -100,6 +103,22 @@ const Task = () => {
     getRejected();
   }, []);
   console.log("reject task", rejectTask);
+  const handleDelete = () => {
+    axios
+      .delete(`http://localhost:4000/api/task/deletetask`, {
+        params: {
+          id: rejectTask.task_id,
+          
+        },
+      })
+      .then((response) => {
+        console.log("Task deleted successfully!");
+      })
+      .catch((error) => {
+        // Handle errors, e.g., show an error message or handle the error in any way you want
+        console.error("Error deleting task:", error);
+      });
+  };
   return (
     <ChakraProvider>
       <>
@@ -109,12 +128,11 @@ const Task = () => {
           <div className="flex w-full items-center justify-center h-full p-2 mt-[80px]">
             <div className="mt-2 ml-10 flex flex-col w-full h-full justify-start ">
               <TaskListCard taskList={taskList} />
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            
               <Grid
                 templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
                 gap={4}
-                style={{ width: "70%", marginLeft: "25%", marginTop: "5%" }}
+                style={{ width: "70%", marginLeft: "20%", marginTop: "5%" }}
               >
                 <Table variant="simple" size="lg">
                   <TableCaption placement="top">
@@ -124,21 +142,23 @@ const Task = () => {
                   </TableCaption>
                   <Thead>
                     <Tr>
+                    <Th>Site Name</Th>
                       <Th>Task Name</Th>
                       <Th>Special Information</Th>
-                      <Th>Site Name</Th>
+                      
                       <Th>Due Date</Th>
-                      <Th>Leave Status</Th>
+                      <Th><center>Action</center></Th>
                     </Tr>
                   </Thead>
                 
                     <Tbody>
-                    {rejectTask.map((taki) => (
-                      <Tr key={taki.task_id}>
-                        <Td>{taki.taskname}</Td>
-                        <Td>{taki.specialInformation}</Td>
-                        <Td>{taki.sitename}</Td>
-                        <Td>{taki.duedate}</Td>
+                    {rejectTask.map((task) => (
+                      <Tr key={task.task_id}>
+                        <Td>{task.sitename}</Td>
+                        <Td>{task.taskname}</Td>
+                        <Td>{task.specialInformation}</Td>
+                        
+                        <Td>{formatDate(task.duedate)}</Td>
 
                         <Td>
                           <Button
@@ -146,8 +166,18 @@ const Task = () => {
                             // Disable the button if status is approved
                             w="120px"
                           >
-                            View
+                            Re Assign
                           </Button>
+                          <Button 
+                            colorScheme="red"
+                            // Disable the button if status is approved
+                            w="120px"
+                            ml={4}  
+                            onClick={handleDelete}    
+                          >
+                            Delete
+                          </Button>
+
                         </Td>
                       </Tr>
                       ))}
