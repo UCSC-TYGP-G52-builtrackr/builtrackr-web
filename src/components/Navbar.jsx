@@ -8,7 +8,7 @@ import avatar from '../data/avatar.jpg';
 import Notification from './Notification';
 import UserProfile from './UserProfile';
 import { useStateContext } from '../contexts/ContextProvider';
-import { decryptData } from '../encrypt';
+// import { decryptData } from '../encrypt';
 
 
  const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
@@ -29,7 +29,7 @@ import { decryptData } from '../encrypt';
 
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
-  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  const name = (JSON.parse(localStorage.getItem("name")));
 
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const Navbar = () => {
     }
   }, [screenSize]);
 
-  const handleActiveMenu = () => setActiveMenu(!activeMenu);
+
 
   return (
 
@@ -68,7 +68,7 @@ const Navbar = () => {
 
                 {name}
               </span></div>
-              <span className='float-right text-sm'>Chief Engineer</span>
+              <span className='float-right text-sm'>Supervisor</span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
             <img

@@ -66,10 +66,32 @@ export const RegisterTwo = () => {
       }));
       error = true;
     }
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const specialCharRegex = /[!@#$%^&*()\-_=+[{\]}|;:,<.>/?]/;
+    const digitRegex = /\d/;
+
+    const hasUppercase = uppercaseRegex.test(values.password);
+    const hasLowercase = lowercaseRegex.test(values.password);
+    const hasSpecialChar = specialCharRegex.test(values.password);
+    const hasDigit = digitRegex.test(values.password);
     if (values.password.trim().length === 0) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         password: "Password Required",
+      }));
+      error = true;
+    } else if (values.password.trim().length < 8) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password Contains atleast 8 Characters",
+      }));
+      error = true;
+    }
+    else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit){
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password Contains atleast one Upercase, Lowercase, Special Character and Number",
       }));
       error = true;
     }
@@ -89,36 +111,39 @@ export const RegisterTwo = () => {
     if (error || errors.OTP) {
       return;
     }
-    try {
-      const username = values.username;
-      const password = values.password;
-
-      await axios
-        .post("http://localhost:4000/api/user/register", {
-          username,
-          email,
-          password,
-          regNo,
-          line1,
-          line2,
-          city,
-          contactNo,
-          certificate,
-          name,
-        })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          toast.success("Registered Successfully");
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        });
-    } catch (err) {
-      console.error(err.message); // "Request failed with status code 500"
-      //console.error(err)
-      toast.error(err?.data?.message || err.error);
+    else{
+      try {
+        const username = values.username;
+        const password = values.password;
+  
+        await axios
+          .post("http://localhost:4000/api/user/register", {
+            username,
+            email,
+            password,
+            regNo,
+            line1,
+            line2,
+            city,
+            contactNo,
+            certificate,
+            name,
+          })
+          .then((res) => {
+            console.log(res);
+            console.log(res.data);
+            toast.success("Registered Successfully");
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
+          });
+      } catch (err) {
+        console.error(err.message); // "Request failed with status code 500"
+        //console.error(err)
+        toast.error(err?.data?.message || err.error);
+      }
     }
+    
   };
 
   let otp_inputs = document.querySelectorAll(".otp_num");

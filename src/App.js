@@ -1,4 +1,6 @@
-import AdminHome from "./pages/CompanyAdmin/AdminHome";
+import AdminUserRole from "./pages/CompanyAdmin/AdminUserRole";
+import AdminDashboard from "./pages/CompanyAdmin/AdminDashboard"
+import Subscription from "./pages/CompanyAdmin/Subscription"
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatSpace from "./components/CompanyAdmin/ChatSpace";
@@ -22,7 +24,6 @@ import PaymentPlan from "./pages/SignUp/PaymentPlan";
 import Sites from "./pages/chiefEngineer/Sites";
 import { Board } from "./pages/Supervisor/KanbanBoard/Board";
 import { Drop } from "./components/DropDown/Drop";
-import { Test } from "./components/Comment/test";
 import { DashboardW } from "./pages/Warehouse/DashboardW";
 import ItemList from "./pages/Warehouse/ItemList";
 import { Material } from "./pages/Warehouse/Material";
@@ -37,9 +38,23 @@ import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
 import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
+import SitesCommon from './pages/chiefEngineer/SitesCommon'
+import Warehouses from './pages/chiefEngineer/Warehouses'
+import OneWarehouse from "./pages/chiefEngineer/OneWarehouse";
 import LaborLeaveTable from "./pages/SiteManager/Leaves";
 import Payment from "./pages/Payment/Payment";
+import RequestForm from "./pages/Supervisor/KanbanBoard/RequestForm";
+import LeaveForm from "./pages/Supervisor/KanbanBoard/Leaves";
+import ImageUpload from "./pages/Supervisor/imageUpload";
 
+
+
+
+
+import Equipments1 from "./pages/InventoryManager/Equipments1";
+import Materials1 from "./pages/InventoryManager/Materials1";
+import Reports1 from "./pages/InventoryManager/Reports1";
+import Analytics1 from "./pages/InventoryManager/Analytics1";
 
 function App() {
   const {
@@ -65,20 +80,29 @@ function App() {
     <div className="App">
       <Routes>
       <Route path  = "/Supervisor/KanbanBoard" element = {<Board /> } />
+      <Route path  = "/Supervisor/KanbanBoard/RequestForm" element = {<RequestForm /> } />
+      <Route path  = "/Supervisor/KanbanBoard/Leaves" element = {<LeaveForm /> } />
+      <Route path="/Supervisor/Analytics" element={<Analytics />} />
+      <Route path="/Supervisor/Documents" element={<FileUpload />} />
+      <Route path="/Supervisor/imageUpload" element={<ImageUpload />} />
+
         <Route path="/home" element={<Home />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route path="/paymentplan" element={<PaymentPlan />} />
+        {/* <Route path="/paymentplan" element={<PaymentPlan />} /> */}
         <Route path="*" element={<Home />} />
         <Route path="/paycheckout" element={<Payment />} />
 
         {/* Compnay Admin  */}
         <Route element={<ProtectedRoutes type={0} />}>
-          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard/>} />
+          <Route path="/admin/userRoles" element={<AdminUserRole />} />
+          <Route path="/admin/Subscription" element={<Subscription/>}/>
         </Route>
+        {/* <Route path="/admin" element={<AdminHome />} /> */}
         {/* HR Manager */}
         <Route element={<ProtectedRoutes type={1} />}></Route>
         <Route path="/hrmanager/user roles" element={<Users />} />
@@ -92,7 +116,14 @@ function App() {
           <Route path="InventoryManger/Materials/List" element={<ItemList />} />
           <Route path="/inventorymanager/Materials" element={<Material />} />
           <Route path="/inventorymanager/documents" element={<FileUpload />} />
-          <Route path="/inventorymanager/Reports" element={<Analytics />} />
+          <Route path="/inventorymanager/Reports" element={<Analytics />} /> 
+          <Route path="/inventorymanager/Equipments" element={<Equipments1/>} />
+        <Route path="/inventorymanager/Materials" element={<Materials1 />} />
+        <Route path="/inventorymanager/Reports" element={<Reports1 />} />
+        <Route path="/inventorymanager/Analytics" element={<Analytics1 />} />
+
+
+
 
         </Route>
 
@@ -100,11 +131,13 @@ function App() {
         <Route element={<ProtectedRoutes type={3} />}>
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
-          {/* <Route path="/chiefEngineer/analytics" element={<Analytics />} /> */}
           <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
+          <Route path="/chiefEngineer/warehouses/:id" element={<OneWarehouse />} />
           <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
           <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
+          <Route path="/chiefEngineer/warehouses" element={<Warehouses/>}/>
         </Route>
+
         {/* Site Manager */}
         <Route element={<ProtectedRoutes type={4} />}>
           <Route path="/sitemanager/dashboard" element={<SMDashboard />} />
@@ -118,10 +151,10 @@ function App() {
 
         {/* Site Supervisor */}
         <Route element={<ProtectedRoutes type={5} />}>
-          <Route path="/Supervisor/KanbanBoard" element={<Board />} />
+          {/* <Route path="/Supervisor/KanbanBoard" element={<Board />} /> */}
 
           <Route path="/dropdown" element={<Drop />} />
-          <Route path="/test" element={<Test />} />
+          
 
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/tasks" element={<Sites />} />
@@ -130,7 +163,7 @@ function App() {
           <Route path="/Materials" element={<Material />} />
           <Route path="/Materials/List" element={<ItemList />} />
           <Route path="/Supervisor/Documents" element={<SMDocuments />} />
-          <Route path="/Supervisor/Analytics" element={<Analytics />} />
+          
         </Route>
       </Routes>
     </div>

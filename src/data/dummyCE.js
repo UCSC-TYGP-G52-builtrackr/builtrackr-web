@@ -5,6 +5,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import ArticleIcon from '@mui/icons-material/Article';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from'react-icons/bi';
 import { AiOutlineLogout } from 'react-icons/ai';
@@ -538,6 +539,10 @@ export const linksCE = [
       {
         name: 'sites',
         icon: <LocationCityIcon />,
+      },
+      {
+        name: 'warehouses',
+        icon: <WarehouseIcon />,
       },
       {
         name: 'site managers',

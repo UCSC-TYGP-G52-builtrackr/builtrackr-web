@@ -59,11 +59,13 @@ const NavBar = () => {
   }, [screenSize]);
 
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+
 
   return (
     <div
       className="relative flex justify-end p-2 pr-8 bg-white"
-      style={{ position: "fixed", right: 0 }}
+      style={{ position: "fixed", right: 0,     width: "calc( 100% - 300px )" }}
     >
       <div className="flex gap-2">
         <div
@@ -78,7 +80,7 @@ const NavBar = () => {
           onClick={() => handleClick("userProfile")}
         >
           <p style={{ display: "flex", flexDirection: "column" }}>
-            <span className="text-[16px] font-bold text-black">{'Cham'}</span>
+            <span className="text-[16px] font-bold text-black">{name}</span>
             <span className="float-right text-sm">Company Admin</span>
           </p>
           <MdKeyboardArrowDown className="text-gray-400 text-14" />

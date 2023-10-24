@@ -106,6 +106,26 @@ const Users = () => {
                 </div>
               </div>
             ))}
+            <div className="relative h-[200px] w-[200px]">
+                <div
+                  className="absolute inset-0 bg-center bg-cover shadow-2xl rounded-[50%]"
+                  style={{ backgroundImage: `url(http://localhost:4000/UserRoles/labourer.jpeg)` }}
+                ></div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-300 bg-opacity-10">
+                  <div className="bg-white bg-opacity-40 mt-10 text-2xl text-center">
+                    Labourers
+                  </div>
+
+                  <nav>
+                    <div className="flex mx-16 mt-10 text-center border-black cursor-pointer border-1">
+                      <span className="ml-3">More Info</span>
+                      <span>
+                        <KeyboardDoubleArrowRightIcon />
+                      </span>
+                    </div>
+                  </nav>
+                </div>
+              </div>
             ;{/* new site creation tile */}
           </div>
           {/* end of users grid */}
