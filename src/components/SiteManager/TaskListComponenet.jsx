@@ -100,26 +100,8 @@ const TaskListCard = ({ taskList }) => {
         <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
           Task List
         </Text>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            style={{
-              backgroundColor: "#ffcc00",
-              border: "none",
-              color: "black",
-              padding: "10px 20px",
-              fontSize: "16px",
-              borderRadius: "4px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-              cursor: "pointer",
-              transition: "background-color 0.3s, box-shadow 0.3s",
-              marginBottom: "20px",
-            }}
-            onClick={handleDashboardClick}
-          >
-            Add Task
-          </Button>
-        </div>
-        <div style={{display:"flex", gap:"20px",width: "80%", marginLeft: "40%"}}> 
+{/*    
+        <div style={{display:"flex",width: "80%", marginLeft: "20%"}}> 
         <Button onClick={clearSiteFilter} variant={selectedSite ? "outline" : "solid"} w="120px" style={{
     backgroundColor: "#ffcc00",
     border: "none",
@@ -172,7 +154,7 @@ const TaskListCard = ({ taskList }) => {
           >
             Site 2
           </Button>
-        </div>
+        </div> */}
         <Grid
           templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
           gap={4}

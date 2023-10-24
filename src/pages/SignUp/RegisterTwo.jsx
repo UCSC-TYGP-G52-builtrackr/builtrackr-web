@@ -248,7 +248,7 @@ export const RegisterTwo = () => {
         {/* left side grid image */}
         <div className="grid_left">
           <form>
-          <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
+            <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
               Sign Up To
             </h1>
             <h2
@@ -269,8 +269,10 @@ export const RegisterTwo = () => {
         </div>
         {/*right side grid form */}
         <div className="grid_right">
-          <div className="register_form" >
-            <h1><b>Complete Registration</b></h1>
+          <div className="register_form">
+            <h1>
+              <b>Complete Registration</b>
+            </h1>
             <div className="form-info">
               <label>Email Address</label>
               <input
@@ -281,11 +283,17 @@ export const RegisterTwo = () => {
                 id="email"
                 value={email}
                 onChange={handleInput}
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
               <br />
-              <button style={{backgroundColor:"#ffcc00",fontWeight:"bold"}} className="next_buttonOtp" onClick={event=>sendOTP(event)}>Send OTP</button>
-              <label >Enter OTP</label>
+              <button
+                style={{ backgroundColor: "#ffcc00", fontWeight: "bold" }}
+                className="next_buttonOtp"
+                onClick={(event) => sendOTP(event)}
+              >
+                Send OTP
+              </button>
+              <label>Enter OTP</label>
               <div className="flex items-center justify-center gap-4 ">
                 <input
                   type="text"
@@ -309,7 +317,7 @@ export const RegisterTwo = () => {
                 value={values.username}
                 onChange={handleInput}
                 placeholder=" Enter User Name"
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
               {errors.username && (
                 <p style={{ color: "red" }}>{errors.username}</p>
@@ -322,7 +330,7 @@ export const RegisterTwo = () => {
                 id="pwd"
                 value={values.password}
                 onChange={handleInput}
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
               <br />
               {errors.password && (
@@ -336,7 +344,7 @@ export const RegisterTwo = () => {
                 id="cpwd"
                 value={values.cPassword}
                 onChange={handleInput}
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
               <br />
               {errors.cPassword && (
