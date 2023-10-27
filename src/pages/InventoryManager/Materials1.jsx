@@ -30,6 +30,7 @@ import {faArrowRight}from "@fortawesome/free-solid-svg-icons";
 import MaterialDetailModal from "./MaterialDetailModal";
 import ReactPaginate from 'react-paginate';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -148,15 +149,15 @@ const Materials1 = () => {
           <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
             <br /><br />
             <Header title="Material Items in the Inventory" category="gdfcgf" />
-            <div className="relative flex gap-80 justify-end  mr-10 w-full">
-              <button
-                onClick={openAddModal}
-                className="flex bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full ml-30"
-              >
+            <div className=" relative flex gap-80 justify-end  mr-10 w-full">
+            <button
+  onClick={openAddModal}
+  className="absolute top-0 right-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full mr-4 mt-4"
+>
                 Add New Material
               </button>
             </div>
-            <br/>
+            <br/><br/><br/>
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
               <thead className="bg-gray-100">
                 <tr>
@@ -209,25 +210,32 @@ const Materials1 = () => {
                     </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => handleViewClick(material)}
-                        className="mr-3"
-                      >
-                        <FontAwesomeIcon icon={faEye} />
-                      </button>
-                      <button
-                        onClick={() => handleOpenEditModal(material)}
-                        className="mr-3"
-                      >
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                      </button>
-                      <button
-                        onClick={() => handleOpenDeleteModal(material)}
-                        className=""
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </button>
-                    </td>
+  <div className="flex">
+    <button
+      onClick={() => handleViewClick(material)}
+      className="p-0 border-none bg-transparent mx-2"
+    >
+      <FontAwesomeIcon icon={faEye} />
+    </button>
+    <button
+      onClick={() => handleOpenEditModal(material)}
+      className="p-0 border-none bg-transparent mx-2"
+    >
+      <FontAwesomeIcon icon={faPencilAlt} />
+    </button>
+    <button
+      onClick={() => handleOpenDeleteModal(material)}
+      className="p-0 border-none bg-transparent mx-2"
+    >
+      <FontAwesomeIcon icon={faTrashAlt} />
+    </button>
+  </div>
+</td>
+
+
+
+
+
                   </tr>
                 ))}
               </tbody>

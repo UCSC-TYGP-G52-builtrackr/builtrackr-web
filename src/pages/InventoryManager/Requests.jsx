@@ -18,7 +18,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { decryptData } from "../../encrypt";
 import "../../App.css";
 
-const Analytics1 = () => {
+const Requests = () => {
   const selectionsettings = { persistSelection: true };
 
   const { themeSettings, setThemeSettings } = useStateContext();
@@ -58,15 +58,52 @@ useEffect(() => {
 
 
 
-  const handleApprove = (requestId) => {
-    // Logic to handle approval for the given requestId
-    console.log("Approved request with ID: " + requestId);
-  };
+const handleApprove = (requestId) => {
+  fetch(`http://localhost:4000/api/mrequest/approveMaterialRequest/${requestId}`, {
+    method: 'PUT',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      // Assuming the request was successful, update the status in the frontend
+      updateStatusLocally(requestId, 'approved');
+    })
+    .catch((error) => {
+      console.error('Error approving request:', error);
+    });
+};
 
-  const handleReject = (requestId) => {
-    // Logic to handle rejection for the given requestId
-    console.log("Rejected request with ID: " + requestId);
-  };
+
+
+
+const handleReject = (requestId) => {
+  fetch(`http://localhost:4000/api/mrequest/rejectMaterialRequest/${requestId}`, {
+    method: 'PUT',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      // Assuming the request was successful, update the status in the frontend
+      updateStatusLocally(requestId, 'rejected');
+    })
+    .catch((error) => {
+      console.error('Error rejecting request:', error);
+    });
+};
+
+
+
+
+
+const updateStatusLocally = (requestId, status) => {
+  setMaterialRequestData((prevData) =>
+    prevData.map((request) =>
+      request.request_id === requestId ? { ...request, status } : request
+    )
+  );
+};
 
   return (
     <div className="">
@@ -119,25 +156,30 @@ useEffect(() => {
             <td className="py-2">{mreq.unit}</td>
             <td className="py-2">{mreq.status}</td>
             <td className="py-2">
-              <button
-                className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                onClick={() => handleApprove(mreq.request_id)}
-              >
-                Approve
-              </button>
-              <button
-                className="px-2 py-1 ml-2 bg-red-600 text-white rounded hover:bg-red-700"
-                onClick={() => handleReject(mreq.request_id)}
-              >
-                Reject
-              </button>
-              <button
-                className="px-2 py-1 ml-2 bg-blue-600 text-white rounded hover:bg-red-700"
-                onClick={() => handleReject(mreq.request_id)}
-              >
-                Close
-              </button>
-            </td>
+  <div className="flex space-x-2">
+    <button
+      className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+      onClick={() => handleApprove(mreq.request_id)}
+    >
+      Approve
+    </button>
+    <button
+      className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+      onClick={() => handleReject(mreq.request_id)}
+    >
+      Reject
+    </button>
+    <button
+      className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-red-700"
+      onClick={() => handleReject(mreq.request_id)}
+    >
+      Close
+    </button>
+  </div>
+</td>
+
+
+
           </tr>
         ))}
       </tbody>
@@ -150,4 +192,4 @@ useEffect(() => {
   );
 };
 
-export default Analytics1;
+export default Requests;

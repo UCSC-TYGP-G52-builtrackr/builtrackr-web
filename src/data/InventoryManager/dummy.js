@@ -542,7 +542,7 @@ export const linksIM = [
       },
     
       {
-        name: 'Analytics',
+        name: 'Requests',
         icon: <AssessmentIcon />,
       },
     

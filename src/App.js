@@ -54,7 +54,7 @@ import ImageUpload from "./pages/Supervisor/imageUpload";
 import Equipments1 from "./pages/InventoryManager/Equipments1";
 import Materials1 from "./pages/InventoryManager/Materials1";
 import Reports1 from "./pages/InventoryManager/Reports1";
-import Analytics1 from "./pages/InventoryManager/Analytics1";
+import Requests from "./pages/InventoryManager/Requests";
 
 function App() {
   const {
@@ -111,16 +111,16 @@ function App() {
         <Route path="/hrmanager/performance review" element={<Performance />} />
         {/* Inventory Manager */}
         <Route element={<ProtectedRoutes type={2} />}>
-          <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
+          {/* <Route path="/inventorymanager/Equipments" element={<DashboardW />} />
           <Route path="InventoryManger/Equipments/List" element={<ItemList />} />
           <Route path="InventoryManger/Materials/List" element={<ItemList />} />
           <Route path="/inventorymanager/Materials" element={<Material />} />
           <Route path="/inventorymanager/documents" element={<FileUpload />} />
-          <Route path="/inventorymanager/Reports" element={<Analytics />} /> 
+          <Route path="/inventorymanager/Reports" element={<Analytics />} />  */}
           <Route path="/inventorymanager/Equipments" element={<Equipments1/>} />
         <Route path="/inventorymanager/Materials" element={<Materials1 />} />
         <Route path="/inventorymanager/Reports" element={<Reports1 />} />
-        <Route path="/inventorymanager/Analytics" element={<Analytics1 />} />
+        <Route path="/inventorymanager/Requests" element={<Requests />} />
 
 
 
