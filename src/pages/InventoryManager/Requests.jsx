@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { decryptData } from "../../encrypt";
 import "../../App.css";
+import Swal from 'sweetalert2';
 
 const Requests = () => {
   const selectionsettings = { persistSelection: true };
@@ -49,49 +50,137 @@ useEffect(() => {
 
 
 
-
-
-
-
-
-
-
-
-
-const handleApprove = (requestId) => {
-  fetch(`http://localhost:4000/api/mrequest/approveMaterialRequest/${requestId}`, {
-    method: 'PUT',
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+const handleApprove = async (requestId) => {
+  try {
+    // Check if the requested quantity is available
+    const checkQuantityResponse = await fetch(
+      `http://localhost:4000/api/mrequest/checkMaterialQuantity/${requestId}`,
+      {
+        method: 'GET',
       }
-      // Assuming the request was successful, update the status in the frontend
-      updateStatusLocally(requestId, 'approved');
-    })
-    .catch((error) => {
-      console.error('Error approving request:', error);
+    );
+
+    const { available } = await checkQuantityResponse.json();
+
+    if (available) {
+      // Requested quantity is available, proceed with the approval
+      Swal.fire({
+        title: 'Approve Request',
+        text: 'Are you sure you want to approve this request?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, approve it',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`http://localhost:4000/api/mrequest/approveMaterialRequest/${requestId}`, {
+            method: 'PUT',
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              updateStatusLocally(requestId, 'approved');
+            })
+            .catch((error) => {
+              console.error('Error approving request:', error);
+              Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while approving the request.',
+                icon: 'error',
+              });
+            });
+        }
+      });
+    } else {
+      // Requested quantity is not available
+      Swal.fire({
+        title: 'Insufficient Quantity',
+        text: 'You cannot confirm because the quantity is not enough.',
+        icon: 'error',
+      });
+    }
+  } catch (error) {
+    console.error('Error checking material quantity:', error);
+    Swal.fire({
+      title: 'Error',
+      text: 'An error occurred while checking material quantity.',
+      icon: 'error',
     });
+  }
 };
+
+
+
+
+
+
+
 
 
 
 
 const handleReject = (requestId) => {
-  fetch(`http://localhost:4000/api/mrequest/rejectMaterialRequest/${requestId}`, {
-    method: 'PUT',
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      // Assuming the request was successful, update the status in the frontend
-      updateStatusLocally(requestId, 'rejected');
-    })
-    .catch((error) => {
-      console.error('Error rejecting request:', error);
-    });
+  Swal.fire({
+    title: 'Reject Request',
+    text: 'Are you sure you want to reject this request?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, reject it',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`http://localhost:4000/api/mrequest/rejectMaterialRequest/${requestId}`, {
+        method: 'PUT',
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          updateStatusLocally(requestId, 'rejected');
+        })
+        .catch((error) => {
+          console.error('Error rejecting request:', error);
+        });
+    }
+  });
 };
+
+const handleClose = (requestId) => {
+  Swal.fire({
+    title: 'Close Request',
+    text: 'Are you sure you want to close this request?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, close it',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`http://localhost:4000/api/mrequest/deleteMaterialRequest/${requestId}`, {
+        method: 'DELETE',
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          removeRequestLocally(requestId);
+        })
+        .catch((error) => {
+          console.error('Error closing request:', error);
+        });
+    }
+  });
+};
+
+const removeRequestLocally = (requestId) => {
+  setMaterialRequestData((prevData) =>
+    prevData.filter((request) => request.request_id !== requestId)
+  );
+};
+
 
 
 
@@ -171,7 +260,7 @@ const updateStatusLocally = (requestId, status) => {
     </button>
     <button
       className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-red-700"
-      onClick={() => handleReject(mreq.request_id)}
+      onClick={() => handleClose(mreq.request_id)}
     >
       Close
     </button>
