@@ -99,9 +99,9 @@ export function Login() {
               } else if (res.data.type === 2) {
                 localStorage.setItem(
                   "home_page",
-                  JSON.stringify(encryptData("/inventorymanager/Equipments"))
+                  JSON.stringify(encryptData("/inventorymanager/Dashboard"))
                 );
-                navigate("/inventorymanager/Equipments");
+                navigate("/inventorymanager/Dashboard");
               } else if (res.data.type === 3) {
                 localStorage.setItem(
                   "home_page",

@@ -527,23 +527,28 @@ export const linksIM = [
   {
     title: 'Pages',
     links: [
-      
+      {
+        name: 'Dashboard',
+        icon: <AssessmentIcon />,
+        AssessmentIcon
+      },
       {
         name: 'Equipments',
         icon: <Tool />,
       },
+      
       {
         name: 'Materials',
         icon: <Package />,
       },
+      
       {
-        name: 'Reports',
+        name: 'Equipment Requests',
         icon: <AssignmentIndIcon />,
       },
-    
       {
-        name: 'Requests',
-        icon: <AssessmentIcon />,
+        name: 'Material Requests',
+        icon: <AssignmentIndIcon />,
       },
     
     ],

@@ -51,11 +51,11 @@ import ImageUpload from "./pages/Supervisor/imageUpload";
 
 
 
-import Equipments1 from "./pages/InventoryManager/Equipments1";
-import Materials1 from "./pages/InventoryManager/Materials1";
-import Reports1 from "./pages/InventoryManager/Reports1";
+import Equipments from "./pages/InventoryManager/Equipments";
+import Materials from "./pages/InventoryManager/Materials";
+import Dashboard from "./pages/InventoryManager/Dashboard";
 import Requests from "./pages/InventoryManager/Requests";
-
+import MaterialRequests from "./pages/InventoryManager/MaterialRequests";
 function App() {
   const {
     setCurrentColor,
@@ -117,11 +117,12 @@ function App() {
           <Route path="/inventorymanager/Materials" element={<Material />} />
           <Route path="/inventorymanager/documents" element={<FileUpload />} />
           <Route path="/inventorymanager/Reports" element={<Analytics />} />  */}
-          <Route path="/inventorymanager/Equipments" element={<Equipments1/>} />
-        <Route path="/inventorymanager/Materials" element={<Materials1 />} />
-        <Route path="/inventorymanager/Reports" element={<Reports1 />} />
-        <Route path="/inventorymanager/Requests" element={<Requests />} />
-
+          <Route path="/inventorymanager/Dashboard" element={<Dashboard />} />
+          <Route path="/inventorymanager/Equipments" element={<Equipments/>} />
+        <Route path="/inventorymanager/Materials" element={<Materials />} />
+        
+        <Route path="/inventorymanager/Equipment Requests" element={<Requests />} />
+        <Route path="/inventorymanager/Material Requests" element={<MaterialRequests />} />
 
 
 

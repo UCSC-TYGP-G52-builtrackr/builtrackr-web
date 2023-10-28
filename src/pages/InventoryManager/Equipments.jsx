@@ -46,7 +46,7 @@ const style = {
   p: 10,
 };
 
-const Equipments1 = () => {
+const Equipments = () => {
   const [modalType, setModalType] = useState(null);
   const [deleteEModalOpen, setDeleteEModalOpen] = useState(false);
   const [addEModalOpen, setAddEModalOpen] = useState(false);
@@ -153,14 +153,14 @@ const Equipments1 = () => {
             <br /><br />
             <Header title="Equipment Items in the Inventory" category="gdfcgf" />
             <div className="relative flex gap-80 justify-end  mr-10 w-full">
-              <button
-                onClick={openAddEModal}
-                className="flex bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full ml-30"
-              >
+            <button
+  onClick={openAddEModal}
+  className="absolute top-0 right-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full mr-4 mt-4"
+>
                 Add New Equipment
               </button>
             </div>
-            <br/>
+            <br/><br/><br/>
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
               <thead className="bg-gray-100">
                 <tr>
@@ -192,24 +192,26 @@ const Equipments1 = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{equipment.quantity}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex">
                       <button
                         onClick={() => handleViewClick(equipment)}
-                        className="mr-3"
+                        className="p-0 border-none bg-transparent mx-2"
                       >
                         <FontAwesomeIcon icon={faEye} />
                       </button>
                       <button
                         onClick={() => handleOpenEditEModal(equipment)}
-                        className="mr-3"
+                        className="p-0 border-none bg-transparent mx-2"
                       >
                         <FontAwesomeIcon icon={faPencilAlt} />
                       </button>
                       <button
                         onClick={() => handleOpenDeleteEModal(equipment)}
-                        className=""
+                        className="p-0 border-none bg-transparent mx-2"
                       >
                         <FontAwesomeIcon icon={faTrashAlt} />
                       </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -288,4 +290,4 @@ const Equipments1 = () => {
   );
 };
 
-export default Equipments1;
+export default Equipments;

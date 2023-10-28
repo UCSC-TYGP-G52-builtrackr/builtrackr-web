@@ -19,7 +19,7 @@ import { decryptData } from "../../encrypt";
 import "../../App.css";
 import Swal from 'sweetalert2';
 
-const Requests = () => {
+const MaterialRequests = () => {
   const selectionsettings = { persistSelection: true };
 
   const { themeSettings, setThemeSettings } = useStateContext();
@@ -271,4 +271,4 @@ const updateStatusLocally = (requestId, status) => {
   );
 };
 
-export default Requests;
+export default MaterialRequests;

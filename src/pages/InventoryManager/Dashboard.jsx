@@ -73,7 +73,7 @@ const datas = [
   },
 ];
 
-const Reports1 = () => {
+const Dashboard = () => {
   const selectionsettings = { persistSelection: true };
 
   const { themeSettings, setThemeSettings } = useStateContext();
@@ -286,4 +286,4 @@ const Reports1 = () => {
   );
 };
 
-export default Reports1;
+export default Dashboard;

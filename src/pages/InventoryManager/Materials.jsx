@@ -43,7 +43,7 @@ const style = {
   p: 10,
 };
 
-const Materials1 = () => {
+const Materials = () => {
   const [modalType, setModalType] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -312,4 +312,4 @@ const Materials1 = () => {
   );
 };
 
-export default Materials1;
+export default Materials;
