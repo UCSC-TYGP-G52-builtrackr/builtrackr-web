@@ -182,13 +182,13 @@ const Equipments = () => {
                 {paginatedEquipmentData.map((equipment) => (
                   <tr
                     key={equipment.equipment_id}
-                    style={{
-                      backgroundColor: equipment.quantity <= 5 ? '#FF5555' : 'white',
-                    }}
+                    // style={{
+                    //   backgroundColor: equipment.quantity <= 5 ? '#FF5555' : 'white',
+                    // }}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">{equipment.equipment_id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {equipment.item_name}
+                      {equipment.equipment_name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{equipment.quantity}</td>
                     <td className="px-6 py-4 whitespace-nowrap">

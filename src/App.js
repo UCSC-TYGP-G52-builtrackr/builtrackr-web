@@ -54,7 +54,7 @@ import ImageUpload from "./pages/Supervisor/imageUpload";
 import Equipments from "./pages/InventoryManager/Equipments";
 import Materials from "./pages/InventoryManager/Materials";
 import Dashboard from "./pages/InventoryManager/Dashboard";
-import Requests from "./pages/InventoryManager/Requests";
+import EquipmentRequests from "./pages/InventoryManager/EquipmentRequests";
 import MaterialRequests from "./pages/InventoryManager/MaterialRequests";
 function App() {
   const {
@@ -121,7 +121,7 @@ function App() {
           <Route path="/inventorymanager/Equipments" element={<Equipments/>} />
         <Route path="/inventorymanager/Materials" element={<Materials />} />
         
-        <Route path="/inventorymanager/Equipment Requests" element={<Requests />} />
+        <Route path="/inventorymanager/Equipment Requests" element={<EquipmentRequests />} />
         <Route path="/inventorymanager/Material Requests" element={<MaterialRequests />} />
 
 

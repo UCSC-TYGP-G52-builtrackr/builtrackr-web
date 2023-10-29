@@ -19,15 +19,15 @@ import { decryptData } from "../../encrypt";
 import "../../App.css";
 import Swal from 'sweetalert2';
 
-const Requests = () => {
+const EquipmentRequests = () => {
   const selectionsettings = { persistSelection: true };
 
   const { themeSettings, setThemeSettings } = useStateContext();
-  const [materialRequestData, setMaterialRequestData] = useState([]);
+  const [equipmentRequestData, setEquipmentRequestData] = useState([]);
 
 //..............................
-const fetchMaterialRequestData = () => {
-  fetch('http://localhost:4000/api/mrequest/getAllMaterialRequests')
+const fetchEquipmentRequestData = () => {
+  fetch('http://localhost:4000/api/erequest/getAllEquipmentRequests')
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -35,15 +35,15 @@ const fetchMaterialRequestData = () => {
       return response.json();
     })
     .then((data) => {
-      setMaterialRequestData(data);
+      setEquipmentRequestData(data);
     })
     .catch((error) => {
-      console.error('Error fetching material data:', error);
+      console.error('Error fetching equipment data:', error);
     });
 };
 
 useEffect(() => {
-  fetchMaterialRequestData();
+  fetchEquipmentRequestData();
 }, []);
 
 //.................
@@ -54,13 +54,12 @@ const handleApprove = async (requestId) => {
   try {
     // Check if the requested quantity is available
     const checkQuantityResponse = await fetch(
-      `http://localhost:4000/api/mrequest/checkMaterialQuantity/${requestId}`,
+      `http://localhost:4000/api/erequest/checkEquipmentQuantity/${requestId}`,
       {
         method: 'GET',
       }
     );
 
-    
     const { available } = await checkQuantityResponse.json();
 
     if (available) {
@@ -75,7 +74,7 @@ const handleApprove = async (requestId) => {
         confirmButtonText: 'Yes, approve it',
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`http://localhost:4000/api/mrequest/approveMaterialRequest/${requestId}`, {
+          fetch(`http://localhost:4000/api/erequest/approveEquipmentRequest/${requestId}`, {
             method: 'PUT',
           })
             .then((response) => {
@@ -103,14 +102,24 @@ const handleApprove = async (requestId) => {
       });
     }
   } catch (error) {
-    console.error('Error checking material quantity:', error);
+    console.error('Error checking equipment quantity:', error);
     Swal.fire({
       title: 'Error',
-      text: 'An error occurred while checking material quantity.',
+      text: 'An error occurred while checking equipment quantity.',
       icon: 'error',
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
 
 const handleReject = (requestId) => {
   Swal.fire({
@@ -123,7 +132,7 @@ const handleReject = (requestId) => {
     confirmButtonText: 'Yes, reject it',
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch(`http://localhost:4000/api/mrequest/rejectMaterialRequest/${requestId}`, {
+      fetch(`http://localhost:4000/api/erequest/rejectEquipmentRequest/${requestId}`, {
         method: 'PUT',
       })
         .then((response) => {
@@ -150,7 +159,7 @@ const handleClose = (requestId) => {
     confirmButtonText: 'Yes, close it',
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch(`http://localhost:4000/api/mrequest/deleteMaterialRequest/${requestId}`, {
+      fetch(`http://localhost:4000/api/erequest/deleteEquipmentRequest/${requestId}`, {
         method: 'DELETE',
       })
         .then((response) => {
@@ -167,7 +176,7 @@ const handleClose = (requestId) => {
 };
 
 const removeRequestLocally = (requestId) => {
-  setMaterialRequestData((prevData) =>
+  setEquipmentRequestData((prevData) =>
     prevData.filter((request) => request.request_id !== requestId)
   );
 };
@@ -178,7 +187,7 @@ const removeRequestLocally = (requestId) => {
 
 
 const updateStatusLocally = (requestId, status) => {
-  setMaterialRequestData((prevData) =>
+  setEquipmentRequestData((prevData) =>
     prevData.map((request) =>
       request.request_id === requestId ? { ...request, status } : request
     )
@@ -207,68 +216,66 @@ const updateStatusLocally = (requestId, status) => {
         {themeSettings && <ChatSpace />}
         <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
           <div className="flex mb-8">
-            <Header title="Material and Equipment Requests" category="gdfcgf" />
+            <Header title="Equipment Requests" category="gdfcgf" />
           </div>
 
-          {/* Material Requests Table */}
+          {/* Equipment Requests Table */}
           <div style={{ marginTop: "20px", width: "100%" }}>
             <h2 className="text-2xl font-semibold"></h2>
             <table className="w-full table-fixed border-collapse border border-green-800">
-              <thead>
-                <tr className="bg-yellow-400 text-white">
-                  <th className="w-1/6 py-2">Request ID</th>
-                  <th className="w-1/6 py-2">Employee ID</th>
-                  <th className="w-1/6 py-2">Material ID</th>
-                 
-                  <th className="w-1/6 py-2">Quantity</th>
-                  <th className="w-1/6 py-2">Unit</th>
-                  <th className="w-1/6 py-2">Status</th>
-                  <th className="w-1/3 py-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-        {materialRequestData.map((mreq) => (
-          <tr key={mreq.id} className="text-center border border-green-600">
-            <td className="py-2">{mreq.request_id}</td>
-            <td className="py-2">{mreq.req_emp_id}</td>
-            <td className="py-2">{mreq.material_id}</td>
-            <td className="py-2">{mreq.req_quantity}</td>
-            <td className="py-2">{mreq.unit}</td>
-            <td className="py-2">{mreq.status}</td>
-            <td className="py-2">
-  <div className="flex space-x-2">
-    <button
-      className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-      onClick={() => handleApprove(mreq.request_id)}
-    >
-      Approve
-    </button>
-    <button
-      className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-      onClick={() => handleReject(mreq.request_id)}
-    >
-      Reject
-    </button>
-    <button
-      className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-red-700"
-      onClick={() => handleClose(mreq.request_id)}
-    >
-      Close
-    </button>
-  </div>
-</td>
-
-
-          </tr>
-        ))}
-      </tbody>
-            </table>
+  <thead>
+    <tr className="bg-yellow-400 text-white">
+      <th className="w-1/6 py-2">Request ID</th>
+      <th className="w-1/6 py-2">Date</th>
+      <th className="w-1/6 py-2">Employee ID</th>
+      <th className="w-1/6 py-2">Equipment ID</th>
+      <th className="w-1/6 py-2">Quantity</th>
+      <th className="w-1/6 py-2">Status</th>
+      <th className="w-1/3 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {equipmentRequestData.map((ereq) => (
+      <tr key={ereq.id} className="text-center border border-green-600">
+        <td className="py-2">{ereq.request_id}</td>
+        <td className="py-2">{ereq.req_date}</td>
+        <td className="py-2">{ereq.req_emp_id}</td>
+        <td className="py-2">{ereq.equipment_id}</td>
+        <td className="py-2">{ereq.req_quantity}</td>
+        <td className="py-2">{ereq.status}</td>
+        <td className="py-2">
+          <div className="flex space-x-2">
+            <button
+              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+              onClick={() => handleApprove(ereq.request_id)}
+            >
+              Approve
+            </button>
+            <button
+              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+              onClick={() => handleReject(ereq.request_id)}
+            >
+              Reject
+            </button>
+            <button
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-red-700"
+              onClick={() => handleClose(ereq.request_id)}
+            >
+              Close
+            </button>
           </div>
-          {/* End of Material Requests Table */}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+          </div>
+          {/* End of Equipment Requests Table */}
         </div>
       </div>
     </div>
   );
 };
 
-export default Requests;
+export default EquipmentRequests;

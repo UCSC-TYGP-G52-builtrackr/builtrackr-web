@@ -175,6 +175,9 @@ const Materials = () => {
                     Available Quantity
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Unit
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Actions
                   </th>
                 </tr>
@@ -183,9 +186,9 @@ const Materials = () => {
                 {paginatedMaterialData.map((material) => (
                   <tr
                     key={material.material_id}
-                    style={{
-                      backgroundColor: material.quantity <= 5 ? '#FF5555' : 'white', // Use a deeper red color (#FF5555)
-                    }}
+                    // style={{
+                    //   backgroundColor: material.quantity <= 5 ? '#FF5555' : 'white', // Use a deeper red color (#FF5555)
+                    // }}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">{material.material_id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -193,7 +196,7 @@ const Materials = () => {
                         to={`/InventoryManger/Equipments/List/${material.material_id}`}
                         className="text-indigo-600 hover:text-indigo-900"
                       > */}
-                      {material.item_name}
+                      {material.material_name}
                       {/* </Link> */}
                     </td>
                     {/* Uncomment the following lines if you want to include an Image column */}
@@ -209,6 +212,7 @@ const Materials = () => {
                       </div>
                     </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{material.type}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
   <div className="flex">
     <button
@@ -231,7 +235,6 @@ const Materials = () => {
     </button>
   </div>
 </td>
-
 
 
 
@@ -295,19 +298,20 @@ const Materials = () => {
         />
       )}
       <EditModal
-        isOpen={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        materialData={editCategory}
-        setMaterialData={(updatedData) => {
-          const updatedMaterialData = materialData.map((material) => {
-            if (material.material_id === updatedData.material_id) {
-              return updatedData;
-            }
-            return material;
-          });
-          setMaterialData(updatedMaterialData);
-        }}
-      />
+  isOpen={editModalOpen}
+  onClose={() => setEditModalOpen(false)}
+  materialData={editCategory}
+  setMaterialData={(updatedData) => {
+    const updatedMaterialData = materialData.map((material) => {
+      if (material.material_id === updatedData.material_id) {
+        return updatedData;
+      }
+      return material;
+    });
+    setMaterialData(updatedMaterialData);
+  }}
+/>
+
     </>
   );
 };

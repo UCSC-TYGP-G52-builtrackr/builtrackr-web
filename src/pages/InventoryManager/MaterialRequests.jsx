@@ -60,8 +60,8 @@ const handleApprove = async (requestId) => {
       }
     );
 
-    
     const { available } = await checkQuantityResponse.json();
+
 
     if (available) {
       // Requested quantity is available, proceed with the approval
@@ -111,6 +111,7 @@ const handleApprove = async (requestId) => {
     });
   }
 };
+
 
 const handleReject = (requestId) => {
   Swal.fire({
@@ -207,7 +208,7 @@ const updateStatusLocally = (requestId, status) => {
         {themeSettings && <ChatSpace />}
         <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
           <div className="flex mb-8">
-            <Header title="Material and Equipment Requests" category="gdfcgf" />
+            <Header title="Material Requests" category="gdfcgf" />
           </div>
 
           {/* Material Requests Table */}
@@ -217,8 +218,10 @@ const updateStatusLocally = (requestId, status) => {
               <thead>
                 <tr className="bg-yellow-400 text-white">
                   <th className="w-1/6 py-2">Request ID</th>
+                  <th className="w-1/6 py-2">Date</th>
                   <th className="w-1/6 py-2">Employee ID</th>
                   <th className="w-1/6 py-2">Material ID</th>
+                 
                  
                   <th className="w-1/6 py-2">Quantity</th>
                   <th className="w-1/6 py-2">Unit</th>
@@ -230,10 +233,11 @@ const updateStatusLocally = (requestId, status) => {
         {materialRequestData.map((mreq) => (
           <tr key={mreq.id} className="text-center border border-green-600">
             <td className="py-2">{mreq.request_id}</td>
+            <td className="py-2">{mreq.req_date}</td>
             <td className="py-2">{mreq.req_emp_id}</td>
             <td className="py-2">{mreq.material_id}</td>
             <td className="py-2">{mreq.req_quantity}</td>
-            <td className="py-2">{mreq.unit}</td>
+            <td className="py-2">{mreq.type}</td>
             <td className="py-2">{mreq.status}</td>
             <td className="py-2">
   <div className="flex space-x-2">
@@ -257,6 +261,7 @@ const updateStatusLocally = (requestId, status) => {
     </button>
   </div>
 </td>
+
 
 
           </tr>

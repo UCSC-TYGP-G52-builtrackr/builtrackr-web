@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Input, InputLabel, Typography, Button, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close'; // Import the Close icon
+import Swal from 'sweetalert2';
 
 const style = {
   position: 'absolute',
@@ -18,34 +19,39 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
   const [materialName, setMaterialName] = useState('');
   const [materialDescription, setMaterialDescription] = useState('');
   const [materialQty, setMaterialQty] = useState('');
-  const [materialImage, setMaterialImage] = useState(null);
+  const [materialType, setMaterialType] = useState('');
+  const [materialPreLevel, setMaterialPreLevel] = useState('');
 
   useEffect(() => {
     // Check if materialData is provided and update the state variables accordingly
     if (materialData) {
-      setMaterialName(materialData.item_name);
+      setMaterialName(materialData.material_name);
       setMaterialDescription(materialData.description);
       setMaterialQty(materialData.quantity);
-      setMaterialImage(materialData.photo_path);
-      // Note: You might want to handle materialImage differently, depending on how it's stored.
-      // If it's a URL or file name, you can set it here as well.
+      setMaterialType(materialData.type);
+      setMaterialPreLevel(materialData.preorder_level);
     }
   }, [materialData]);
 
   const handleSubmitModal = () => {
     // Input validation
-    if (!materialName || !materialDescription || isNaN(materialQty) || materialQty <= 0) {
-      alert('Please enter valid data.');
+    if (!materialName || !materialDescription || isNaN(materialQty) || materialQty <= 0 || isNaN(materialPreLevel)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please enter valid data.',
+      });
       return;
     }
 
     // Prepare the updated material data
     const updatedMaterial = {
       material_id: materialData.material_id,
-      item_name: materialName,
+      material_name: materialName,
       description: materialDescription,
       quantity: materialQty,
-      photo_path: materialImage ? materialImage.name : '', // Assuming you want to update the image name
+      type: materialType,
+      preorder_level: materialPreLevel,
     };
 
     // Make an HTTP request to update the material data
@@ -63,12 +69,29 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
         return response.json();
       })
       .then((data) => {
-        // Update the material data in the state with the updated data
-        setMaterialData(data);
+        // Update the local state with the updated data
+        setMaterialName(data.material_name);
+        setMaterialDescription(data.description);
+        setMaterialQty(data.quantity);
+        setMaterialType(data.type);
+        setMaterialPreLevel(data.preorder_level);
+
+        // Display a success message using SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Material details have been successfully updated!',
+        });
       })
       .catch((error) => {
         console.error('Error updating material data:', error);
         // Handle the error gracefully, e.g., show an error message to the user.
+        // You can also display an error message using SweetAlert if needed.
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update material details. Please try again.',
+        });
       });
 
     // Close the modal
@@ -79,17 +102,17 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
         <IconButton
-          edge="end" // Position the icon on the top right corner
+          edge="end"
           color="inherit"
           onClick={onClose}
-          sx={{ position: 'absolute', top: '10px', right: '10px' }} // Position the icon
+          sx={{ position: 'absolute', top: '10px', right: '10px' }}
         >
           <CloseIcon />
         </IconButton>
         <Typography variant="h4" style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold' }}>
           Update Material
         </Typography>
-        <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <form style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           <div>
             <InputLabel htmlFor="materialName">Material Name</InputLabel>
             <Input
@@ -119,28 +142,31 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
             />
           </div>
           <div>
-            <InputLabel>Choose an image</InputLabel>
+            <InputLabel htmlFor="materialType">Material Type</InputLabel>
             <Input
-              type="file"
-              onChange={(e) => setMaterialImage(e.target.files[0])}
-              accept=".jpg, .png, .jpeg"
+              value={materialType}
+              onChange={(e) => setMaterialType(e.target.value)}
+              placeholder="Enter material Type"
               sx={{ width: '100%' }}
             />
           </div>
-          {materialImage && (
-            <Typography sx={{ width: '100%' }}>Selected file: {materialImage.name}</Typography>
-          )}
- <Button
-  onClick={handleSubmitModal}
-  variant="contained"
-  style={{ backgroundColor: "#f59e0b" }} // Replace with the correct color code
->
-  Save Changes
-</Button>
-
-
-
-
+          <div>
+            <InputLabel htmlFor="materialPreLevel">Pre Order Level</InputLabel>
+            <Input
+              type="number"
+              value={materialPreLevel}
+              onChange={(e) => setMaterialPreLevel(e.target.value)}
+              placeholder="Enter Pre Oreder Level"
+              sx={{ width: '100%' }}
+            />
+          </div>
+          <Button
+            onClick={handleSubmitModal}
+            variant="contained"
+            style={{ backgroundColor: "#f59e0b" }}
+          >
+            Save Changes
+          </Button>
         </form>
       </Box>
     </Modal>

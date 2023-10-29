@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Input, InputLabel, Typography, Button, Box, Select, MenuItem } from '@mui/material';
+import { Modal, Input, InputLabel, Typography, Button, Box } from '@mui/material';
+import Swal from 'sweetalert2';
 
 const style = {
   position: 'absolute',
@@ -17,21 +18,23 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
   const [equipmentName, setEquipmentName] = useState('');
   const [equipmentDescription, setEquipmentDescription] = useState('');
   const [equipmentQty, setEquipmentQty] = useState('');
-  const [equipmentImage, setEquipmentImage] = useState(null);
 
   const handleSubmitModal = () => {
     // Input validation
     if (!equipmentName || !equipmentDescription || isNaN(equipmentQty) || equipmentQty <= 0) {
-      alert('Please enter valid data.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please enter valid data.',
+      });
       return;
     }
 
     // Prepare the new equipment data
     const newEquipment = {
-      item_name: equipmentName,
+      equipment_name: equipmentName,
       description: equipmentDescription,
       quantity: equipmentQty,
-      photo_path: equipmentImage ? equipmentImage.name : '',
     };
 
     // Make an HTTP request to add the equipment data
@@ -51,9 +54,21 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
       .then((data) => {
         // Update the equipment data in the state with the added data
         setEquipmentData((prevEquipmentData) => [...prevEquipmentData, data]);
+
+        // Show a success message using SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Your equipment has been successfully added!',
+        });
       })
       .catch((error) => {
         console.error('Error adding equipment data:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to add equipment. Please try again.',
+        });
       });
 
     // Close the modal
@@ -95,22 +110,10 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
               sx={{ width: '100%' }}
             />
           </div>
-          <div style={{ marginBottom: '20px' }}>
-            <InputLabel>Choose an image</InputLabel>
-            <Input
-              type="file"
-              onChange={(e) => setEquipmentImage(e.target.files[0])}
-              accept=".jpg, .png, .jpeg"
-              sx={{ width: '100%' }}
-            />
-          </div>
-          {equipmentImage && (
-            <Typography>Selected file: {equipmentImage.name}</Typography>
-          )}
           <Button
             onClick={handleSubmitModal}
             variant="contained"
-            style={{ backgroundColor: "#f59e0b" }} 
+            style={{ backgroundColor: "#f59e0b" }}
           >
             Add Equipment
           </Button>

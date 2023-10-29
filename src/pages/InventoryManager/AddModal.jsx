@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Input, InputLabel, Typography, Button, Box, Select, MenuItem } from '@mui/material';
+import Swal from 'sweetalert2'; // Import SweetAlert
+import { Modal, Input, InputLabel, Typography, Button, Box } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -17,21 +18,27 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
   const [materialName, setMaterialName] = useState('');
   const [materialDescription, setMaterialDescription] = useState('');
   const [materialQty, setMaterialQty] = useState('');
-  const [materialImage, setMaterialImage] = useState(null);
+  const [materialType, setMaterialType] = useState('');
+  const [materialPreLevel, setMaterialPreLevel] = useState('');
 
   const handleSubmitModal = () => {
     // Input validation
-    if (!materialName || !materialDescription || isNaN(materialQty) || materialQty <= 0) {
-      alert('Please enter valid data.');
+    if (!materialName || !materialDescription || isNaN(materialQty) || materialQty <= 0 || isNaN(materialPreLevel)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please enter valid data.',
+      });
       return;
     }
 
     // Prepare the new material data
     const newMaterial = {
-      item_name: materialName,
+      material_name: materialName,
       description: materialDescription,
       quantity: materialQty,
-      photo_path: materialImage ? materialImage.name : '',
+      type: materialType,
+      preorder_level: materialPreLevel,
     };
 
     // Make an HTTP request to add the material data
@@ -51,13 +58,20 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
       .then((data) => {
         // Update the material data in the state with the added data
         setMaterialData((prevMaterialData) => [...prevMaterialData, data]);
+
+        // Show success message with SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Your material has been successfully added.',
+        });
+
+        // Close the modal
+        onClose();
       })
       .catch((error) => {
         console.error('Error adding material data:', error);
       });
-
-    // Close the modal
-    onClose();
   };
 
   return (
@@ -96,17 +110,24 @@ const AddModal = ({ isOpen, onClose, setMaterialData }) => {
             />
           </div>
           <div style={{ marginBottom: '20px' }}>
-            <InputLabel>Choose an image</InputLabel>
+            <InputLabel htmlFor="materialType">Material Type</InputLabel>
             <Input
-              type="file"
-              onChange={(e) => setMaterialImage(e.target.files[0])}
-              accept=".jpg, .png, .jpeg"
+              value={materialType}
+              onChange={(e) => setMaterialType(e.target.value)}
+              placeholder="Enter Material Type"
               sx={{ width: '100%' }}
             />
           </div>
-          {materialImage && (
-            <Typography>Selected file: {materialImage.name}</Typography>
-          )}
+          <div style={{ marginBottom: '20px' }}>
+            <InputLabel htmlFor="materialPreLevel">Pre Order Level</InputLabel>
+            <Input
+              type="number"
+              value={materialPreLevel}
+              onChange={(e) => setMaterialPreLevel(e.target.value)}
+              placeholder="Enter Pre Order Level"
+              sx={{ width: '100%' }}
+            />
+          </div>
           <Button
             onClick={handleSubmitModal}
             variant="contained"

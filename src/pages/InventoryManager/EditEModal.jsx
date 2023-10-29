@@ -1,9 +1,7 @@
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Modal, Input, InputLabel, Typography, Button, Box, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close'; // Import the Close icon
+import CloseIcon from '@mui/icons-material/Close';
+import Swal from 'sweetalert2';
 
 const style = {
   position: 'absolute',
@@ -21,37 +19,32 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
   const [equipmentName, setEquipmentName] = useState('');
   const [equipmentDescription, setEquipmentDescription] = useState('');
   const [equipmentQty, setEquipmentQty] = useState('');
-  const [equipmentImage, setEquipmentImage] = useState(null);
 
   useEffect(() => {
-    // Check if equipmentData is provided and update the state variables accordingly
     if (equipmentData) {
-      setEquipmentName(equipmentData.item_name);
+      setEquipmentName(equipmentData.equipment_name);
       setEquipmentDescription(equipmentData.description);
       setEquipmentQty(equipmentData.quantity);
-      setEquipmentImage(equipmentData.photo_path);
-      // Note: You might want to handle equipmentImage differently, depending on how it's stored.
-      // If it's a URL or file name, you can set it here as well.
     }
   }, [equipmentData]);
 
   const handleSubmitModal = () => {
-    // Input validation
     if (!equipmentName || !equipmentDescription || isNaN(equipmentQty) || equipmentQty <= 0) {
-      alert('Please enter valid data.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please enter valid data.',
+      });
       return;
     }
 
-    // Prepare the updated equipment data
     const updatedEquipment = {
       equipment_id: equipmentData.equipment_id,
-      item_name: equipmentName,
+      equipment_name: equipmentName,
       description: equipmentDescription,
       quantity: equipmentQty,
-      photo_path: equipmentImage ? equipmentImage.name : '', // Assuming you want to update the image name
     };
 
-    // Make an HTTP request to update the equipment data
     fetch(`http://localhost:4000/api/equipment/updateEquipment/${equipmentData.equipment_id}`, {
       method: 'PUT',
       headers: {
@@ -66,15 +59,24 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
         return response.json();
       })
       .then((data) => {
-        // Update the equipment data in the state with the updated data
         setEquipmentData(data);
+
+        // Show a success message using SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Equipment details have been successfully updated!',
+        });
       })
       .catch((error) => {
         console.error('Error updating equipment data:', error);
-        // Handle the error gracefully, e.g., show an error message to the user.
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update equipment details. Please try again.',
+        });
       });
 
-    // Close the modal
     onClose();
   };
 
@@ -82,10 +84,10 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
         <IconButton
-          edge="end" // Position the icon on the top right corner
+          edge="end"
           color="inherit"
           onClick={onClose}
-          sx={{ position: 'absolute', top: '10px', right: '10px' }} // Position the icon
+          sx={{ position: 'absolute', top: '10px', right: '10px' }}
         >
           <CloseIcon />
         </IconButton>
@@ -121,22 +123,10 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
               sx={{ width: '100%' }}
             />
           </div>
-          <div>
-            <InputLabel>Choose an image</InputLabel>
-            <Input
-              type="file"
-              onChange={(e) => setEquipmentImage(e.target.files[0])}
-              accept=".jpg, .png, .jpeg"
-              sx={{ width: '100%' }}
-            />
-          </div>
-          {equipmentImage && (
-            <Typography sx={{ width: '100%' }}>Selected file: {equipmentImage.name}</Typography>
-          )}
           <Button
             onClick={handleSubmitModal}
             variant="contained"
-            style={{ backgroundColor: "#f59e0b" }} 
+            style={{ backgroundColor: "#f59e0b" }}
           >
             Save Changes
           </Button>
