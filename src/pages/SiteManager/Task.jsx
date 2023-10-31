@@ -267,7 +267,8 @@ const Task = () => {
 
                         <Td>{formatDate(task.duedate)}</Td>
 
-                        <Td>
+                        <Td textAlign="center ">
+                          <div className="flex justify-center">
                           <Button
                             colorScheme="green"
                             // Disable the button if status is approved
@@ -287,6 +288,7 @@ const Task = () => {
                           >
                             Delete
                           </Button>
+                          </div>
                         </Td>
                       </Tr>
                     ))}

@@ -67,6 +67,22 @@ const SiteDashboard = () => {
 
   const [selectedSiteIds, setSelectedSiteIds] = useState([]);
 
+  const GetSupervisorDetails = async (siteId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/api/sitemanager/getsupervisor/${siteId}`
+      );
+      if (response.status === 200) {
+        setSupDetails(response.data);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error("Error getting supervisor details:", error);
+      // Handle the error appropriately (e.g., show an error message).
+    }
+  };
+  
+
   const onClose = () => {
     setIsOpen(false);
     setSelectedSite(null);
@@ -74,6 +90,7 @@ const SiteDashboard = () => {
 
   const openModal = (siteID) => {
     setSelectedSite(siteID);
+    GetSupervisorDetails(siteID);
     setIsOpen(true);
     const isSupervisorSelected =
       sites.find((site) => site.site_id === siteID).supervisorid !== null;
@@ -222,23 +239,7 @@ const SiteDashboard = () => {
       });
   };
 
-  useEffect(() => {
-    const GetSupervisorDetails = async (siteId) => {
-      try {
-        const response = await axios.get(
-          `http://localhost:4000/api/sitemanager/getsupervisor/${siteId}`
-        );
-        if (response.status === 200) {
-          setSupDetails(response.data);
-          console.log(response.data);
-        }
-      } catch (error) {
-        console.error("Error getting supervisor details:", error);
-        // Handle the error appropriately (e.g., show an error message).
-      }
-    };
-    GetSupervisorDetails();
-  }, []);
+
 
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
@@ -408,6 +409,15 @@ const SiteDashboard = () => {
       alert("Minimum quantity is 1");
     }
   };
+  const supervisorPaths = [
+    '/set1.png',
+    '/set2.png',
+    '/set3.png',
+    '/set4.png',
+    '/set5.png',
+    // Add more image paths here
+  ];
+
   return (
     <>
       <ChakraProvider>
@@ -452,7 +462,7 @@ const SiteDashboard = () => {
                           }`}
                         >
                           <Image
-                            src="/supervisor.png"
+                            src={supervisorPaths[Math.floor(Math.random() * supervisorPaths.length)]}
                             alt={supervisor.name}
                             boxSize="150px"
                             objectFit="cover"
@@ -491,7 +501,8 @@ const SiteDashboard = () => {
                             fontSize: "20px",
                           }}
                         >
-                          Supervisor is already selected.
+                          {supDetails.f_name} {supDetails.l_name} is already
+                        selected as the Site Supervisor. 
                         </p>
                         <p></p>
                       </div>
@@ -633,10 +644,11 @@ const SiteDashboard = () => {
                       style={{
                         fontSize: "24px",
                         fontWeight: "bold",
-                        marginBottom: "20px",
+                        marginBottom: "60px",
                       }}
                     >
-                      Select Materials
+                      Select 
+                      Materials
                     </label>
 
                     {/* Material selection dropdown */}
@@ -711,7 +723,7 @@ const SiteDashboard = () => {
                       style={{
                         fontSize: "24px",
                         fontWeight: "bold",
-                        marginBottom: "20px",
+                        marginBottom: "30px",
                       }}
                     >
                       Select Labours

@@ -70,6 +70,30 @@ const SMDashboard = () => {
   const [selectedSiteIds, setSelectedSiteIds] = useState([]);
   const [eachTaskCount, setEachTaskCount] = useState([]);
   const [eachCompletedCount, setEachCompletedCount] = useState([]);
+  const [chartData, setChartData] = useState({
+    labels: ["Completed", "Pending"],
+    datasets: [
+      {
+        label: "Task Dataset",
+        data: [8, 4], // Removed .toString()
+        backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
+        borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
+        borderWidth: 1,
+      },
+    ],
+  });
+  const [chartData2, setChartData2] = useState({
+    labels: ["Completed", "Pending"],
+    datasets: [
+      {
+        label: "Task Dataset",
+        data: [3, 10], // Removed .toString()
+        backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
+        borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
+        borderWidth: 1,
+      },
+    ],
+  });
   // const [data3, setData3] = useState(null);
 
   // useEffect(() => {
@@ -178,13 +202,12 @@ const SMDashboard = () => {
   };
 
   const labels = [
+    "October",
+    "November",
+    "December",
     "January",
     "February",
     "March",
-    "April",
-    "May",
-    "June",
-    "July",
   ];
 
   const data3 = {
@@ -192,18 +215,67 @@ const SMDashboard = () => {
     datasets: [
       {
         label: "Approved",
-        data: [300, 50, 100, 200, 500, 250, 400],
+        data: [8, 10, 11, 0, 7, 2, 1],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
+        tension: 0.1
       },
       {
         label: "Rejected",
-        data: [100, 200, 150, 50, 200, 100, 300],
+        data: [3,2,4,5,6,7,8],
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
+
+  const getEachTask = async (siteId) => {
+    axios
+      .get(`http://localhost:4000/api/task/eachtaskcount/${siteId}`)
+      .then((response) => {
+        const data = {
+          'siteID' : siteId,
+          'count' : response.data.count
+        }
+        setEachTaskCount((prevData) => {
+          const newTaskList = [...prevData];
+          const index = newTaskList.findIndex((task) => task.siteID === siteId);
+          if (index > -1) {
+            newTaskList[index] = data;
+          } else {
+            newTaskList.push(data);
+          }
+          return newTaskList;
+        })
+      })
+      .catch((error) => {
+        console.error("Error fetching task count:", error);
+      });
+    };
+
+    const getEachCompleted = async(siteId)=>{
+      axios
+        .get(`http://localhost:4000/api/task/eachcompletedcount/${siteId}`)
+        .then((response) => {
+          const data = {
+            'siteID' : siteId,
+            'count' : response.data.count
+          }
+          setEachCompletedCount((prevData) => {
+            const newTaskList = [...prevData];
+            const index = newTaskList.findIndex((task) => task.siteID === siteId);
+            if (index > -1) {
+              newTaskList[index] = data;
+            } else {
+              newTaskList.push(data);
+            }
+            return newTaskList;
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching task count:", error);
+        });
+      }
   useEffect(() => {
     // Function to fetch labor data for a single site ID
     const fetchLaborDataForSite = async (siteId) => {
@@ -218,66 +290,30 @@ const SMDashboard = () => {
         console.error(`Error fetching labor data for site ${siteId}:`, error);
       }
     };
-
-    const getEachTask = async (siteId) => {
-      axios
-        .get(`http://localhost:4000/api/task/eachtaskcount/${siteId}`)
-        .then((response) => {
-          const data = {
-            'siteID' : siteId,
-            'count' : response.data.count
-          }
-          setEachTaskCount((prevData) => {
-            const newTaskList = [...prevData];
-            const index = newTaskList.findIndex((task) => task.siteID === siteId);
-            if (index > -1) {
-              newTaskList[index] = data;
-            } else {
-              newTaskList.push(data);
-            }
-            return newTaskList;
-          })
-        })
-        .catch((error) => {
-          console.error("Error fetching task count:", error);
-        });
-      };
-
-      const getEachCompleted = async(siteId)=>{
-        axios
-          .get(`http://localhost:4000/api/task/eachcompletedcount/${siteId}`)
-          .then((response) => {
-            const data = {
-              'siteID' : siteId,
-              'count' : response.data.count
-            }
-            setEachCompletedCount((prevData) => {
-              const newTaskList = [...prevData];
-              const index = newTaskList.findIndex((task) => task.siteID === siteId);
-              if (index > -1) {
-                newTaskList[index] = data;
-              } else {
-                newTaskList.push(data);
-              }
-              return newTaskList;
-            });
-          })
-          .catch((error) => {
-            console.error("Error fetching task count:", error);
-          });
-        }
-   
   
     // Loop through each selected site ID and fetch labor data for them
     selectedSiteIds.forEach((siteId) => {
       console.log(siteId);
       fetchLaborDataForSite(siteId);
-      getEachTask(siteId);
-      getEachCompleted(siteId);
+      // getEachTask(siteId);
+      // getEachCompleted(siteId);
+    });
+    setChartData({
+      labels: ["Completed", "Pending"],
+      datasets: [
+        {
+          label: "Task Dataset",
+          data: [3, 4], // Removed .toString()
+          backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
+          borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
+          borderWidth: 1,
+        },
+      ],
     });
   }, [selectedSiteIds]);
-  console.log(eachCompletedCount);
-  console.log(eachTaskCount);
+  
+
+
  
   console.log("labourdetails", laborData);
   
@@ -471,14 +507,14 @@ const SMDashboard = () => {
     <>
       <ChakraProvider>
         <Navbar />
-        <div className="flex">
+        <div className="flex overflow-hidden">
           {/* {taskData.length > 0 ? (
               <Doughnut data={data} />
             ) : (
               <p>Loading data...</p>
             )} */}
-          <Sidebar />
-          <div className="flex flex-col w-full items-center justify-center ml-[400px]">
+          <Sidebar className="w-1/5"/>
+          <div className=" flex flex-col ml-[300px] items-center justify-center">
             <div className="flex w-full items-center justify-evenly p-5 mt-16 mx-4">
               <DetailBox
                 backgroundColor={borderColors[0]}
@@ -517,7 +553,7 @@ const SMDashboard = () => {
                   <div className="w-80 h-80">
                     {" "}
                     {/* Adjust the width and height as needed */}
-                    <Doughnut data={data} options={options} />
+                    <Doughnut data={chartData} options={options} />
                   </div>
                 </div>
                 <div className="flex gap-4 flex-col w-2/5 items-center justify-center ml-10 mt-6 ">
@@ -525,7 +561,7 @@ const SMDashboard = () => {
                   <div className="w-80 h-80">
                     {" "}
                     {/* Adjust the width and height as needed */}
-                    <Doughnut data={data2} options={options} />
+                    <Doughnut data={chartData2} options={options} />
                   </div>
                 </div>
                 {/* <div className="flex gap-2 flex-col w-2/5 items-center justify-center">
@@ -565,7 +601,7 @@ const SMDashboard = () => {
                   <Tr key={row.labor_id}>
                     <Td>{row.f_name} {row.l_name}</Td>
                     <Td>{row.labourtype}</Td>
-                    <Td>{row.site_id}</Td>
+                    <Td>{row.site_name}</Td>
                     <Td>{row.tel_no}</Td>
                     <Td>Available</Td>
 

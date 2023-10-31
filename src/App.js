@@ -147,6 +147,7 @@ function App() {
           <Route path="/sitemanager/sites" element={<SiteDashboard />} />
         
           <Route path="/sitemanager/labourleaves" element={<LaborLeaveTable />} />
+          
         </Route>
 
         {/* Site Supervisor */}

@@ -868,7 +868,7 @@ export const SiteManagerLinks = [
       {
         name:"Kanbanboard",
         icon:<Clipboard/>,
-        redirect:"sitemanager/kanbanboard"
+        redirect:"supervisor/kanbanboard"
       }
     ],
   },
