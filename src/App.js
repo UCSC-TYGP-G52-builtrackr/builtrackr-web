@@ -50,6 +50,7 @@ import Equipments1 from "./pages/InventoryManager/Equipments1";
 import Materials1 from "./pages/InventoryManager/Materials1";
 import Reports1 from "./pages/InventoryManager/Reports1";
 import Analytics1 from "./pages/InventoryManager/Analytics1";
+import OTPVerify from "./pages/Login/OTPVerify"
 
 function App() {
   const {
@@ -86,6 +87,7 @@ function App() {
         <Route path="/RegisterTwo" element={<RegisterTwo />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/OTPVerify" element={<OTPVerify />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/paymentplan" element={<PaymentPlan />} />
         <Route path="*" element={<Home />} />

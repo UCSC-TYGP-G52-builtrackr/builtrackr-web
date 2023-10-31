@@ -1,11 +1,19 @@
 import "../../CSS/register.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Validation } from "../Login/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+const steps = [
+  "Enter Company Details",
+  "Verify email and set Credentials",
+  "Payment",
+];
 
 export const RegisterTwo = () => {
   const [values, setValues] = useState({
@@ -18,6 +26,10 @@ export const RegisterTwo = () => {
   const [otpVerify, setOtpVerify] = useState(false);
   const navigate = useNavigate();
   const [verifiedMsg, setVerifiedMsg] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
+
   const [errors, setErrors] = useState({
     OTP: "",
     username: "",
@@ -54,8 +66,10 @@ export const RegisterTwo = () => {
   console.log(formData);
   const handleSubmit = async (e) => {
     setErrors({ username: "", password: "", cPassword: "", OTP: "" });
+    setIsLoading2(true);
     if (otpVerify === false) {
       toast.error("Please Verify OTP");
+      setIsLoading2(false);
       return;
     }
     let error = false;
@@ -87,11 +101,11 @@ export const RegisterTwo = () => {
         password: "Password Contains atleast 8 Characters",
       }));
       error = true;
-    }
-    else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit){
+    } else if (!hasUppercase || !hasLowercase || !hasSpecialChar || !hasDigit) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        password: "Password Contains atleast one Upercase, Lowercase, Special Character and Number",
+        password:
+          "Password Contains atleast one Upercase, Lowercase, Special Character and Number",
       }));
       error = true;
     }
@@ -110,40 +124,55 @@ export const RegisterTwo = () => {
     }
     if (error || errors.OTP) {
       return;
+    } else {
+      const username = values.username;
+      const password = values.password;
+      const formDataNew = {
+        username,
+        email,
+        password,
+        regNo,
+        line1,
+        line2,
+        city,
+        contactNo,
+        certificate,
+        name,
+      };
+      setIsLoading2(false);
+      navigate("/paymentplan", { state: formDataNew });
+
+      // try {
+      //   const username = values.username;
+      //   const password = values.password;
+
+      //   await axios
+      //     .post("http://localhost:4000/api/user/register", {
+      //       username,
+      //       email,
+      //       password,
+      //       regNo,
+      //       line1,
+      //       line2,
+      //       city,
+      //       contactNo,
+      //       certificate,
+      //       name,
+      //     })
+      //     .then((res) => {
+      //       console.log(res);
+      //       console.log(res.data);
+      //       toast.success("Registered Successfully");
+      //       setTimeout(() => {
+      //         navigate("/login");
+      //       }, 3000);
+      //     });
+      // } catch (err) {
+      //   console.error(err.message); // "Request failed with status code 500"
+      //   //console.error(err)
+      //   toast.error(err?.data?.message || err.error);
+      // }
     }
-    else{
-      try {
-        const username = values.username;
-        const password = values.password;
-  
-        await axios
-          .post("http://localhost:4000/api/user/register", {
-            username,
-            email,
-            password,
-            regNo,
-            line1,
-            line2,
-            city,
-            contactNo,
-            certificate,
-            name,
-          })
-          .then((res) => {
-            console.log(res);
-            console.log(res.data);
-            toast.success("Registered Successfully");
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
-          });
-      } catch (err) {
-        console.error(err.message); // "Request failed with status code 500"
-        //console.error(err)
-        toast.error(err?.data?.message || err.error);
-      }
-    }
-    
   };
 
   let otp_inputs = document.querySelectorAll(".otp_num");
@@ -212,7 +241,7 @@ export const RegisterTwo = () => {
 
   function sendOTP(e) {
     e.preventDefault();
-    // console.log(email);
+    setIsLoading1(true);
     userEmail = email;
     if (regex.test(userEmail)) {
       fetch("http://localhost:4000/api/user/sendotp", {
@@ -222,17 +251,23 @@ export const RegisterTwo = () => {
         }),
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
+        setIsLoading1(false);
+
         if (res.status === 200) {
           // verfEle.style.display = 'block';
           // emailpartialEle.innerHTML = userEmail
           console.log("OTP sent");
+          setOtpSent("OTP was send, please check your email.");
         } else {
           // errorEle.style.display = 'block';
           // errorEle.innerHTML = "Email not exist";
           // successEle.style.display = 'none';
+          setOtpSent("OTP was not send, please try again, check your email.");
         }
       });
     } else {
+      setIsLoading1(false);
+
       // errorEle.style.display = 'block';
       // errorEle.innerHTML = "Invalid Email";
       // successEle.style.display = 'none';
@@ -248,7 +283,7 @@ export const RegisterTwo = () => {
         {/* left side grid image */}
         <div className="grid_left">
           <form>
-          <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
+            <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
               Sign Up To
             </h1>
             <h2
@@ -269,8 +304,10 @@ export const RegisterTwo = () => {
         </div>
         {/*right side grid form */}
         <div className="grid_right">
-          <div className="register_form" >
-            <h1><b>Complete Registration</b></h1>
+          <div className="register_form">
+            <h1>
+              <b>Complete Registration</b>
+            </h1>
             <div className="form-info">
               <label>Email Address</label>
               <input
@@ -281,11 +318,32 @@ export const RegisterTwo = () => {
                 id="email"
                 value={email}
                 onChange={handleInput}
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
               <br />
-              <button style={{backgroundColor:"#ffcc00",fontWeight:"bold"}} className="next_buttonOtp" onClick={event=>sendOTP(event)}>Send OTP</button>
-              <label >Enter OTP</label>
+              {isLoading1 ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                <button
+                  style={{ backgroundColor: "#ffcc00", fontWeight: "bold" }}
+                  className="next_buttonOtp"
+                  onClick={(event) => sendOTP(event)}
+                >
+                  Send OTP
+                </button>
+              )}
+
+              <h2 style={{ textAlign: "center" }}>{otpSent}</h2>
+              <label>Enter OTP</label>
               <div className="flex items-center justify-center gap-4 ">
                 <input
                   type="text"
@@ -309,7 +367,7 @@ export const RegisterTwo = () => {
                 value={values.username}
                 onChange={handleInput}
                 placeholder=" Enter User Name"
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
               {errors.username && (
                 <p style={{ color: "red" }}>{errors.username}</p>
@@ -322,9 +380,8 @@ export const RegisterTwo = () => {
                 id="pwd"
                 value={values.password}
                 onChange={handleInput}
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
-              <br />
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
@@ -336,28 +393,59 @@ export const RegisterTwo = () => {
                 id="cpwd"
                 value={values.cPassword}
                 onChange={handleInput}
-                style={{paddingLeft:"10px"}}
+                style={{ paddingLeft: "10px" }}
               ></input>
-              <br />
               {errors.cPassword && (
                 <p style={{ color: "red" }}>{errors.cPassword}</p>
               )}
-              <button
-                className="next_button"
-                type="submit"
-                onClick={(e) => handleSubmit(e)}
-                style={{
-                  backgroundColor: "#ffcc00",
-                  marginTop: "10px",
-                  fontWeight: "700",
-                }}
-              >
-                Register
-              </button>
+              <br />
+              {isLoading2 ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                <button
+                  className="next_button"
+                  type="submit"
+                  onClick={(e) => handleSubmit(e)}
+                  style={{
+                    backgroundColor: "#ffcc00",
+                    marginTop: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Next
+                </button>
+              )}
             </div>
           </div>
+          
         </div>
       </div>
+      <div
+            style={{
+              paddingBottom: "20px",
+              width: "50%",
+              position: "absolute",
+              right: "0",
+              marginTop: "10px",
+            }}
+          >
+            <Stepper activeStep={1} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </div>
     </div>
   );
 };

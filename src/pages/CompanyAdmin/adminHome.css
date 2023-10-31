@@ -156,6 +156,11 @@ input ::placeholder {
   color: #0d00ff;
   font-weight: 700;
 }
+.labourer .link {
+  cursor: pointer;
+  color: #0d00ff;
+  font-weight: 700;
+}
 .employye-add-form {
 }
 .two-inputs {
@@ -332,6 +337,15 @@ input ::placeholder {
     width: 500;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    
-    
+      
+}
+.labour-types-container{
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.laboure-type-lable{
+  padding: 6px 14px;
+  background-color: #dedede;
+  border-radius: 5px;
 }

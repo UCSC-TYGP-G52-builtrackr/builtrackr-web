@@ -15,8 +15,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import CircularProgress from "@mui/material/CircularProgress";
-
 import { decryptData } from "../../encrypt";
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const nicRegex1 = /^[2-9]+[0-9]{8}[vVxX]$/;
 const nicRegex2 = /^[1-2]+[0-9]{11}$/;
@@ -148,6 +148,8 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setConfirmPasswordErr("");
     setEmployeeTypeValue(0);
     setEmployeeTypeErr("");
+    setLabourerTypeName("");
+    setLabourerTypeNameErr("");
     setSelectEmployeeType(false);
   };
 
@@ -157,6 +159,11 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
 
   const [isLoadingError, setIsLoadingError] = useState(false);
   const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
+
+  const [labourerTypes, setLabourerTypes] = useState([]);
+  const [labourerTypeName, setLabourerTypeName] = useState("");
+  const [labourerTypeNameErr, setLabourerTypeNameErr] = useState("");
+  console.log(labourerTypeNameErr);
 
   const openConfirmModal = async () => {
     let hasErrors = false;
@@ -173,6 +180,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     setPasswordErr("");
     setConfirmPasswordErr("");
     setImageErr("");
+    setLabourerTypeNameErr("");
 
     const uppercaseRegex = /[A-Z]/;
     const lowercaseRegex = /[a-z]/;
@@ -259,6 +267,10 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       setEmployeeTypeErr("Select Employee Type");
       hasErrors = true;
     }
+    if (labourerTypeName.length === 0 && employeeTypeValue === 6) {
+      setLabourerTypeNameErr("Select labourer Type");
+      hasErrors = true;
+    }
     if (employeeTypeValue === 6) {
       try {
         await axios
@@ -276,7 +288,6 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
       }
 
       try {
-        console.log("Hiiii")
         await axios
           .post("http://localhost:4000/api/employee/labourerExistById", {
             company_id: company_id,
@@ -364,6 +375,29 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
     viewUserRoles();
   }, [employeeAddForm]);
 
+  useEffect(() => {
+    const labourer = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/employee/getLabourerTypes",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ company_id: company_id }),
+          }
+        );
+        const jsonData = await data.json();
+        setLabourerTypes(jsonData);
+        console.log(jsonData);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    labourer();
+  }, [employeeTypeValue]);
+
   const handelSubmitEmployyeAdd = async (e) => {
     setIsLoadingError(true);
     if (employeeTypeValue !== 6) {
@@ -444,6 +478,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
         address: address,
         company_id: company_id,
         imageName: imageName,
+        labourerType : labourerTypeName
       };
       let emailErr = false;
 
@@ -530,7 +565,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
               Add employee details
             </h2>
             <form>
-              <InputLabel htmlFor="name" style={{ marginTop: "15px" }}>
+              <InputLabel htmlFor="name" style={{ marginTop: "10px" }}>
                 Select Employee Type
               </InputLabel>
               <Select
@@ -546,7 +581,7 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
                   }
                 }
                 size="small"
-                sx={{ width: "100%", marginBottom: "20px" }}
+                sx={{ width: "100%", marginBottom: "10px" }}
                 error={employeeTypeErr !== "" && true}
               >
                 {userRoles.map((el) => (
@@ -558,14 +593,46 @@ const EmpRegForm = ({ employeeAddForm, setemployeeAddForm }) => {
               </Select>
               {employeeTypeErr && (
                 <FormHelperText
-                  style={{ color: "#d32f2f", marginLeft: "15px" }}
+                  style={{ color: "#d32f2f", marginLeft: "10px" }}
                 >
                   {employeeTypeErr}
                 </FormHelperText>
               )}
+              {employeeTypeValue === 6 && (
+                <>
+                  <InputLabel htmlFor="type">Select Labourer Type</InputLabel>
+                  <Select
+                    // labelId="demo-simple-select-label"
+                    name="type"
+                    id=""
+                    value={labourerTypeName}
+                    label="Age"
+                    onChange={(e) => setLabourerTypeName(e.target.value)}
+                    size="small"
+                    sx={{ width: "100%", marginBottom: "10px" }}
+                    error={employeeTypeErr !== "" && true}
+                  >
+                    {labourerTypes.map((el) => (
+                      <MenuItem value={el.type_name}>{el.type_name}</MenuItem>
+                    ))}
+                  </Select>
+                </>
+              )}
+              {labourerTypeNameErr && (
+                <FormHelperText
+                  style={{
+                    color: "#d32f2f",
+                    marginLeft: "10px",
+                    marginTop: "-5px",
+                  }}
+                >
+                  {labourerTypeNameErr}
+                </FormHelperText>
+              )}
+
               {selcetEmployeeType && (
                 <>
-                  <div className="two-inputs">
+                  <div className="two-inputs" style={{ marginTop: "20px" }}>
                     <TextField
                       error={fNameErr !== "" && true}
                       className="outlined-basic"
