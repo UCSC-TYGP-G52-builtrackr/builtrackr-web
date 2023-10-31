@@ -4,6 +4,10 @@ import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
+import { decryptData } from "../../encrypt";
 
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -22,6 +26,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { GiConsoleController } from "react-icons/gi";
 
 const imagePaths = [
   "kumbuka.jpg",
@@ -47,13 +52,20 @@ const SiteDashboard = () => {
   const [selectedSite, setSelectedSite] = useState(null);
   const [selectedLabour, setSelectedLabour] = useState(null);
   const [sites, setSites] = useState([]);
-  
+
   const [quantity, setQuantity] = useState(1); // Initialize quantity with 1
+  const [mquantity, setmQuantity] = useState(1); // Initialize quantity with 1
+  const [selectedType, setSelectedType] = useState("tubes");
   const [equipmentList, setEquipmentList] = useState([]);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [selectedEquipmentName, setSelectedEquipmentName] = useState(null);
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const [materialList, setMaterialList] = useState([]);
+  const [selectedMaterialName, setSelectedMaterialName] = useState(null);
+  const [isSupervisorSelected, setIsSupervisorSelected] = useState(false);
+  const [supDetails, setSupDetails] = useState([]);
 
-
-
+  const [selectedSiteIds, setSelectedSiteIds] = useState([]);
 
   const onClose = () => {
     setIsOpen(false);
@@ -63,7 +75,32 @@ const SiteDashboard = () => {
   const openModal = (siteID) => {
     setSelectedSite(siteID);
     setIsOpen(true);
+    const isSupervisorSelected =
+      sites.find((site) => site.site_id === siteID).supervisorid !== null;
+    console.log(sites.find((site) => site.site_id === siteID));
+    console.log(siteID);
+    if (isSupervisorSelected) {
+      setIsSupervisorSelected(true);
+    } else {
+      setIsSupervisorSelected(false);
+    }
   };
+
+  useEffect(() => {
+    const employee_id = decryptData(JSON.parse(localStorage.getItem("no")));
+    axios
+      .get("http://localhost:4000/api/sitemanager/getsiteids/" + employee_id)
+      .then((response) => {
+        const siteIds = response.data.map((site) => site.site_id);
+        setSelectedSiteIds(siteIds);
+        for (let i = 0; i < siteIds.length; i++) {
+          GetSites(siteIds[i]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching site ids:", error);
+      });
+  }, []);
 
   const [supervisors, setSupervisors] = useState([]);
   const toast = useToast();
@@ -89,13 +126,21 @@ const SiteDashboard = () => {
 
     axios
       .post("http://localhost:4000/api/sitemanager/selectsupervisor", {
-        supervisorID: supervisor.id,
-        supervisorName: supervisor.name,
+        supervisorID: supervisor.no,
+        supervisorName: supervisor.f_name,
         siteID: selectedSite,
       })
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 200) {
-          console.log(res.data);
+          await axios
+            .get("http://localhost:4000/api/sitemanager/viewsites")
+            .then((res) => {
+              if (res.status === 200) {
+                //request was succussful
+                console.log(res.data);
+                setSites(res.data);
+              }
+            });
         }
         toast({
           title: "Supervisor Selected",
@@ -116,6 +161,7 @@ const SiteDashboard = () => {
 
   const AddTask = async (e) => {
     e.preventDefault();
+    console.log(selectedSite);
     try {
       const response = await axios.post(
         "http://localhost:4000/api/task/addtask",
@@ -123,7 +169,8 @@ const SiteDashboard = () => {
           taskName: task.taskName,
           specialInformation: task.specialInformation,
           dueDate: task.dueDate,
-          siteId: selectedSite.id,
+          siteID: selectedSite,
+          siteName: sites.find((site) => site.site_id === selectedSite),
         }
       );
 
@@ -152,44 +199,61 @@ const SiteDashboard = () => {
     }
   };
 
-  const GetSites = async (e = null) => {
-    if (e) e.preventDefault();
+  const GetSites = async (siteId) => {
+    console.log("sites", siteId);
     await axios
-      .get("http://localhost:4000/api/sitemanager/viewsites")
+      .get(`http://localhost:4000/api/sitemanager/viewsites/${siteId}`)
       .then((res) => {
         if (res.status === 200) {
           //request was succussful
           console.log(res.data);
-          setSites(res.data);
+          setSites((prevSites) => {
+            const newSites = prevSites.concat(
+              res.data.filter(
+                (site) =>
+                  !prevSites.some(
+                    (prevSite) => prevSite.site_id === site.site_id
+                  )
+              )
+            );
+            return newSites;
+          });
         }
       });
   };
 
   useEffect(() => {
-    GetSites();
+    const GetSupervisorDetails = async (siteId) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/sitemanager/getsupervisor/${siteId}`
+        );
+        if (response.status === 200) {
+          setSupDetails(response.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error("Error getting supervisor details:", error);
+        // Handle the error appropriately (e.g., show an error message).
+      }
+    };
+    GetSupervisorDetails();
   }, []);
 
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toISOString().split("T")[0];
   };
-  function getCurrentDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    let month = now.getMonth() + 1;
-    if (month < 10) {
-      month = `0${month}`;
-    }
-    let day = now.getDate();
-    if (day < 10) {
-      day = `0${day}`;
-    }
-    return `${year}-${month}-${day}`;
-  }
-
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    // Get the current date in YYYY-MM-DD format
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    return formattedDate;
+  };
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/sitemanager/labour")
@@ -234,29 +298,29 @@ const SiteDashboard = () => {
         });
     }
   };
-
+  // Get and assign Equipments to the site
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/sitemanager/getequipment")
       .then((res) => {
         if (res.status === 200) {
-          console.log("Equipment List");
-          console.log(res.data);
           setEquipmentList(res.data);
         }
       })
       .catch((error) => {
-        console.log("Error in epquipmwnt list");
+        console.log("Error in equipment list");
       });
   }, []);
 
   const assignEquipmentToSite = () => {
+    console.log(setSelectedEquipmentName);
     if (selectedSite && selectedEquipment) {
       axios
         .post("http://localhost:4000/api/sitemanager/assignequipment", {
           siteid: selectedSite,
           equipmentid: selectedEquipment,
           quantity: quantity,
+          name: selectedEquipmentName,
         })
         .then((res) => {
           if (res.status === 200) {
@@ -279,7 +343,71 @@ const SiteDashboard = () => {
         });
     }
   };
+  //get and assign material to site
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/sitemanager/getmaterial")
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("Material List");
+          console.log(res.data);
+          setMaterialList(res.data);
+        }
+      })
+      .catch((error) => {
+        console.log("Error in material list");
+      });
+  }, []);
 
+  const assignMaterialToSite = () => {
+    const currentDate = getCurrentDate();
+    console.log(currentDate);
+    console.log("selectedMaterialName");
+    if (selectedSite && selectedMaterial) {
+      axios
+        .post("http://localhost:4000/api/sitemanager/assignmaterial", {
+          siteid: selectedSite,
+          materialid: selectedMaterial,
+          quantity: quantity,
+          date: currentDate,
+          type: selectedType,
+          name: selectedMaterialName,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res.data);
+
+            // Show success toast
+            toast({
+              title: "Material Assigned Successfully",
+              description: "Material Assigned Successfully",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          } else {
+            // Handle error
+          }
+        })
+        .catch((error) => {
+          // Handle error
+        });
+    }
+  };
+  const handleTypeChange = (e) => {
+    setSelectedType(e.target.value);
+  };
+  const handleIncrease = () => {
+    setmQuantity(mquantity + 1);
+  };
+
+  const handleDecrease = () => {
+    if (mquantity > 1) {
+      setmQuantity(mquantity - 1);
+    } else {
+      alert("Minimum quantity is 1");
+    }
+  };
   return (
     <>
       <ChakraProvider>
@@ -289,53 +417,85 @@ const SiteDashboard = () => {
 
           <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
-            <ModalContent style={{ width: "1000px", marginLeft: "10%" }}>
-              <ModalHeader>Select a Supervisor</ModalHeader>
+            <ModalContent
+              style={{ width: "1500px", marginLeft: "10%", marginTop: "5%" }}
+            >
+              <ModalHeader style={{ fontSize: "24px" }}>
+                Select a Supervisor
+              </ModalHeader>
+
               <ModalCloseButton />
               <ModalBody>
                 <Box p={8}>
                   <Grid templateColumns="repeat(3, minmax(200px, 1fr))" gap={4}>
-                    {supervisors.map((supervisor) => (
-                      <Box
-                        key={supervisor.id}
-                        borderWidth="1px"
-                        borderRadius="md"
-                        p={4}
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                      >
-                        <Image
-                          src="/supervisor.png"
-                          alt={supervisor.name}
-                          boxSize="150px"
-                          objectFit="cover"
-                          mb={4}
-                        />
-                        <Text fontWeight="bold" mb={2}>
-                          {supervisor.name}
-                        </Text>
-                        <Text>{supervisor.availability}</Text>
-                        <Button
-                          colorScheme="blue"
-                          style={{
-                            backgroundColor: "#ffcc00",
-                            border: "none",
-                            color: "black",
-                            padding: "10px 20px",
-                            fontSize: "16px",
-                            borderRadius: "4px",
-                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                            cursor: "pointer",
-                            transition:
-                              "background-color 0.3s, box-shadow 0.3s",
-                          }}
-                          onClick={() => selectSupervisor(supervisor)}
+                    {!isSupervisorSelected &&
+                      supervisors.map((supervisor) => (
+                        <Box
+                          key={supervisor.no}
+                          borderWidth="1px"
+                          borderRadius="md"
+                          p={4}
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
+                          className={`${
+                            sites.find((site) => site.site_id === selectedSite)
+                              ?.supervisorID === supervisor.no
+                              ? "supervisor-selected"
+                              : ""
+                          } ${
+                            isSupervisorSelected &&
+                            sites.find((site) => site.site_id === selectedSite)
+                              ?.supervisorID === supervisor.no
+                              ? "supervisor-selected"
+                              : ""
+                          }`}
                         >
-                          Assign Supervisor
-                        </Button>
-                      </Box>
-                    ))}
+                          <Image
+                            src="/supervisor.png"
+                            alt={supervisor.name}
+                            boxSize="150px"
+                            objectFit="cover"
+                            mb={4}
+                          />
+                          <Text fontWeight="bold" mb={2}>
+                            {supervisor.f_name} {supervisor.l_name}
+                          </Text>
+                          <Text>{supervisor.availability}</Text>
+                          <Button
+                            colorScheme="blue"
+                            style={{
+                              backgroundColor: "#ffcc00",
+                              border: "none",
+                              color: "black",
+                              padding: "10px 20px",
+                              fontSize: "16px",
+                              borderRadius: "4px",
+                              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                              cursor: "pointer",
+                              transition:
+                                "background-color 0.3s, box-shadow 0.3s",
+                            }}
+                            onClick={() => selectSupervisor(supervisor)}
+                          >
+                            Assign Supervisor
+                          </Button>
+                        </Box>
+                      ))}
+                    {isSupervisorSelected && (
+                      <div>
+                        <p
+                          style={{
+                            fontWeight: "bold",
+                            color: "green",
+                            fontSize: "20px",
+                          }}
+                        >
+                          Supervisor is already selected.
+                        </p>
+                        <p></p>
+                      </div>
+                    )}
                   </Grid>
                 </Box>
 
@@ -417,27 +577,38 @@ const SiteDashboard = () => {
                         marginBottom: "20px",
                       }}
                     >
-                      Select Equipment
+                      Select Equipments
                     </label>
 
                     {/* Material selection dropdown */}
-                   
+
                     <select
-                      onChange={(e) => setSelectedEquipment(e.target.value)}
+                      onChange={(e) => {
+                        setSelectedEquipment(e.target.value);
+                        // Set the selected equipment_id
+                        const selectedEquipment = equipmentList.find(
+                          (equipment) =>
+                            equipment.equipment_id === parseInt(e.target.value)
+                        );
+                        if (selectedEquipment) {
+                          setSelectedEquipmentName(
+                            selectedEquipment.equipment_name
+                          );
+                        }
+                      }}
                       value={selectedEquipment}
                     >
                       <option value={null}>Select Equipment</option>
-                      {equipmentList.map((material) => (
+                      {equipmentList.map((equipment) => (
                         <option
-                          key={material.materialid}
-                          value={material.materialid}
+                          key={equipment.equipment_id}
+                          value={equipment.equipment_id}
                         >
-                          {material.materialname}
+                          {equipment.equipment_name}
                         </option>
                       ))}
                     </select>
 
-                    {/* Quantity input field */}
                     <input
                       type="number"
                       value={quantity}
@@ -445,7 +616,7 @@ const SiteDashboard = () => {
                       min="1" // Minimum quantity should be 1
                       className="mt-2"
                     />
-
+                    <div style={{ margin: "22px 0" }}></div>
                     {/* Button to assign material to the selected site */}
                     <button
                       onClick={assignEquipmentToSite}
@@ -453,13 +624,98 @@ const SiteDashboard = () => {
                       style={{ backgroundColor: "#FFCC00" }}
                       type="button"
                     >
-                      Assign Material to Site
+                      Assign Equipment
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-center flex-col">
+                    <label
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      Select Materials
+                    </label>
+
+                    {/* Material selection dropdown */}
+
+                    <select
+                      onChange={(e) => {
+                        setSelectedMaterial(e.target.value);
+                        // Set the selected material_id
+                        const selectedMaterial = materialList.find(
+                          (material) =>
+                            material.material_id === parseInt(e.target.value)
+                        );
+                        if (selectedMaterial) {
+                          setSelectedMaterialName(
+                            selectedMaterial.material_name
+                          );
+
+                          console.log(selectedMaterialName);
+                        }
+                      }}
+                      value={selectedMaterial}
+                    >
+                      <option value={null}>Select Material</option>
+                      {materialList.map((material) => (
+                        <option
+                          key={material.material_id}
+                          value={material.material_id}
+                        >
+                          {material.material_name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <select
+                      id="typeSelect"
+                      value={selectedType}
+                      onChange={handleTypeChange}
+                      className="mt-2"
+                    >
+                      <option value={null}>Select Type</option>
+                      <option value="Tubes">Tubes</option>
+                      <option value="Cubes">Cubes</option>
+                      <option value="Packets">Packets</option>
+                      <option value="Dozen">Dozen</option>
+                    </select>
+
+                    <input
+                      type="number"
+                      value={mquantity}
+                      onChange={(e) => setmQuantity(e.target.value)}
+                      min="1" // Minimum quantity should be 1
+                      className="mt-2"
+                      id="quantityInput"
+                    />
+                    {/* <button onClick={handleDecrease}>-</button>
+                    <button onClick={handleIncrease}>+</button> */}
+                    {/* Button to assign material to the selected site */}
+                    <button
+                      onClick={assignMaterialToSite}
+                      className="text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+                      style={{ backgroundColor: "#FFCC00" }}
+                      type="button"
+                    >
+                      Assign Material
                     </button>
                   </div>
 
                   {/* Site selection dropdown */}
                   <div className="flex items-center justify-center flex-col">
                     {/* Labour selection dropdown */}
+                    <label
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      Select Labours
+                    </label>
                     <select
                       onChange={(e) => setSelectedLabour(e.target.value)}
                       value={selectedLabour}
@@ -467,11 +723,11 @@ const SiteDashboard = () => {
                       <option value={null}>Select a Labour</option>
                       {labourList.map((labour) => (
                         <option key={labour.labourid} value={labour.labourid}>
-                          {labour.labourname}
+                          {labour.f_name}
                         </option>
                       ))}
                     </select>
-
+                    <div style={{ margin: "30px 0" }}></div>
                     {/* Button to assign labour to the selected site */}
                     <button
                       onClick={assignLabourToSite}
@@ -479,7 +735,7 @@ const SiteDashboard = () => {
                       style={{ backgroundColor: "#FFCC00" }}
                       type="button"
                     >
-                      Assign Labour to Site
+                      Assign to Site
                     </button>
                   </div>
                 </div>
@@ -492,25 +748,32 @@ const SiteDashboard = () => {
               </ModalFooter>
             </ModalContent>
           </Modal>
+
           <div
             className="flex w-full items-center justify-center h-full p-2 mt-[80px]"
             gap={4}
             style={{ width: "80%", marginLeft: "18%", marginTop: "10%" }}
           >
-            <div className="dashboard items-center justify-center flex flex-wrap gap-2 p-2">
-              {sites.map((site, index) => (
-                <div
-                  className="flex justify-center"
-                  onClick={() => openModal(site.siteid)}
-                >
-                  <SiteCard
-                    key={site.siteid}
-                    site={site}
-                    imagePath={`/` + imagePaths[index]}
-                    className="min-w-[300px] max-w-[300px]"
-                  />
-                </div>
-              ))}
+            <div className="mt-2 ml-10 flex flex-col w-full h-full justify-center align-items-center gap-8 ">
+              <Text className="text-center text-3xl font-bold">
+                Allocated Sites
+              </Text>
+
+              <div className="dashboard items-center justify-center flex flex-wrap gap-2 p-2">
+                {sites.map((site, index) => (
+                  <div
+                    className="flex justify-center"
+                    onClick={() => openModal(site.site_id)}
+                  >
+                    <SiteCard
+                      key={site.siteid}
+                      site={site}
+                      imagePath={`/` + imagePaths[index]}
+                      className="min-w-[300px] max-w-[300px]"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

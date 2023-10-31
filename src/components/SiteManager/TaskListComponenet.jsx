@@ -69,6 +69,7 @@ const TaskListCard = ({ taskList }) => {
         // Handle errors, e.g., show an error message or handle the error in any way you want
         console.error("Error deleting task:", error);
       });
+      
   };
 
   const formatDate = (dateStr) => {
@@ -97,29 +98,14 @@ const TaskListCard = ({ taskList }) => {
   return (
     <ChakraProvider>
       <Box borderWidth="1px" borderRadius="md" p={4} mb={4}>
-        <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
+        <center>
+        <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4} 
+        style={{ marginLeft: "10%" }}>
           Task List
         </Text>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            style={{
-              backgroundColor: "#ffcc00",
-              border: "none",
-              color: "black",
-              padding: "10px 20px",
-              fontSize: "16px",
-              borderRadius: "4px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-              cursor: "pointer",
-              transition: "background-color 0.3s, box-shadow 0.3s",
-              marginBottom: "20px",
-            }}
-            onClick={handleDashboardClick}
-          >
-            Add Task
-          </Button>
-        </div>
-        <div style={{display:"flex", gap:"20px",width: "80%", marginLeft: "40%"}}> 
+        </center>
+{/*    
+        <div style={{display:"flex",width: "80%", marginLeft: "20%"}}> 
         <Button onClick={clearSiteFilter} variant={selectedSite ? "outline" : "solid"} w="120px" style={{
     backgroundColor: "#ffcc00",
     border: "none",
@@ -172,7 +158,7 @@ const TaskListCard = ({ taskList }) => {
           >
             Site 2
           </Button>
-        </div>
+        </div> */}
         <Grid
           templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
           gap={4}
@@ -183,7 +169,7 @@ const TaskListCard = ({ taskList }) => {
               <Table variant="striped" mt={4}>
                 <Thead>
                   <Tr>
-                    <Th><b> Task ID : {task.task_id}</b></Th>
+                    <Th><b>{task.sitename}</b></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -225,7 +211,7 @@ const TaskListCard = ({ taskList }) => {
                       <Th>Task Name</Th>
                       <Th>Special Information</Th>
                       <Th>Due Date</Th>
-                      <Th>Site Supervisor</Th>
+                     
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -233,16 +219,14 @@ const TaskListCard = ({ taskList }) => {
                       <Td>{selectedTask.taskname}</Td>
                       <Td>{selectedTask.specialinformation}</Td>
                       <Td>{formatDate(selectedTask.duedate)}</Td>
-                      {/* <Td>{selectedTask.sitesupervisor}</Td> */}
+                   
                     </Tr>
                   </Tbody>
                 </Table>
               )}
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" mr={3} onClick={handleCloseModal}>
-                Close
-              </Button>
+             
               <Button colorScheme="red" mr={3} onClick={handleDelete}>
                 Delete
               </Button>

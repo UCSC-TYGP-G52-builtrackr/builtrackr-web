@@ -37,6 +37,7 @@ export function Login() {
           .post("http://localhost:4000/api/user/auth", values)
           .then((res) => {
             if (res.data.type === 0) {
+              console.log(res.data);
               localStorage.setItem(
                 "user_type",
                 JSON.stringify(encryptData(res.data.type.toString()))
