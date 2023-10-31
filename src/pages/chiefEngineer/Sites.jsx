@@ -154,6 +154,10 @@ const Sites = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
+
+        const formData = {
+          companyID: companyID,
+        };
         const data = await fetch(
           "http://localhost:4000/api/site/getCustomers",
           {

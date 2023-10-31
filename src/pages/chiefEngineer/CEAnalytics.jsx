@@ -9,6 +9,7 @@ import { FaRegCalendarMinus, FaEllipsisV } from "react-icons/fa"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, Sector } from 'recharts';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, } from 'recharts';
 import { Progress } from 'antd';
+import { decryptData } from '../../encrypt'
 
 // kpi card icons
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -27,6 +28,7 @@ import { BsChatDots } from 'react-icons/bs';
 import PieComponent from '../../components/PieComponent';
 
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useStateContext } from '../../contexts/ContextProvider';
 import '../../App.css';
 
@@ -81,6 +83,47 @@ const CEAnalytics = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const navigate = useNavigate();
   const { themeSettings, setThemeSettings } = useStateContext();
+  const [siteData, setSiteData] = useState([]);
+
+  const storedCompId = localStorage.getItem("company_id");
+  const decryptedValue = decryptData(JSON.parse(storedCompId));
+  const companyID = parseInt(decryptedValue, 10);
+  console.log("company's ID: ", companyID);
+
+
+  useEffect(() => {
+    const viewSitesAll = async () => {
+      try {
+
+        const formData = {
+          companyID: companyID,
+        };
+
+        const data = await fetch(
+          "http://localhost:4000/api/site/getSites",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          console.log("Got data",jsonData);
+          setSiteData(jsonData);
+        } else {
+          console.log(data.status);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    viewSitesAll();
+  }, []);
+
+  console.log("here's analytics site data", siteData);
 
   return (
     <div className="">
@@ -204,17 +247,20 @@ const CEAnalytics = () => {
 
               {/* last row of charts */}
               <div className='flex mt-[22px] w-full gap-[30px]'>
-                <div className='basis-[55%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
+                <div className='basis-[55%] border bg-white shadow-md rounded-[4px]'>
                     <div className='bg-[#F8F9FC] flex items-center justify-between py-[15px] px-[20px] border-b-[1px] border-[#EDEDED]'>
                         <h2 className='text-[#4e73df] text-[16px] leading-[19px] font-bold'>Projects Overview</h2>
                         <FaEllipsisV color="gray" className='cursor-pointer' />
                     </div>
                     <div className='px-[25px] space-y-[15px] py-[15px]'>
-                        <div>
-                            <h2 className="text-start">Task 1</h2>
+                    {siteData.map((site) => {
+                        return(<div>
+                            <h2 className="text-start cursor-pointer">{site.site_name}</h2>
                             <Progress percent={30} strokeColor="#E74A3B" />
-                        </div>
-                        <div>
+                        </div>)    
+                    })}
+                       
+                        {/* <div>
                             <h2 className="text-start">Task 2</h2>
                             <Progress percent={50} status="active" strokeColor="#F6C23E" />
                         </div>
@@ -229,7 +275,7 @@ const CEAnalytics = () => {
                         <div>
                             <h2 className="text-start">Task 5</h2>
                             <Progress percent={50} status="exception" strokeColor="#1CC88A" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

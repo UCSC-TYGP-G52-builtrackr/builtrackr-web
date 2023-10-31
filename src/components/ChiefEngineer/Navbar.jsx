@@ -32,8 +32,11 @@ const Navbar = () => {
   //parsing a number from local storage
   const storedEmployeeNo = localStorage.getItem("no");
   const decryptedNo = decryptData(JSON.parse(storedEmployeeNo));
-  const employeeNo = parseInt(decryptedNo, 10);
-  const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
+  // const employeeNo = parseInt(decryptedNo, 10);
+  // const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
+  const photo = "aaaaa";
+  const employeeNo = "2"
+
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);

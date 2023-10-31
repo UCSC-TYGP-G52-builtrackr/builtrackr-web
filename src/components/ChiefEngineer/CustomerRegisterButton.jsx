@@ -5,6 +5,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import { SiteData } from '../../data/SiteData';
 import Header from './Header';
 import Dropdown from './Dropdown';
+import { decryptData } from '../../encrypt'
 // import RegForm from '../../components/RegForm';
 
 // dashboard common components
@@ -58,6 +59,11 @@ const CustomerRegisterButton = () => {
   const navigate = useNavigate();
   const { themeSettings, setThemeSettings } = useStateContext();
 
+  const storedCompId = localStorage.getItem("company_id");
+  const decryptedValueofID = decryptData(JSON.parse(storedCompId));
+  const companyID = parseInt(decryptedValueofID, 10);
+  console.log("comp", companyID);
+
   // customer registration form 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -91,6 +97,7 @@ const CustomerRegisterButton = () => {
         email: email,
         contNo: contNo,
         confpwd: confpwd,
+        companyID: companyID
       };
 
       const data = await fetch(

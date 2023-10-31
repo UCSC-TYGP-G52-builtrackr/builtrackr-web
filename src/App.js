@@ -114,7 +114,7 @@ function App() {
         </Route>
 
         {/* Cheif Engineer */}
-        <Route element={<ProtectedRoutes type={3} />}>
+        {/* <Route element={<ProtectedRoutes type={3} />}>
           <Route path="/chiefEngineer/sites" element={<Sites />} />
           <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
           <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
@@ -122,7 +122,14 @@ function App() {
           <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
           <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
           <Route path="/chiefEngineer/warehouses" element={<Warehouses/>}/>
-        </Route>
+        </Route> */}
+        <Route path="/chiefEngineer/sites" element={<Sites />} />
+        <Route path="/chiefEngineer/site managers" element={<SiteManagers />} />
+        <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
+        <Route path="/chiefEngineer/warehouses/:id" element={<OneWarehouse />} />
+        <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
+        <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
+        <Route path="/chiefEngineer/warehouses" element={<Warehouses/>}/>
 
         {/* Site Manager */}
         <Route element={<ProtectedRoutes type={4} />}>
