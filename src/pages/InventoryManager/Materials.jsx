@@ -31,6 +31,7 @@ import MaterialDetailModal from "./MaterialDetailModal";
 import ReactPaginate from 'react-paginate';
 
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -53,7 +54,9 @@ const Materials = () => {
   const [materialData, setMaterialData] = useState([]);
   const { themeSettings, setThemeSettings } = useStateContext();
   const [currentPage, setCurrentPage] = useState(0);
-  const perPage = 3; // Number of items per page
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [filteredMaterialData, setFilteredMaterialData] = useState([]);
+  const perPage = 4; // Number of items per page
 
   const openDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -64,7 +67,6 @@ const Materials = () => {
   };
 
   const openAddModal = () => {
-    console.log("Opening Add Modal");
     setAddModalOpen(true);
   };
 
@@ -83,12 +85,13 @@ const Materials = () => {
     fetch('http://localhost:4000/api/material/getAllMaterials')
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw Error('Network response was not ok');
         }
         return response.json();
       })
       .then((data) => {
         setMaterialData(data);
+        setFilteredMaterialData(data);
       })
       .catch((error) => {
         console.error('Error fetching material data:', error);
@@ -123,7 +126,19 @@ const Materials = () => {
     setModalType(null);
   };
 
-  const paginatedMaterialData = materialData.slice(currentPage * perPage, (currentPage + 1) * perPage);
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+  
+  useEffect(() => {
+    const filteredData = materialData.filter((material) => (
+      (material.material_id.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (material.material_name.toLowerCase().includes(searchQuery.toLowerCase()))
+    ));
+    setFilteredMaterialData(filteredData);
+  }, [materialData, searchQuery]);
+
+  const paginatedMaterialData = filteredMaterialData.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
   return (
     <>
@@ -147,17 +162,24 @@ const Materials = () => {
           </div>
           {themeSettings && <ChatSpace />}
           <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
-            <br /><br />
             <Header title="Material Items in the Inventory" category="gdfcgf" />
-            <div className=" relative flex gap-80 justify-end  mr-10 w-full">
-            <button
-  onClick={openAddModal}
-  className="absolute top-0 right-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full mr-4 mt-4"
->
-                Add New Material
+            <div className=" relative flex gap-20 justify-between ml-10 w-full">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-1/4 px-3 py-2 rounded-md border-2 border-gray-200 focus:outline-none mt-4"
+
+              />
+              <button
+                onClick={openAddModal}
+                className="absolute top-0 right-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 mr-10 mt-4 rounded-lg"
+              >
+                Add New Material 
               </button>
             </div>
-            <br/><br/><br/>
+            <br /><br />
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
               <thead className="bg-gray-100">
                 <tr>
@@ -167,10 +189,6 @@ const Materials = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Item Name
                   </th>
-                  {/* Uncomment the following lines if you want to include an Image column */}
-                  {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Image
-                  </th> */}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Available Quantity
                   </th>
@@ -184,96 +202,70 @@ const Materials = () => {
               </thead>
               <tbody>
                 {paginatedMaterialData.map((material) => (
-                  <tr
-                    key={material.material_id}
-                    // style={{
-                    //   backgroundColor: material.quantity <= 5 ? '#FF5555' : 'white', // Use a deeper red color (#FF5555)
-                    // }}
-                  >
+                  <tr key={material.material_id}>
                     <td className="px-6 py-4 whitespace-nowrap">{material.material_id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {/* <Link
-                        to={`/InventoryManger/Equipments/List/${material.material_id}`}
-                        className="text-indigo-600 hover:text-indigo-900"
-                      > */}
                       {material.material_name}
-                      {/* </Link> */}
                     </td>
-                    {/* Uncomment the following lines if you want to include an Image column */}
-                    {/* <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-12 w-12">
-                          <img
-                            className="h-12 w-12 rounded-full"
-                            src={material.photo_path}
-                            alt={material.item_name}
-                          />
-                        </div>
-                      </div>
-                    </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">{material.quantity}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{material.type}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-  <div className="flex">
-    <button
-      onClick={() => handleViewClick(material)}
-      className="p-0 border-none bg-transparent mx-2"
-    >
-      <FontAwesomeIcon icon={faEye} />
-    </button>
-    <button
-      onClick={() => handleOpenEditModal(material)}
-      className="p-0 border-none bg-transparent mx-2"
-    >
-      <FontAwesomeIcon icon={faPencilAlt} />
-    </button>
-    <button
-      onClick={() => handleOpenDeleteModal(material)}
-      className="p-0 border-none bg-transparent mx-2"
-    >
-      <FontAwesomeIcon icon={faTrashAlt} />
-    </button>
-  </div>
-</td>
-
-
-
-
+                    <td className="py-2">
+                      <div className="flex">
+                        <button
+                          onClick={() => handleViewClick(material)}
+                          className="p-0 border-none bg-transparent mx-2"
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </button>
+                        <button
+                          onClick={() => handleOpenEditModal(material)}
+                          className="p-0 border-none bg-transparent mx-2"
+                        >
+                          <FontAwesomeIcon icon={faPencilAlt} />
+                        </button>
+                        <button
+                          onClick={() => handleOpenDeleteModal(material)}
+                          className="p-0 border-none bg-transparent mx-2"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
             <ReactPaginate
-  previousLabel={
-    <div className="flex items-center space-x-2">
-      <span className="text-gray-600">
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </span>
-      <span className="hidden md:block">Previous</span>
-    </div>
-  }
-  nextLabel={
-    <div className="flex items-center space-x-2">
-      <span className="hidden md:block">Next</span>
-      <span className="text-gray-600">
-        <FontAwesomeIcon icon={faArrowRight} />
-      </span>
-    </div>
-  }
-  breakLabel={<span className="text-gray-600 px-2 py-1 rounded-md hover:bg-gray-100">...</span>}
-  pageCount={Math.ceil(materialData.length / perPage)}
-  marginPagesDisplayed={2}
-  pageRangeDisplayed={5}
-  onPageChange={(data) => {
-    setCurrentPage(data.selected);
-  }}
-  containerClassName={'flex justify-center mt-5 space-x-2'}
-  pageClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
-  activeClassName={'bg-blue-500 text-white px-3 py-1 rounded-md'}
-  previousClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
-  nextClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
-/>
+              previousLabel={
+                <div className="flex items-center space-x-2">
+                  <span className="text-red-600">
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                  </span>
+                  <span className="hidden md:block text-gray-600">Previous</span>
+                </div>
+              }
+              nextLabel={
+                <div className="flex items-center space-x-2">
+                  <span className="hidden md:block text-gray-600">Next</span>
+                  <span className="text-green-600">
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </span>
+                </div>
+              }
+              breakLabel={<span className="text-gray-600 px-2 py-1 rounded-md hover:bg-gray-100">...</span>}
+              pageCount={Math.ceil(filteredMaterialData.length / perPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={(data) => {
+                setCurrentPage(data.selected);
+              }}
+              containerClassName={'flex justify-center mt-5 space-x-2'}
+              pageClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+              activeClassName={'bg-gray-900 text-white px-3 py-1 rounded-md'}
+              previousClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+              nextClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover-bg-gray-100'}
+            />
           </div>
         </div>
       </div>
@@ -298,20 +290,19 @@ const Materials = () => {
         />
       )}
       <EditModal
-  isOpen={editModalOpen}
-  onClose={() => setEditModalOpen(false)}
-  materialData={editCategory}
-  setMaterialData={(updatedData) => {
-    const updatedMaterialData = materialData.map((material) => {
-      if (material.material_id === updatedData.material_id) {
-        return updatedData;
-      }
-      return material;
-    });
-    setMaterialData(updatedMaterialData);
-  }}
-/>
-
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        materialData={editCategory}
+        setMaterialData={(updatedData) => {
+          const updatedMaterialData = materialData.map((material) => {
+            if (material.material_id === updatedData.material_id) {
+              return updatedData;
+            }
+            return material;
+          });
+          setMaterialData(updatedMaterialData);
+        }}
+      />
     </>
   );
 };

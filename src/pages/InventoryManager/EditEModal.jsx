@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Input, InputLabel, Typography, Button, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'; // Import SweetAlert
 
 const style = {
   position: 'absolute',
@@ -20,6 +20,12 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
   const [equipmentDescription, setEquipmentDescription] = useState('');
   const [equipmentQty, setEquipmentQty] = useState('');
 
+  const [validationErrors, setValidationErrors] = useState({
+    equipmentName: false,
+    equipmentDescription: false,
+    equipmentQty: false,
+  });
+
   useEffect(() => {
     if (equipmentData) {
       setEquipmentName(equipmentData.equipment_name);
@@ -28,13 +34,33 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
     }
   }, [equipmentData]);
 
+  const showErrorAlert = (message) => {
+    // You can customize the alert UI for validation errors here
+    alert(message);
+  };
+
+  const showSuccessAlert = () => {
+    // Show a success message using SweetAlert after successful update
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Equipment details have been successfully updated!',
+    });
+  };
+
   const handleSubmitModal = () => {
-    if (!equipmentName || !equipmentDescription || isNaN(equipmentQty) || equipmentQty <= 0) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: 'Please enter valid data.',
-      });
+    // Input validation
+    const errors = {
+      equipmentName: !equipmentName,
+      equipmentDescription: !equipmentDescription,
+      equipmentQty: isNaN(equipmentQty) || equipmentQty <= 0,
+    };
+
+    setValidationErrors(errors);
+
+    // Check if there are any validation errors
+    if (Object.values(errors).some((error) => error)) {
+      showErrorAlert('Validation Error: Please enter valid data.');
       return;
     }
 
@@ -60,21 +86,11 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
       })
       .then((data) => {
         setEquipmentData(data);
-
-        // Show a success message using SweetAlert
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Equipment details have been successfully updated!',
-        });
+        showSuccessAlert(); // Show the success message using SweetAlert
       })
       .catch((error) => {
         console.error('Error updating equipment data:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to update equipment details. Please try again.',
-        });
+        showErrorAlert('Error: Failed to update equipment details. Please try again.');
       });
 
     onClose();
@@ -102,7 +118,9 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
               onChange={(e) => setEquipmentName(e.target.value)}
               placeholder="Enter equipment name"
               sx={{ width: '100%' }}
+              error={validationErrors.equipmentName}
             />
+            {validationErrors.equipmentName && <div style={{ color: 'red' }}>Equipment name is required</div>}
           </div>
           <div>
             <InputLabel htmlFor="equipmentDescription">Equipment Description</InputLabel>
@@ -111,7 +129,11 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
               onChange={(e) => setEquipmentDescription(e.target.value)}
               placeholder="Enter Description"
               sx={{ width: '100%' }}
+              error={validationErrors.equipmentDescription}
             />
+            {validationErrors.equipmentDescription && (
+              <div style={{ color: 'red' }}>Equipment description is required</div>
+            )}
           </div>
           <div>
             <InputLabel htmlFor="equipmentQty">Equipment Quantity</InputLabel>
@@ -121,12 +143,14 @@ const EditEModal = ({ isOpen, onClose, equipmentData, setEquipmentData }) => {
               onChange={(e) => setEquipmentQty(e.target.value)}
               placeholder="Enter Quantity"
               sx={{ width: '100%' }}
+              error={validationErrors.equipmentQty}
             />
+            {validationErrors.equipmentQty && <div style={{ color: 'red' }}>Please enter a valid quantity</div>}
           </div>
           <Button
             onClick={handleSubmitModal}
             variant="contained"
-            style={{ backgroundColor: "#f59e0b" }}
+            style={{ backgroundColor: '#f59e0b' }}
           >
             Save Changes
           </Button>

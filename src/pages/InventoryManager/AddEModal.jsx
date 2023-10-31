@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Input, InputLabel, Typography, Button, Box } from '@mui/material';
 import Swal from 'sweetalert2';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 
 const style = {
   position: 'absolute',
@@ -19,14 +21,56 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
   const [equipmentDescription, setEquipmentDescription] = useState('');
   const [equipmentQty, setEquipmentQty] = useState('');
 
+  const [validationErrors, setValidationErrors] = useState({
+    equipmentName: false,
+    equipmentDescription: false,
+    equipmentQty: false,
+  });
+
   const handleSubmitModal = () => {
     // Input validation
-    if (!equipmentName || !equipmentDescription || isNaN(equipmentQty) || equipmentQty <= 0) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: 'Please enter valid data.',
-      });
+    let hasError = false;
+
+    if (!equipmentName) {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        equipmentName: true,
+      }));
+      hasError = true;
+    } else {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        equipmentName: false,
+      }));
+    }
+
+    if (!equipmentDescription) {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        equipmentDescription: true,
+      }));
+      hasError = true;
+    } else {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        equipmentDescription: false,
+      }));
+    }
+
+    if (isNaN(equipmentQty) || equipmentQty <= 0) {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        equipmentQty: true,
+      }));
+      hasError = true;
+    } else {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        equipmentQty: false,
+      }));
+    }
+
+    if (hasError) {
       return;
     }
 
@@ -47,12 +91,11 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw Error('Network response was not ok');
         }
         return response.json();
       })
       .then((data) => {
-        // Update the equipment data in the state with the added data
         setEquipmentData((prevEquipmentData) => [...prevEquipmentData, data]);
 
         // Show a success message using SweetAlert
@@ -78,6 +121,13 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
+        <IconButton
+          style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <CloseIcon />
+        </IconButton>
         <Typography variant="h4" style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold' }}>
           Add Equipment
         </Typography>
@@ -89,7 +139,11 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
               onChange={(e) => setEquipmentName(e.target.value)}
               placeholder="Enter equipment name"
               sx={{ width: '100%' }}
+              error={validationErrors.equipmentName}
             />
+            {validationErrors.equipmentName && (
+              <div style={{ color: 'red' }}>Equipment name is required</div>
+            )}
           </div>
           <div style={{ marginBottom: '20px' }}>
             <InputLabel htmlFor="equipmentDescription">Equipment Description</InputLabel>
@@ -98,7 +152,11 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
               onChange={(e) => setEquipmentDescription(e.target.value)}
               placeholder="Enter Description"
               sx={{ width: '100%' }}
+              error={validationErrors.equipmentDescription}
             />
+            {validationErrors.equipmentDescription && (
+              <div style={{ color: 'red' }}>Equipment description is required</div>
+            )}
           </div>
           <div style={{ marginBottom: '20px' }}>
             <InputLabel htmlFor="equipmentQty">Equipment Quantity</InputLabel>
@@ -108,7 +166,11 @@ const AddEModal = ({ isOpen, onClose, setEquipmentData }) => {
               onChange={(e) => setEquipmentQty(e.target.value)}
               placeholder="Enter Quantity"
               sx={{ width: '100%' }}
+              error={validationErrors.equipmentQty}
             />
+            {validationErrors.equipmentQty && (
+              <div style={{ color: 'red' }}>Please enter a valid quantity</div>
+            )}
           </div>
           <Button
             onClick={handleSubmitModal}

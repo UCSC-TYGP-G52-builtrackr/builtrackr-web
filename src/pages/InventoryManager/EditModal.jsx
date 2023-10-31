@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Input, InputLabel, Typography, Button, Box, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close'; // Import the Close icon
-import Swal from 'sweetalert2';
+import CloseIcon from '@mui/icons-material/Close';
+import Swal from 'sweetalert2'; // Import SweetAlert
+import withReactContent from 'sweetalert2-react-content'; // Import SweetAlert with React support
+
+const MySwal = withReactContent(Swal);
 
 const style = {
   position: 'absolute',
@@ -22,6 +25,14 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
   const [materialType, setMaterialType] = useState('');
   const [materialPreLevel, setMaterialPreLevel] = useState('');
 
+  const [validationErrors, setValidationErrors] = useState({
+    materialName: false,
+    materialDescription: false,
+    materialQty: false,
+    materialType: false,
+    materialPreLevel: false,
+  });
+
   useEffect(() => {
     // Check if materialData is provided and update the state variables accordingly
     if (materialData) {
@@ -35,12 +46,18 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
 
   const handleSubmitModal = () => {
     // Input validation
-    if (!materialName || !materialDescription || isNaN(materialQty) || materialQty <= 0 || isNaN(materialPreLevel)) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: 'Please enter valid data.',
-      });
+    const errors = {
+      materialName: !materialName,
+      materialDescription: !materialDescription,
+      materialQty: isNaN(materialQty) || materialQty <= 0,
+      materialType: !materialType,
+      materialPreLevel: isNaN(materialPreLevel) || materialPreLevel < 0,
+    };
+
+    setValidationErrors(errors);
+
+    // Check if there are any validation errors
+    if (Object.values(errors).some((error) => error)) {
       return;
     }
 
@@ -70,32 +87,23 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
       })
       .then((data) => {
         // Update the local state with the updated data
-        setMaterialName(data.material_name);
-        setMaterialDescription(data.description);
-        setMaterialQty(data.quantity);
-        setMaterialType(data.type);
-        setMaterialPreLevel(data.preorder_level);
+        setMaterialData(data);
 
-        // Display a success message using SweetAlert
-        Swal.fire({
+        // Show a success message using SweetAlert
+        MySwal.fire({
           icon: 'success',
-          title: 'Success',
-          text: 'Material details have been successfully updated!',
+          title: 'Material Details Updated',
+          text: 'Material details have been updated successfully.',
         });
+
+        // Close the modal
+        onClose();
       })
       .catch((error) => {
         console.error('Error updating material data:', error);
         // Handle the error gracefully, e.g., show an error message to the user.
-        // You can also display an error message using SweetAlert if needed.
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to update material details. Please try again.',
-        });
+        alert('Failed to update material details. Please try again.');
       });
-
-    // Close the modal
-    onClose();
   };
 
   return (
@@ -120,8 +128,10 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
               onChange={(e) => setMaterialName(e.target.value)}
               placeholder="Enter material name"
               sx={{ width: '100%' }}
+              error={validationErrors.materialName}
             />
           </div>
+          {validationErrors.materialName && <div style={{ color: 'red' }}>Material name is required</div>}
           <div>
             <InputLabel htmlFor="materialDescription">Material Description</InputLabel>
             <Input
@@ -129,8 +139,10 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
               onChange={(e) => setMaterialDescription(e.target.value)}
               placeholder="Enter Description"
               sx={{ width: '100%' }}
+              error={validationErrors.materialDescription}
             />
           </div>
+          {validationErrors.materialDescription && <div style={{ color: 'red' }}>Material description is required</div>}
           <div>
             <InputLabel htmlFor="materialQty">Material Quantity</InputLabel>
             <Input
@@ -139,8 +151,10 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
               onChange={(e) => setMaterialQty(e.target.value)}
               placeholder="Enter Quantity"
               sx={{ width: '100%' }}
+              error={validationErrors.materialQty}
             />
           </div>
+          {validationErrors.materialQty && <div style={{ color: 'red' }}>Please enter a valid quantity</div>}
           <div>
             <InputLabel htmlFor="materialType">Material Type</InputLabel>
             <Input
@@ -148,22 +162,26 @@ const EditModal = ({ isOpen, onClose, materialData, setMaterialData }) => {
               onChange={(e) => setMaterialType(e.target.value)}
               placeholder="Enter material Type"
               sx={{ width: '100%' }}
+              error={validationErrors.materialType}
             />
           </div>
+          {validationErrors.materialType && <div style={{ color: 'red' }}>Please enter a valid type</div>}
           <div>
             <InputLabel htmlFor="materialPreLevel">Pre Order Level</InputLabel>
             <Input
               type="number"
               value={materialPreLevel}
               onChange={(e) => setMaterialPreLevel(e.target.value)}
-              placeholder="Enter Pre Oreder Level"
+              placeholder="Enter Pre Order Level"
               sx={{ width: '100%' }}
+              error={validationErrors.materialPreLevel}
             />
           </div>
+          {validationErrors.materialPreLevel && <div style={{ color: 'red' }}>Please enter a valid pre-order level</div>}
           <Button
             onClick={handleSubmitModal}
             variant="contained"
-            style={{ backgroundColor: "#f59e0b" }}
+            style={{ backgroundColor: '#f59e0b' }}
           >
             Save Changes
           </Button>
