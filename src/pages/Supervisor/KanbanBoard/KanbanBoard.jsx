@@ -6,10 +6,13 @@ import { Card } from "../../../components/Card/Card";
 import {Dropdown} from "../../../components/DropDown/DropDown"
 import {Editable} from "../../../components/Editable/Editable"
 import axios from "axios";
+import { decryptData } from "../../../encrypt";
 
 export const KanbanBoard = (props) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef();
+  const siteId = localStorage.getItem("site_id");
+
 
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
@@ -39,15 +42,16 @@ export const KanbanBoard = (props) => {
       title: "New Card",
       description: "",
     });
-    
+
     const currentDate  = new Date()
     const title = name;
     const date = currentDate.toLocaleDateString();
     const boardId = props.board?.id;
-    const companyId = 1;
-    const SupervisorId = 1;
+    const companyId = decryptData(JSON.parse(localStorage.getItem("company_id")));
+    const SupervisorId = decryptData(JSON.parse(localStorage.getItem("no")));
 
-    const data = { title, date, boardId, companyId, SupervisorId };
+
+    const data = { title, date, boardId, companyId, SupervisorId, siteId };
 
     axios.post("http://localhost:4000/api/kanbanbord/addCard", data)
     .then((response) => {
@@ -63,7 +67,7 @@ export const KanbanBoard = (props) => {
     const getCards = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/kanbanbord/getCard"
+          `http://localhost:4000/api/kanbanbord/getCard?siteId=${siteId}`
         );
         console.log(response.data);
         if (response.status === 200) {
@@ -75,7 +79,7 @@ export const KanbanBoard = (props) => {
       }
     };
     getCards();
-  }, []);
+  }, [siteId]);
 
 
   const handleDeleteBoard = () => {

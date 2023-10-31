@@ -16,7 +16,6 @@ import SMDocuments from "./pages/SiteManager/Documents";
 import ForgotPassword from "./pages/Login/Forgotpassword";
 import ResetPassword from "./pages/Login/ResetPassword";
 import Task from "./pages/SiteManager/Task";
-
 import Home from "./pages/index";
 import SiteDashboard from "./pages/SiteManager/Sites";
 // import {SMSupervisor} from './pages/SiteManager/Supervisor'

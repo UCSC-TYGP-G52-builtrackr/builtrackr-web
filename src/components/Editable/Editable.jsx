@@ -3,9 +3,13 @@ import { X} from "react-feather";
 import { useState } from 'react';
 import "./editable.css";
 import { AiOutlinePlus } from 'react-icons/ai'
+import { decryptData } from "../../encrypt";
 
 
 export const Editable = (props)=> {
+  const id  = decryptData (JSON.parse(localStorage.getItem("user_type")));
+
+
 
     const [isEditable, setIsEditable] = useState(false);
     const [inputText, setInputText] = useState(props.defaultValue || "");
@@ -34,9 +38,12 @@ export const Editable = (props)=> {
             placeholder={props.placeholder || props.text}
             onChange={(event) => setInputText(event.target.value)}
             autoFocus
+            isEditable={id===4? false:true}
           />
           <div className="editable_edit_footer">
-            <button style={{display:"flex",justifyContent:"center"}} type="submit">{props.buttonText || "Add"} <AiOutlinePlus style={{marginLeft:"10px", marginTop:"6px"}} size={32} /> </button>
+            <button style={{display:"flex",justifyContent:"center"}} type="submit"
+            isDisabled={id===5? true:false}
+            >{props.buttonText || "Add"} <AiOutlinePlus style={{marginLeft:"10px", marginTop:"6px"}} size={32} /> </button>
             <X onClick={() => setIsEditable(false)} className="closeIcon" />
           </div>
         </form>
@@ -45,9 +52,11 @@ export const Editable = (props)=> {
           className={`editable_input ${
             props.displayClass ? props.displayClass : ""
           }`}
-          onClick={() => setIsEditable(true)}
+
+          onClick={() => setIsEditable(id === "4"? false:true)}
+
         >
-           <span ><span className='add_card' style={{display:"flex",justifyContent:"center"}}>{props.text || "Add card"} <AiOutlinePlus style={{marginLeft:"10px", marginTop:"5px"}} /> </span></span>
+           <span ><span className='add_card' style={{display:"flex",justifyContent:"center"}}>{props.text || "Add card"}  </span></span>
 
         </p>
       )}
