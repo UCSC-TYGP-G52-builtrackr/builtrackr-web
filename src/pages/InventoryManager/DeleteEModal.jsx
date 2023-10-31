@@ -20,9 +20,14 @@ const DeleteEModal = ({ isOpen, onClose, equipmentData, onDelete }) => {
     setDeleting(true);
 
     // Make an HTTP request to delete the equipment data
-    fetch(`http://localhost:4000/api/equipment/deletEquipment/${equipmentData.equipment_id}`, {
-      method: "DELETE",
-    })
+    fetch('http://localhost:4000/api/equipment/deleteEquipment', { // Change this line
+    method: "DELETE",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(equipmentData), // Add this line
+  })
+    
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -46,7 +51,7 @@ const DeleteEModal = ({ isOpen, onClose, equipmentData, onDelete }) => {
         <Typography variant="h4">Delete Equipment</Typography>
         <Typography sx={{ margin: "20px 0" }}>
           Are you sure you want to delete the equipment:{" "}
-          <strong>{equipmentData.item_name}</strong>?
+          <strong>{equipmentData.equipment_name}</strong>?
         </Typography>
         <Button
           onClick={handleDelete}

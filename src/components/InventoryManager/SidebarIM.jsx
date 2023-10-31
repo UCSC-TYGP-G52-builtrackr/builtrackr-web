@@ -39,12 +39,12 @@ const SidebarIM = () => {
               <div key={item.title}>
             
                 {item.links.map((link) => (
-                  <div className='my-4'>
+                  <div className='my-2'>
                   <NavLink
                     to={`/inventorymanager/${link.name}`}
                     isActive={(match, location) => {
                       const { pathname } = location;
-                      return pathname === '/inventorymanager' || pathname.startsWith('/inventorymanager/equipments');
+                      return pathname === '/inventorymanager' || pathname.startsWith('/inventorymanager/dashboard');
                     }}
                   
                     key={link.name}

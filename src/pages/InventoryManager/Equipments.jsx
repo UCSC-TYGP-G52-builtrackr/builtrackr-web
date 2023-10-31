@@ -46,7 +46,7 @@ const style = {
   p: 10,
 };
 
-const Equipments1 = () => {
+const Equipments = () => {
   const [modalType, setModalType] = useState(null);
   const [deleteEModalOpen, setDeleteEModalOpen] = useState(false);
   const [addEModalOpen, setAddEModalOpen] = useState(false);
@@ -56,7 +56,9 @@ const Equipments1 = () => {
   const [equipmentData, setEquipmentData] = useState([]);
   const { themeSettings, setThemeSettings } = useStateContext();
   const [currentPage, setCurrentPage] = useState(0);
-  const perPage = 3; // Number of items per page
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [filteredEquipmentData, setFilteredEquipmentData] = useState([]);
+  const perPage = 4; // Number of items per page
 
   const openDeleteEModal = () => {
     setDeleteEModalOpen(true);
@@ -67,7 +69,6 @@ const Equipments1 = () => {
   };
 
   const openAddEModal = () => {
-    console.log("Opening Add Modal");
     setAddEModalOpen(true);
   };
 
@@ -80,8 +81,6 @@ const Equipments1 = () => {
     setModalType("detail");
   };
 
-  const selectionsettings = { persistSelection: true };
-
   const fetchEquipmentData = () => {
     fetch('http://localhost:4000/api/equipment/getAllEquipments')
       .then((response) => {
@@ -92,6 +91,7 @@ const Equipments1 = () => {
       })
       .then((data) => {
         setEquipmentData(data);
+        setFilteredEquipmentData(data);
       })
       .catch((error) => {
         console.error('Error fetching equipment data:', error);
@@ -126,7 +126,19 @@ const Equipments1 = () => {
     setModalType(null);
   };
 
-  const paginatedEquipmentData = equipmentData.slice(currentPage * perPage, (currentPage + 1) * perPage);
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+  
+  useEffect(() => {
+    const filteredData = equipmentData.filter((equipment) => (
+      (equipment.equipment_id.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (equipment.equipment_name.toLowerCase().includes(searchQuery.toLowerCase()))
+    ));
+    setFilteredEquipmentData(filteredData);
+  }, [equipmentData, searchQuery]);
+
+  const paginatedEquipmentData = filteredEquipmentData.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
   return (
     <>
@@ -150,22 +162,29 @@ const Equipments1 = () => {
           </div>
           {themeSettings && <ChatSpace />}
           <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
-            <br /><br />
             <Header title="Equipment Items in the Inventory" category="gdfcgf" />
-            <div className="relative flex gap-80 justify-end  mr-10 w-full">
-              <button
-                onClick={openAddEModal}
-                className="flex bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full ml-30"
-              >
-                Add New Equipment
-              </button>
-            </div>
-            <br/>
+            <div className=" relative flex gap-20 justify-between ml-10 w-full">
+  <input
+    type="text"
+    placeholder="Search..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    className="w-1/4 px-3 py-2 rounded-md border-2 border-gray-200 focus:outline-none mt-4"
+  />
+  <button
+    onClick={openAddEModal}
+    className="absolute top-0 right-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 mr-10 mt-4 rounded-lg"
+  >
+    Add New Material 
+  </button>
+</div>
+
+            <br/><br/>
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
               <thead className="bg-gray-100">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Equipment ID
+                    Equipment ID
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Item Name
@@ -180,73 +199,68 @@ const Equipments1 = () => {
               </thead>
               <tbody>
                 {paginatedEquipmentData.map((equipment) => (
-                  <tr
-                    key={equipment.equipment_id}
-                    style={{
-                      backgroundColor: equipment.quantity <= 5 ? '#FF5555' : 'white',
-                    }}
-                  >
+                  <tr key={equipment.equipment_id}>
                     <td className="px-6 py-4 whitespace-nowrap">{equipment.equipment_id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {equipment.item_name}
+                      {equipment.equipment_name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{equipment.quantity}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => handleViewClick(equipment)}
-                        className="mr-3"
-                      >
-                        <FontAwesomeIcon icon={faEye} />
-                      </button>
-                      <button
-                        onClick={() => handleOpenEditEModal(equipment)}
-                        className="mr-3"
-                      >
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                      </button>
-                      <button
-                        onClick={() => handleOpenDeleteEModal(equipment)}
-                        className=""
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </button>
+                    <td className="py-2">
+                      <div className="flex">
+                        <button
+                          onClick={() => handleViewClick(equipment)}
+                          className="p-0 border-none bg-transparent mx-2"
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </button>
+                        <button
+                          onClick={() => handleOpenEditEModal(equipment)}
+                          className="p-0 border-none bg-transparent mx-2"
+                        >
+                          <FontAwesomeIcon icon={faPencilAlt} />
+                        </button>
+                        <button
+                          onClick={() => handleOpenDeleteEModal(equipment)}
+                          className="p-0 border-none bg-transparent mx-2"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <ReactPaginate
-  previousLabel={
-    <div className="flex items-center space-x-2">
-      <span className="text-gray-600">
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </span>
-      <span className="hidden md:block">Previous</span>
-    </div>
-  }
-  nextLabel={
-    <div className="flex items-center space-x-2">
-      <span className="hidden md:block">Next</span>
-      <span className="text-gray-600">
-        <FontAwesomeIcon icon={faArrowRight} />
-      </span>
-    </div>
-  }
-  breakLabel={<span className="text-gray-600 px-2 py-1 rounded-md hover:bg-gray-100">...</span>}
-  pageCount={Math.ceil(equipmentData.length / perPage)}
-  marginPagesDisplayed={2}
-  pageRangeDisplayed={5}
-  onPageChange={(data) => {
-    setCurrentPage(data.selected);
-  }}
-  containerClassName={'flex justify-center mt-5 space-x-2'}
-  pageClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
-  activeClassName={'bg-blue-500 text-white px-3 py-1 rounded-md'}
-  previousClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
-  nextClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
-/>
-
-
+              previousLabel={
+                <div className="flex items-center space-x-2">
+                  <span className="text-red-600">
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                  </span>
+                  <span className="hidden md:block text-gray-600">Previous</span>
+                </div>
+              }
+              nextLabel={
+                <div className="flex items-center space-x-2">
+                  <span className="hidden md:block text-gray-600">Next</span>
+                  <span className="text-green-600">
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </span>
+                </div>
+              }
+              breakLabel={<span className="text-gray-600 px-2 py-1 rounded-md hover:bg-gray-100">...</span>}
+              pageCount={Math.ceil(filteredEquipmentData.length / perPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={(data) => {
+                setCurrentPage(data.selected);
+              }}
+              containerClassName={'flex justify-center mt-5 space-x-2'}
+              pageClassName={'bg-white text-green-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+              activeClassName={'bg-gray-900 text-white px-3 py-1 rounded-md'}
+              previousClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+              nextClassName={'bg-white text-gray-600 px-3 py-1 rounded-md hover:bg-gray-100'}
+            />
           </div>
         </div>
       </div>
@@ -263,9 +277,12 @@ const Equipments1 = () => {
           onClose={closeDeleteEModal}
           equipmentData={selectedEquipment}
           onDelete={() => {
-            // Handle deletion logic here
-            // Update equipmentData if needed
-            // Then, close the modal
+            const updatedEquipmentData = equipmentData.filter(
+              (equipment) => equipment.equipment_id !== selectedEquipment.equipment_id
+            );
+            setEquipmentData(updatedEquipmentData);
+
+            // Close the modal
             closeDeleteEModal();
           }}
         />
@@ -288,4 +305,4 @@ const Equipments1 = () => {
   );
 };
 
-export default Equipments1;
+export default Equipments;
