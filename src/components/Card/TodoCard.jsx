@@ -8,7 +8,7 @@ import './card.css';
 export const TodoCard = (props) => {
  
 
-  const title = props.card[1];
+  const taskname = props.card[1];
   const id  = props.card[0];
   const date  = props.card[2];
   
@@ -25,7 +25,7 @@ export const TodoCard = (props) => {
           </div>
         </div>
         <div className="card_main_title" >Task Id :{id}</div>
-        <div className="card_main_title" >{title}</div>
+        <div className="card_main_title" >{taskname}</div>
 
       </div>
     </>

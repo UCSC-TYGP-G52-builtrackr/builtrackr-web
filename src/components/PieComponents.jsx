@@ -25,10 +25,14 @@ const [taskcards, settaskCards] = useState([]);
 
  //get task
 
+ const siteId = localStorage.getItem("site_id");
+
+ //get task
+
 useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/card/viewTaskname');
+        const response = await axios.get(`http://localhost:4000/api/card/viewTaskname?siteId=${siteId}`);
          // Replace with your API endpoint to fetch card data
 
         if (response.status === 200) {
@@ -40,18 +44,18 @@ useEffect(() => {
       }
     };
  fetchCards();
-  }, []);
+  }, [siteId]);
 
   const calculatePercent = () => {
 
-    const filterCardTask =taskcards.filter((card) => card.completed === 1)
+    const filterCardTask =taskcards.filter((card) => card.status === 1)
     if (!filterCardTask.length) return 0;
     const completed = filterCardTask.length;
     const totalTasks = taskcards.length;
     return (completed / totalTasks) * 100;
   };
 
-const filterCardTask =taskcards.filter((card) => card.completed === 1)
+const filterCardTask =taskcards.filter((card) => card.status === 1)
 const persent = calculatePercent();
 console.log(persent);
 const perecentage  = 100-persent
