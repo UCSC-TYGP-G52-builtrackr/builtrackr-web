@@ -864,6 +864,11 @@ export const SiteManagerLinks = [
         name:"Labour Leaves",
         icon:<Calendar/>,
         redirect:"sitemanager/labourleaves"
+      },
+      {
+        name:"Kanbanboard",
+        icon:<Clipboard/>,
+        redirect:"sitemanager/kanbanboard"
       }
     ],
   },

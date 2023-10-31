@@ -62,8 +62,44 @@ const SMDashboard = () => {
   const [data1, setData1] = useState(null);
   const [llcount, setLLCount] = useState(0);
   const [laborData, setLabourData] = useState([]);
+  const [siteManagerSiteIds, setSiteManagerSiteIds] = useState([]);
+  
 
+  const [siteManagerId, setSiteManagerId] = useState(null);
+  const [siteData, setSiteData] = useState([]);
+  const [selectedSiteIds, setSelectedSiteIds] = useState([]);
+  const [eachTaskCount, setEachTaskCount] = useState([]);
+  const [eachCompletedCount, setEachCompletedCount] = useState([]);
   // const [data3, setData3] = useState(null);
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:4000/api/sitemanager/sites") 
+  //     .then((response) => {
+        
+  //       setSiteManagerSiteIds(response.data.siteIds);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching site manager sites:", error);
+  //     });
+  // }, []);
+ 
+  useEffect(() => {
+    const employee_id = decryptData(JSON.parse(localStorage.getItem("no")));
+    axios
+      .get("http://localhost:4000/api/sitemanager/getsiteids/" + employee_id)
+      .then((response) => {
+        const siteIds = response.data.map((site) => site.site_id);
+        setSelectedSiteIds(siteIds);
+      })
+      .catch((error) => {
+        console.error("Error fetching site ids:", error);
+      });
+  }, []);
+
+  console.log("site ids",selectedSiteIds);
+
+
 
   const generatePDF = () => {
     const input = document.body; // Capture the entire page
@@ -151,7 +187,6 @@ const SMDashboard = () => {
     "July",
   ];
 
- 
   const data3 = {
     labels,
     datasets: [
@@ -170,15 +205,82 @@ const SMDashboard = () => {
     ],
   };
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/labor/data")
-      .then((response) => {
-        setLabourData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+    // Function to fetch labor data for a single site ID
+    const fetchLaborDataForSite = async (siteId) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/labor/data/${siteId}`
+          
+        );
+        // Add the fetched labor data to the existing state or process it as needed
+        setLabourData((prevData) => [...prevData, ...response.data]);
+      } catch (error) {
+        console.error(`Error fetching labor data for site ${siteId}:`, error);
+      }
+    };
+
+    const getEachTask = async (siteId) => {
+      axios
+        .get(`http://localhost:4000/api/task/eachtaskcount/${siteId}`)
+        .then((response) => {
+          const data = {
+            'siteID' : siteId,
+            'count' : response.data.count
+          }
+          setEachTaskCount((prevData) => {
+            const newTaskList = [...prevData];
+            const index = newTaskList.findIndex((task) => task.siteID === siteId);
+            if (index > -1) {
+              newTaskList[index] = data;
+            } else {
+              newTaskList.push(data);
+            }
+            return newTaskList;
+          })
+        })
+        .catch((error) => {
+          console.error("Error fetching task count:", error);
+        });
+      };
+
+      const getEachCompleted = async(siteId)=>{
+        axios
+          .get(`http://localhost:4000/api/task/eachcompletedcount/${siteId}`)
+          .then((response) => {
+            const data = {
+              'siteID' : siteId,
+              'count' : response.data.count
+            }
+            setEachCompletedCount((prevData) => {
+              const newTaskList = [...prevData];
+              const index = newTaskList.findIndex((task) => task.siteID === siteId);
+              if (index > -1) {
+                newTaskList[index] = data;
+              } else {
+                newTaskList.push(data);
+              }
+              return newTaskList;
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching task count:", error);
+          });
+        }
+   
+  
+    // Loop through each selected site ID and fetch labor data for them
+    selectedSiteIds.forEach((siteId) => {
+      console.log(siteId);
+      fetchLaborDataForSite(siteId);
+      getEachTask(siteId);
+      getEachCompleted(siteId);
+    });
+  }, [selectedSiteIds]);
+  console.log(eachCompletedCount);
+  console.log(eachTaskCount);
+ 
+  console.log("labourdetails", laborData);
+  
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/task/completion")
@@ -215,7 +317,6 @@ const SMDashboard = () => {
         console.error("Error fetching leave count:", error);
       });
   }, []);
-
 
   useEffect(() => {
     axios
@@ -293,6 +394,7 @@ const SMDashboard = () => {
   };
 
   useEffect(() => {
+
     axios
       .get("http://localhost:4000/api/task/taskcount")
       .then((response) => {
@@ -303,20 +405,27 @@ const SMDashboard = () => {
         console.error("Error fetching task count:", error);
       });
   }, []);
+  
 
   const data = {
     labels: ["Completed", "Pending"],
     datasets: [
       {
         label: "Task Dataset",
-        data: [ taskCount - completion,taskCount], // Removed .toString()
+        data: [taskCount - completion, taskCount], // Removed .toString()
         backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
-       
-        borderColor: [ "rgb(75, 192, 192)","rgb(255, 99, 132)"],
+
+        borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
         borderWidth: 1,
       },
     ],
   };
+
+
+
+
+
+
 
   useEffect(() => {
     axios
@@ -335,15 +444,15 @@ const SMDashboard = () => {
     datasets: [
       {
         label: "Task Dataset",
-        data: [taskCount - completion,taskCount], // Removed .toString()
+        data: [taskCount - completion, taskCount], // Removed .toString()
         backgroundColor: ["rgb(8, 143, 143, 0.9)", "rgb(255, 99, 71,0.9)"], // Red and green colors with higher opacity (0.5)
-       
-        borderColor: [ "rgb(75, 192, 192)","rgb(255, 99, 132)"],
+
+        borderColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
         borderWidth: 1,
       },
     ],
   };
-  
+
   function getCurrentDate() {
     const now = new Date();
     const year = now.getFullYear();
@@ -358,7 +467,6 @@ const SMDashboard = () => {
     return `${year}-${month}-${day}`;
   }
 
-  
   return (
     <>
       <ChakraProvider>
@@ -428,7 +536,6 @@ const SMDashboard = () => {
               <div className="w-1/2 flex items-center p-3 justify-center">
                 <Line options={options} data={data3} />
               </div>
-              
             </div>
           </div>
         </div>
@@ -456,11 +563,11 @@ const SMDashboard = () => {
               <Tbody>
                 {laborData.map((row) => (
                   <Tr key={row.labor_id}>
-                    <Td>{row.labourname}</Td>
+                    <Td>{row.f_name} {row.l_name}</Td>
                     <Td>{row.labourtype}</Td>
                     <Td>{row.site_id}</Td>
-                    <Td>{row.site_id}</Td>
-                    <Td>{row.site_id}</Td>
+                    <Td>{row.tel_no}</Td>
+                    <Td>Available</Td>
 
                     <Td>
                       <Button

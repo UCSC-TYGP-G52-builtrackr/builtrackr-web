@@ -36,7 +36,8 @@ const Navbar = () => {
     screenSize,
   } = useStateContext();
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
-  const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
+  // const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
+  const roleName = "HR Manager";
   const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
 
   useEffect(() => {
