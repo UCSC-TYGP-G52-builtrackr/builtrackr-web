@@ -130,20 +130,9 @@ const Analytics = () => {
     const data2 = { percentages, key };
     return data2;
   });
-  console.log("data key",data);
-
-  //get the title from card that id equal to data key
-
-  const data3 = data.map((data) => {
-    const data4 = cards.map((card) => {
-      if (card.id === data.key) {
-        return card.title;
-      }
-    });
-    return data4;
-  });
-  console.log("data3", data3);
+  console.log(data);
   
+  console.log(cards);
 
   console.log(groupedTasks);
 
@@ -229,13 +218,18 @@ const Analytics = () => {
             </div>
             <div className="px-[25px] space-y-[15px] py-[15px]">
             {data.map((data) => (
-  <div key={data.key}> 
-  {cards.map((card) => (
-  <>
-           <h2>{card.id === data.key?card.title:data.kay}</h2>
-          <Progress key={data.key} percent={data.percentages} strokeColor="#2dc78e"  strokeWidth='12px'/>
+  <div key={data.key}> {/* Add a unique key for the map */}
+   
+    {cards.map((card) => {
+      if (data.key === card.id) {
+        return (
+          <>
+           <h2>Task {card.title}</h2>
+          <Progress key={card.id} percent={data.percentages} strokeColor="#2dc78e"  strokeWidth='12px'/>
           </>
-      ))} 
+        );
+      }
+    })}
     </div>
               ))}
               {/* <div>
