@@ -256,12 +256,11 @@ const columns: GridColDef[] = [
   renderCell: (params) => (
     <>
     {/* //map value according to row id */}
-    {value.map((val) => {
+    {Array.isArray(value) && value.map((val) => {
       if (val.labourid === params.row.id) {
-        
+
         return(
-        
-     
+
     <Rating
       name="size-medium"
       defaultValue={ratings.value}
