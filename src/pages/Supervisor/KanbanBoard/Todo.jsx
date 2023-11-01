@@ -117,6 +117,7 @@ const handleDecline = async (id) => {
                cursor: "pointer",
                marginLeft: "8%",
                marginTop: "5%",
+               boxShadow: "0 1px 1px 1px rgba(0, 0, 0, 0.2)",
              }}
               onClick={() => setOpen(false)}
             >
