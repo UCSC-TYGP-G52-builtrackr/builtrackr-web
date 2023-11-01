@@ -85,9 +85,9 @@
   padding: 14px;
   border-radius: 20px;
 } */
-tbody tr:nth-child(odd){
+tbody tr:nth-child(odd) {
   background-color: #efefef;
 }
-.currente{
+.currente {
   background-color: #ffcc00;
 }

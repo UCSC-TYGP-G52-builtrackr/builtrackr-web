@@ -68,7 +68,7 @@ const SideBar = () => {
               onClick={handleCloseSideBar}
               className="flex items-center gap-3 mt-4 text-xl font-extrabold tracking-tight text-white dark:text-white"
             >
-              <img src={logo} className="w-36 h-24" />
+              <img src={logo} className="w-36 h-15" />
             </Link>
             {/* <button
                 type="button"

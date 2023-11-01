@@ -2,11 +2,11 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { React, useState } from "react";
 import { Validation } from "./validation";
 import { ToastContainer, toast } from "react-toastify";
-import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { alignProperty } from "@mui/material/styles/cssUtils";
 import { encryptData } from "../../encrypt";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // import { encryptData } from "../../encrypt";
 export function Login() {
@@ -37,6 +37,7 @@ export function Login() {
           .post("http://localhost:4000/api/user/auth", values)
           .then((res) => {
             if (res.data.type === 0) {
+              console.log(res.data);
               localStorage.setItem(
                 "user_type",
                 JSON.stringify(encryptData(res.data.type.toString()))
@@ -66,7 +67,7 @@ export function Login() {
               );
               localStorage.setItem(
                 "photo",
-                JSON.stringify(encryptData(res.data.type.toString()))
+                JSON.stringify(encryptData(res.data.photo))
               );
               localStorage.setItem(
                 "name",
@@ -99,9 +100,9 @@ export function Login() {
               } else if (res.data.type === 2) {
                 localStorage.setItem(
                   "home_page",
-                  JSON.stringify(encryptData("/inventorymanager/Equipments"))
+                  JSON.stringify(encryptData("/inventorymanager/Dashboard"))
                 );
-                navigate("/inventorymanager/Equipments");
+                navigate("/inventorymanager/Dashboard");
               } else if (res.data.type === 3) {
                 localStorage.setItem(
                   "home_page",

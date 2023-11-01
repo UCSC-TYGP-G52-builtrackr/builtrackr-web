@@ -14,6 +14,7 @@ import { decryptData } from "../../encrypt";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import axios from "axios";
+import Badge from "@mui/material/Badge";
 
 // const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 //     <button
@@ -49,31 +50,31 @@ const NavBar = () => {
   //print localsorage
   console.log(localStorage);
 
-console.log(employeeNo);
+  console.log(employeeNo);
   const [siteInfo, setSiteInfo] = useState([]);
- 
-  
+
   useEffect(() => {
     const getSiteInfo = async () => {
-    axios.get(`http://localhost:4000/api/kanbanbord/getSite?employeeNo=${employeeNo}`).then((response) => {
-      setSiteInfo(response.data);
-    }).catch((error) => {
-      console.error("Error fetching site information:", error);
-    });
-  };
-  getSiteInfo();
+      axios
+        .get(
+          `http://localhost:4000/api/kanbanbord/getSite?employeeNo=${employeeNo}`
+        )
+        .then((response) => {
+          setSiteInfo(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching site information:", error);
+        });
+    };
+    getSiteInfo();
   }, [employeeNo]);
-
 
   console.log(siteInfo);
 
+  const siteArray = siteInfo.site_id;
 
-const siteArray = siteInfo.site_id;
-
-//save site id to local storage
-localStorage.setItem("site_id", JSON.stringify(siteArray));
-
-
+  //save site id to local storage
+  localStorage.setItem("site_id", JSON.stringify(siteArray));
 
   const [socket, setSocket] = useState(null);
   const [notification, setNotification] = useState([]);
@@ -97,14 +98,17 @@ localStorage.setItem("site_id", JSON.stringify(siteArray));
   }, [socket]);
 
   useEffect(() => {
-    console.log("Hammmeeee");
-    socket?.on("getTaskNotification", (data) => {
+    socket?.on("getEquipmentNotification", (data) => {
       setNotification((prev) => [...prev, data]);
     });
   }, [socket]);
 
-  // console.log(notification);
-
+  useEffect(() => {
+    socket?.on("getEquipmentAcceptNotification", (data) => {
+      setNotification((prev) => [...prev, data]);
+    });
+  }, [socket]);
+  console.log(notification);
 
   useEffect(() => {
     if (screenSize <= 900) {
@@ -121,12 +125,18 @@ localStorage.setItem("site_id", JSON.stringify(siteArray));
       className="relative flex justify-end p-2 pr-8 bg-white"
       style={{ position: "fixed", right: 0 }}
     >
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <div
           className="text-4xl cursor-pointer"
           onClick={() => handleClick("notification")}
         >
-          <NotificationsNoneIcon fontSize="inherit" />
+          {notification.length > 0 ? (
+            <Badge badgeContent={notification.length} color="primary">
+              <NotificationsNoneIcon />
+            </Badge>
+          ) : (
+            <NotificationsNoneIcon />
+          )}
         </div>
         {/* <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('notification')} icon={<RiNotification3Line style={{ color: 'black', fontSize: '28px' }}/>} /> */}
         <div
@@ -145,7 +155,7 @@ localStorage.setItem("site_id", JSON.stringify(siteArray));
           /> */}
         </div>
 
-        {isClicked.notification && <Notification />}
+        {isClicked.notification && <Notification notification={notification} setNotification={setNotification} />}
         {isClicked.userProfile && <UserProfile />}
       </div>
     </div>
