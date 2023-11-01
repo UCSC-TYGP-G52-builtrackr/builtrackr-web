@@ -3,13 +3,18 @@ import SiteCard from "../../components/SiteManager/SiteCard";
 import Navbar from "../../components/SiteManager/Navbar";
 import Sidebar from "../../components/SiteManager/Sidebar";
 import axios from "axios";
+import ChatSpace from "../../components/SiteManager/ChatSpace";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 import { decryptData } from "../../encrypt";
-
+import { io } from "socket.io-client";
 import { Link, useNavigate } from "react-router-dom";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { BsChatDots } from "react-icons/bs";
+
+
 import {
   Button,
   Modal,
@@ -44,7 +49,22 @@ localStorage.setItem("imageFilenames", JSON.stringify(imagePaths));
 // ];
 
 const SiteDashboard = () => {
+  const {
+    setCurrentColor,
+    setCurrentMode,
+    currentMode,
+    activeMenu,
+    themeSettings,
+    setThemeSettings,
+  } = useStateContext();
   const imageFilenames = JSON.parse(localStorage.getItem("imagePaths")) || [];
+
+  const company_id = parseInt(
+    decryptData(JSON.parse(localStorage.getItem("company_id")))
+  );
+  const employeeNo = decryptData(JSON.parse(localStorage.getItem("no")));
+
+  console.log(company_id);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [isErrorAlertOpen, setIsErrorAlertOpen] = useState(false);
@@ -66,6 +86,17 @@ const SiteDashboard = () => {
   const [supDetails, setSupDetails] = useState([]);
 
   const [selectedSiteIds, setSelectedSiteIds] = useState([]);
+
+  const [notificationEmployees, setNotificationEmployee] = useState([]);
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(io("http://localhost:4000/"));
+  }, []);
+  console.log(socket);
+
+  useEffect(() => {
+    socket?.emit("newUser", employeeNo);
+  }, [socket]);
 
   const onClose = () => {
     setIsOpen(false);
@@ -326,6 +357,24 @@ const SiteDashboard = () => {
           if (res.status === 200) {
             console.log(res.data);
 
+            axios
+              .post("http://localhost:4000/api/employee/siteEmployees", {
+                company_id: company_id,
+                site_id: selectedSite,
+              })
+              .then((res) => {
+                console.log("res ", res.data);
+                setNotificationEmployee(res.data);
+                console.log(res.data);
+                socket.emit("sendEquipmentNotification", {
+                  reciver: notificationEmployees,
+                  sender: employeeNo,
+                });
+              })
+              .catch((error) => {
+                // Handle error
+              });
+
             // Show success toast
             toast({
               title: "Equipment Assigned Successfully",
@@ -413,7 +462,18 @@ const SiteDashboard = () => {
       <ChakraProvider>
         <Navbar />
         <div className="flex">
+          <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
+            <button
+              type="button"
+              onClick={() => setThemeSettings(true)}
+              style={{ backgroundColor: "yellow-400", borderRadius: "50%" }}
+              className="p-3 text-3xl text-white bg-yellow-400 hover:drop-shadow-xl"
+            >
+              <BsChatDots />
+            </button>
+          </div>
           <Sidebar />
+          {themeSettings && <ChatSpace />}
 
           <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />

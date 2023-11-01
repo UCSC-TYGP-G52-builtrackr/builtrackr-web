@@ -472,7 +472,7 @@ const AdminUserRole = () => {
     const isHrAdded = async () => {
       try {
         const data = await fetch(
-          "http://localhost:4000/api/employee/employeeExist",
+          "http://localhost:4000/api/employee/employeeExistsByType",
           {
             method: "POST",
             headers: {
@@ -481,8 +481,9 @@ const AdminUserRole = () => {
             body: JSON.stringify({ id: company_id, type: 1 }),
           }
         );
-        if (data.status) {
+        if (data.status === 200) {
           setHrAdded(true);
+          console.log("HR added ok");
         } else {
           console.log(data.status);
         }
@@ -904,7 +905,7 @@ const AdminUserRole = () => {
                 />
                 {!hrAdded && (
                   <span className="link " onClick={handleOpenEmployeeForm}>
-                    Click here to add a HR MAnager
+                    Click here to add a HR Manager
                   </span>
                 )}
               </div>
@@ -995,7 +996,7 @@ const AdminUserRole = () => {
                 <div>
                   <Box sx={style} style={{ width: "550px" }}>
                     <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
-                      Add user roles
+                      Add User Roles
                     </h2>
                     <form>
                       <TextField
@@ -1132,7 +1133,7 @@ const AdminUserRole = () => {
             >
               <Box sx={style} style={{ width: "550px" }}>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-                  Add employee details
+                  Add HR Manager employee details
                 </h2>
                 <form>
                   <div className="two-inputs">
