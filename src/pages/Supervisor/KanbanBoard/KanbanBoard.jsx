@@ -98,6 +98,9 @@ export const KanbanBoard = (props) => {
   }
 
   const filteredCards = cards.filter((card) => card.boardId === props.board?.id);
+  console.log(filteredCards)
+  console.log(cards)
+  console.log(props.board?.id)
 
   return (
     <>
