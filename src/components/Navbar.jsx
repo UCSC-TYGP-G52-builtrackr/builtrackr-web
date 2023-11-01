@@ -8,7 +8,7 @@ import avatar from '../data/avatar.jpg';
 import Notification from './Notification';
 import UserProfile from './UserProfile';
 import { useStateContext } from '../contexts/ContextProvider';
-// import { decryptData } from '../encrypt';
+import { decryptData } from '../encrypt';
 
 
  const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
@@ -29,7 +29,8 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
-  const name = (JSON.parse(localStorage.getItem("name")));
+  const name = decryptData(JSON.parse(localStorage.getItem("name")));
+  console.log(localStorage);
 
 
   useEffect(() => {

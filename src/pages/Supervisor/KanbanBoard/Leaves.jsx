@@ -11,8 +11,9 @@ import NativeSelect from '@mui/material/NativeSelect';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const style = {
@@ -26,8 +27,7 @@ const style = {
     boxShadow: 24,
     p: 14,
   };
-  
-  
+
 
 export const  LeaveForm = () => {
     const [post, setPost] = useState({
@@ -40,49 +40,54 @@ export const  LeaveForm = () => {
 
       console.log(post);
 
-const toast = useToast();
+
+
+const [selectedId, setSelectedId] = useState('');
+  const [selectedName, setSelectedName] = useState('');
+
+  const handleOptionChange = (event) => {
+    const selectedValue = event.target.value;
+    const [id, name] = selectedValue.split('|');
+    setSelectedId(id);
+    setSelectedName(name);
+  };
+  console.log(selectedId);
+  console.log(selectedName);
+
+  const id  = selectedId;
+  const Lname = selectedName;
+
 
 const handleSubmit = async (event) =>{ 
 
 //  pass the post.name, post.note and post.number to the backend
   event.preventDefault();
-  const {option, name,start,end,note } = post;
-  const data = {option,name,start,end,note };
-  console.log(data);
+  const {name,start,end,note } = post;
+  const data = {id,Lname,start,end,note, name };
+  console.log("leave", data);
   try {
     const response = await axios.post(
       "http://localhost:4000/api/leave/sendleave",
       data
     );
     console.log(response);
-    if (response.data.success) {
-      toast({
-        position: "bottom-right",
-        title: "Request sent successfully",
-        description: "We've sent your request successfully.",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-      });
+    if (response.status === 200) {
+      toast.success("Success");
     }
+    window.location.reload();
   }
   catch (error) {
     console.log(error);
-    toast({
-      position: "bottom-right",
-      title: "An error occurred.",
-      description: "Unable to send your request.",
-      status: "error",
-      duration: 9000,
-      isClosable: true,
-    });
+    toast.error("Error")
+    window.location.reload();
   }
 }
 
    const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
   };
-  
+
+
   const handleDateRangeChange = (dateRange) => {
     // dateRange will be an array with [startDate, endDate]
     const [startDate, endDate] = dateRange;
@@ -99,24 +104,25 @@ const handleSubmit = async (event) =>{
 
 
   const [labourArray, setLabourArray] = useState([]);
- 
+  const siteId  = localStorage.getItem("site_id");
+
   useEffect(() => {
-  const getLabourData = async () => {
-    
-    try {
-      const response = await axios.get(
-        "http://localhost:4000/api/labour/viewemployee"
-      );
-      console.log(response.data);
-      if (response.status === 200) {
-        setLabourArray(response.data);
+    const getLabourData = async () => {
+
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/labour/viewemployee?siteId=${siteId}`
+        );
+        console.log(response.data);
+          setLabourArray(response.data);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-};
- getLabourData();
-}, []);
+  };
+   getLabourData();
+  }, [siteId]);
+
+console.log("labour display", labourArray);
 
 return(
 
@@ -165,7 +171,7 @@ return(
     {/* style the name to be bold h1 tag */}
     <h1 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-3xl dark:text-black"> Labour Leave Form </h1><br/>
    <FormControl fullWidth>
-  <label variant="standard" htmlFor="uncontrolled-native" style  ={{marginLeft:"-70%"}}>
+  <label variant="standard" htmlFor="uncontrolled-native">
    Select Labour name
   </label>
   <NativeSelect
@@ -175,24 +181,31 @@ return(
       id: 'uncontrolled-native',
     }}
     label="option"
-    onClick={(e) => handleChange(e)} 
+    onClick={(e) => handleOptionChange(e)} 
   >
-    {labourArray.map((labour) => (
-    <option value={labour.name}>{labour.name}</option>
-    ))}
+    {Array.isArray(labourArray) ? (
+  labourArray.map((labour) => (
+    <option key={labour.labourid} value={`${labour.labourid}|${labour.f_name}`}>
+      {labour.f_name}
+    </option>
+  ))
+) : (
+  <option value="default">No valid data</option>
+)}
+
   </NativeSelect>
   </FormControl>
   <br/><br/>
     <FormControl fullWidth >
-    <label style  ={{marginLeft:"-80%"}}>Special Note</label><br/>
+    <label> Special Note</label><br/>
     <Textarea placeholder='Enter the description' border={'black'}  w='400px' name  = "note"  onChange={(e) => handleChange(e)}/>
     </FormControl><br/><br/>
     <FormControl fullWidth>
-    <label style  ={{marginLeft:"-70%"}}>Enter the category</label>
+    <label>Enter the category</label>
     <Input type  ="text" placeholder='Name' name = "name"   onChange={(e) => handleChange(e)} />
     </FormControl><br/><br/>
     <FormControl  fullWidth>
-    <label style  ={{marginLeft:"-70%"}}>Enter Date range</label><br/>
+    <label>Enter Date range</label><br/>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
         {/* disable past days */}
         <DateRangePicker localeText={{ start: 'Start date', end: 'End date' }}
@@ -209,6 +222,7 @@ return(
   </Box>
   </form>
 </div>
+<ToastContainer/>
 </React.Fragment>
 )
 }

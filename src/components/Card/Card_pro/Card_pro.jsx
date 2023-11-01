@@ -6,6 +6,11 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button} from '@chakra-ui/react';
+import { Rating} from "@mui/material"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -20,80 +25,133 @@ const style = {
 
 
 
+
 export const CardFirst = () => {
   const [modalContent, setModalContent] = useState(null);
   const [open, setOpen] = useState(false);
  
 
+  
+
 
   //get view request data from backend and set it to labourArray
   const [labourArray, setLabourArray] = useState([]);
   const [equipmentArray, setEquipmentArray] = useState([]);
-
+  const [materialArray, setMaterialArray] = useState([]);
+  const [value, setValue] = useState("");
+  const siteid = localStorage.getItem("site_id");
+// let id  = parseInt(siteid ,10)
+console.log(siteid)
+  const siteId=localStorage.getItem("site_id");
+ 
+ 
   useEffect(() => {
   const getLabourData = async () => {
     
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/labour/viewemployee"
-      );
+      const response = await axios.get(`http://localhost:4000/api/labour/viewemployee?siteId=${siteid}`);
       console.log(response.data);
-      if (response.status === 200) {
         setLabourArray(response.data);
-      }
     } catch (error) {
       console.log(error);
     }
 };
  getLabourData();
-}, []);
+}, [siteid]);
+
 
 //equipments
 useEffect(() => {
   const getEquipmentData = async () => {
     
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/equipment/viewequipments"
-      );
+      const response = await axios.get( `http://localhost:4000/api/equipment/viewequipments?siteId=${siteId}`);
       console.log(response.data);
-      if (response.status === 200) {
+     
         setEquipmentArray(response.data);
-      }
+      
     } catch (error) {
       console.log(error);
     }
 };
 getEquipmentData ();
-}, []);
+}, [siteId]);
+
+
+//materials
+useEffect(() => {
+  const getMaterialData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/api/equipment/viewmaterials?siteId=${siteId}`
+      );
+      console.log(response.data);
+        setMaterialArray(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+};
+getMaterialData ();
+}, [siteId]);
+
+
+
 
 
 //assign labour array to rows
+
 const rows = labourArray.map((labour) => {
+
+  console.log(labour.approval)
+  if(labour.approval === "Approved"){
+    labour.approval = "Not Available"
+  }else if(labour.approval !== "Not Available"){
+    labour.approval = "Available"
+  }
   return {
-    id: labour.id,
-    fullName: labour.name,
-    Category: labour.Category,
-    available: labour.available,
-    Release: `<button onclick="releaseLabour(${labour.id})">Release</button>`,
+    id: labour.labourid,
+    fullName: labour.f_name,
+    Category: labour.labourtype,
+    available: labour.approval,
+    Rating: `<Rating name="size-medium" defaultValue={0}
+    precision={0.5} size="large" />`,
+    Release: `<button onclick="releaseLabour(${labour.labourid})">Release</button>`,
 
   }});
+
+
+  const Row  = materialArray.map((material) => {
+    return {
+      id: material.material_id,
+      Category :material.materialname,
+      Number: material.req_quantity,
+      Unit: material.type,
+      Release: <button onclick={releaseMaterial(`${material.material_id}`)}>Release</button>,
+
+    }});
+
 
   //assign equipment array to row
   const row = equipmentArray.map((equipment) => {
     return {
-      id: equipment.id,
-      Category: equipment.name,
-      Number: equipment.id,
-      Release: <button onclick={releaseEquipment(`${equipment.id}`)}>Release</button>,
+      id: equipment.equipment_id,
+      Name :equipment.equipmentname,
+      Number: equipment.req_quantity,
+      Release: <button onclick={releaseEquipment(`${equipment.equipment_id}`)}>Release</button>,
 
     }});
+
+    console.log(equipmentArray)
+    console.log(labourArray)
     
     function releaseLabour(labourId) {
       // Implement the logic to release the labor with the given `labourId`.
     }
     
     function releaseEquipment(equipmentId) {
+      // Implement the logic to release the equipment with the given `equipmentId`.
+    }
+    function releaseMaterial(equipmentId) {
       // Implement the logic to release the equipment with the given `equipmentId`.
     }
 
@@ -111,7 +169,58 @@ const rows = labourArray.map((labour) => {
     setOpen(false);
   };
 
+  //rating
+const [ratings, setRatings] = useState({});
+
+const handleRating = (rowId, value) => {
+  // Update the ratings state with the new value
+  setRatings((prevRatings) => ({
+    ...prevRatings,
+    id: rowId,
+    rating: value,
+  }));
+updateRate();
+};
+
+  const updateRate = () =>{
+    const rate = ratings.rating;
+    const id = ratings.id;
+        const data = { rate, id };
+        console.log("rating", data);
+        axios
+          .post(`http://localhost:4000/api/labour/updaterating`, data)
+          .then((response) => {
+            console.log(response.data);
+            if(response.status===200){
+              toast.success("Rating updated successfully");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        
+  }
+
+  useEffect(() => {
+    const getRatingData = async () => {
+      
+      try {
+        const response = await axios.get(`http://localhost:4000/api/labour/viewrating?siteId=${siteid}`);
+        console.log(response.data);
+          setValue(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+  };
+   getRatingData();
+  }, [siteid]);
+
+  console.log("rating id,value",value)
+
+
 function handleForm(){
+ 
 return(
   <form>
   <label>form</label>
@@ -131,15 +240,48 @@ const columns: GridColDef[] = [
     width: 150,
   },
   {
-    field: 'Category',
-    headerName: 'Category',
-    width: 120,
-  },
-  {
     field: 'available',
     headerName: 'Available',
-    type: 'number',
-    width: 120,
+    width: 150,
+  },
+  {
+    field: 'Category',
+    headerName: 'Category',
+    width: 150,
+  },
+  {
+  field: 'Rating',
+  headerName: 'Rating',
+  width: 150,
+  renderCell: (params) => (
+    <>
+    {/* //map value according to row id */}
+    {Array.isArray(value) && value.map((val) => {
+      if (val.labourid === params.row.id) {
+
+        return(
+
+    <Rating
+      name="size-medium"
+      defaultValue={ratings.value}
+      value={val.rating}
+      precision={1}
+      placeholder={val.rating}
+      size="large"
+      onChange={(event, newValue) => {
+        // Update the rating when it changes
+        handleRating(params.row.id, newValue);
+      }}
+      // onClick={() => handleRating(params.row.id ,ratings.value)}
+      
+    />
+        )
+      
+  }return null;
+})}
+    </>
+
+  ),
   },
   {
     field: 'Release',
@@ -168,6 +310,7 @@ const columns: GridColDef[] = [
 ];
 
 const CustomDataGrid = ({ rows }) => {};
+
   const handleRelease = (itemId) => {
     console.log(itemId);
     const data  = {itemId}
@@ -179,23 +322,25 @@ const CustomDataGrid = ({ rows }) => {};
     .catch((err) => {
       console.log(err);
     });
+    window.location.reload();
 };
 
 
 const column: GridColDef[] = [
 
   {
-    field: 'Category',
-    headerName: 'Category',
+    field: 'Name',
+    headerName: 'Name',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
-    width: 160,
+    width: 220,
   },
   {
     field: 'Number',
-    headerName: 'Available Number',
+    headerName: 'Quantity',
     type: 'number',
-    width: 90,
+    width: 150,
+    alignItem:'center'
   },
   {
     field: 'Release',
@@ -223,6 +368,8 @@ const column: GridColDef[] = [
   },
 ];
 
+const CustomGrid = ({ row }) => {};
+
 const handleReleaseEquipment = (itemId) => {
   console.log(itemId);
   const data  = {itemId}
@@ -234,7 +381,36 @@ const handleReleaseEquipment = (itemId) => {
   .catch((err) => {
     console.log(err);
   });
+  window.location.reload();
 };
+
+const Columns: GridColDef[] = [
+
+  {
+    field: 'id',
+    headerName: 'Material Id',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 150,
+  },
+  {
+    field: 'Category',
+    headerName: 'Category',
+    width: 150,
+  },
+  {
+    field: 'Number',
+    headerName: 'Quantity',
+    width: 150,
+  },
+  {
+    field: 'Unit',
+    headerName: 'Unit',
+    width: 150,
+  },
+];
+
+const CustomData = ({ Rows }) => {};
 
 
 
@@ -267,15 +443,27 @@ const handleReleaseEquipment = (itemId) => {
       />
     </div>
    )}
+
+{modalContent?.title === "Allocated Materials" && (
+    <div style={{ height: 300, width: '100%' }}>
+      <DataGrid
+        rows={Row}
+        columns={Columns}
+      />
+
+    </div>
+   )}
+
+
    <br/>
   <div style  ={{display:"inline-block"}}>
   {modalContent?.title === "Workers of the day" && (
     <div className='flex'>
       <Link to="RequestForm">
-        <button className='' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "180px", boxShadow: "none",marginLeft: "-12%",marginTop:"0%" }}>Request Labourers</button>
+        <button className='' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "180px", boxShadow: "none",marginLeft: "5%",marginTop:"0%" }}>Request Labourers</button>
       </Link>
       <Link to="Leaves">
-        <button className='ml-10' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "180px", boxShadow: "none"}}>Request Leaves</button>
+        <button className='ml-10' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "180px", boxShadow: "none",marginLeft: "60%"}}>Request Leaves</button>
       </Link>
      </div>
   )}
@@ -283,7 +471,13 @@ const handleReleaseEquipment = (itemId) => {
 
     {modalContent?.title === "Allocated Equipments" && (
             <Link to="RequestForm">
-              <button className='ml-40' style={{ backgroundColor: "#FFCC00", padding: "5%", width: "200px", boxShadow: "none" }}>Request Equipments</button>
+              <button className='ml-40' style={{ backgroundColor: "#FFCC00", padding: "2%", width: "250px", boxShadow: "none", marginLeft: "52%"}}>Request Equipments</button>
+            </Link>
+    )}
+
+{modalContent?.title === "Allocated Materials" && (
+            <Link to="RequestForm">
+              <button className='ml-40' style={{ backgroundColor: "#FFCC00", padding: "2%", width: "250px", boxShadow: "none", marginLeft: "52%"}}>Request Materials</button>
             </Link>
     )}
 
@@ -292,15 +486,22 @@ const handleReleaseEquipment = (itemId) => {
 </Modal>
 
 
-   <div className="card_1" onClick={() => handleOpen({ title: "Allocated Equipments", description: "", 
-    request:"Request Equipments"}, handleForm())}>
-        <h4>Allocated Equipments</h4>
-      </div>
+   
       <div className="card_1" onClick={() => handleOpen({ title: "Workers of the day", description: "Content for Workers of the day", 
        request:"Request Labourers", 
     }, handleForm())}>
         <h4>Workers of the day</h4>
       </div>
+      <div className="card_1" onClick={() => handleOpen({ title: "Allocated Equipments", description: "", 
+    request:"Request Equipments"}, handleForm())}>
+        <h4>Allocated Equipments</h4>
+      </div>
+      <div className="card_1" onClick={() => handleOpen({ title: "Allocated Materials", description: "", 
+    request:"Request Materials"}, handleForm())}>
+        <h4>Allocated Materials</h4>
+      </div>
+      <ToastContainer />
     </>
   );
 }
+

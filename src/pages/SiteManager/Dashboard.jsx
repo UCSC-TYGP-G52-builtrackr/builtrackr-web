@@ -381,6 +381,7 @@ const SMDashboard = () => {
   useEffect(() => {
     setSocket(io("http://localhost:4000/"));
   }, []);
+  console.log(socket);
 
   useEffect(() => {
     socket?.emit("newUser", employeeNo);
@@ -503,6 +504,13 @@ const SMDashboard = () => {
     return `${year}-${month}-${day}`;
   }
 
+  const sendNotification = () => {
+    socket.emit("sendTaskNotification", {
+      reciver: 3,
+      sender: employeeNo,
+    });
+  };
+
   return (
     <>
       <ChakraProvider>
@@ -546,6 +554,13 @@ const SMDashboard = () => {
                 onClick={handleBorderColorChange}
               />
             </div>
+            <button
+              style={{ marginLeft: "50px", height: "50px" }}
+              onClick={sendNotification}
+            >
+              Send Notification
+            </button>
+
             <div className="flex w-full gap-2 items-center justify-evenly">
               <div className="w-1/2 flex items-center justify-center mt-4">
                 <div className="flex gap-4 flex-col w-2/5 items-center justify-center  mt-6">

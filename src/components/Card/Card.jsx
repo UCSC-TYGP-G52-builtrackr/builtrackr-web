@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 
+
 export const Card = (props) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +23,8 @@ export const Card = (props) => {
   const [values, setValues] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
+
+
 
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
@@ -204,7 +207,7 @@ export const Card = (props) => {
                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                  cursor: "pointer",
                  transition: "background-color 0.3s, box-shadow 0.3s",
-                 marginLeft: "-8%",
+                 marginLeft: "0%",
                  marginTop: "5%",
                }}
                ref={cancelRef} onClick={onClose}>
