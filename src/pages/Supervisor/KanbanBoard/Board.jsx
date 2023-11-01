@@ -10,17 +10,15 @@ import ChatSpace from "../../../components/SiteSupervisor/ChatSpace";
 import { BsChatDots } from "react-icons/bs";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
+import { decryptData } from "../../../encrypt";
 
 export const Board = () => {
-const {
- 
-  activeMenu,
-  themeSettings,
-  setThemeSettings,
-} = useStateContext();
+  const { activeMenu, themeSettings, setThemeSettings } = useStateContext();
 
-const [boards, setBoards] = useState([]);
-
+  const [boards, setBoards] = useState([]);
+  const companyId = decryptData(JSON.parse(localStorage.getItem("company_id")));
+  const SupervisorId = decryptData(JSON.parse(localStorage.getItem("no")));
+  const siteId = localStorage.getItem("site_id");
 
   const addBoardHandler = (name) => {
     const tempBoards = [...boards];
@@ -29,30 +27,32 @@ const [boards, setBoards] = useState([]);
       title: name,
       cards: [],
     });
-  
-    const title  = name;
-    const companyId  = 1;
-    const SupervisorId =1;
 
-    const data = {title,companyId,SupervisorId};
+    const title = name;
 
-    axios.post("http://localhost:4000/api/kanbanbord/addBoard", data)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    }
-    );
+    console.log(companyId, SupervisorId);
+
+    const data = { title, companyId, SupervisorId, siteId };
+    console.log(data);
+
+    axios
+      .post("http://localhost:4000/api/kanbanbord/addBoard", data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    //reload
+    window.location.reload();
   };
-
-
 
   useEffect(() => {
     const getBoards = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/kanbanbord/getBoard"
+          `http://localhost:4000/api/kanbanbord/getBoard?siteId=${siteId}`
         );
         console.log(response.data);
         if (response.status === 200) {
@@ -64,10 +64,7 @@ const [boards, setBoards] = useState([]);
       }
     };
     getBoards();
-  }, []);
-
-
-
+  }, [siteId]);
 
   return (
     <>
@@ -106,12 +103,13 @@ const [boards, setBoards] = useState([]);
             : "bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 "
         }
       >
-        <br/><br/><br/>
+        <br />
+        <br />
+        <br />
 
         <div className="kanban">
           <div className="owner_info">
-            <div className="name">
-            </div>
+            <div className="name"></div>
           </div>
 
           <div className="board_outer">
@@ -119,13 +117,9 @@ const [boards, setBoards] = useState([]);
               <FirstBoard />
               <Todo />
 
-        {boards.map((board) => (
-                <KanbanBoard
-                  key={board.id}
-                  board= {board}
-                  
-                />
-          ))}
+              {boards.map((board) => (
+                <KanbanBoard key={board.id} board={board} />
+              ))}
               <div className="add_board">
                 <Editable
                   displayClass="app_boards_add-board"

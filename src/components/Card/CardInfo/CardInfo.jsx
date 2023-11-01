@@ -20,6 +20,9 @@ import "./comment.css"
 import Select from "react-select";
 import ImageUpload from "../../../pages/Supervisor/imageUpload";
 import { BsClipboardPlusFill } from "react-icons/bs";
+import { decryptData } from "../../../encrypt";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const CardInfo = (props) => {
   const colors = [
@@ -43,6 +46,11 @@ const [title, setTitle] = useState([]);
 const [image, setImage] = useState([]);
 const [TaskId , setTaskId] = useState([]);
 
+const companyId = decryptData(JSON.parse(localStorage.getItem("company_id")));
+const SupervisorId = decryptData(JSON.parse(localStorage.getItem("no")));
+const id  =decryptData(JSON.parse(localStorage.getItem("user_type")));
+const siteId = localStorage.getItem("site_id");
+
   const updateTitle = (value) =>{
     const title  = value;
     const cardId = props.card.id;
@@ -57,6 +65,7 @@ const [TaskId , setTaskId] = useState([]);
       console.error("Error updating title:", err);
     }
     );
+    window.location.reload();
 
   };
 
@@ -80,12 +89,14 @@ const [TaskId , setTaskId] = useState([]);
       .catch((err) => {
         console.error("Error adding label:", err);
       });
+      window.location.reload();
   };
 
   const removeLabel = (label) => {
+    console.log("this is the label" ,label)
     axios
-      .delete(`http://localhost:4000/api/card/removeLabel/${values.id}`, {
-        data: { labelId: label.id },
+      .delete(`http://localhost:4000/api/cardInfo/removeLabel`, {
+        data: { labelId: label },
       })
       .then(() => {
         const updatedLabels = values.labels.filter(
@@ -96,6 +107,7 @@ const [TaskId , setTaskId] = useState([]);
       .catch((err) => {
         console.error("Error removing label:", err);
       });
+      window.location.reload();
   };
 
   useEffect(() => {
@@ -122,11 +134,10 @@ const [TaskId , setTaskId] = useState([]);
     const cardId  = props.card.id;
     const task  = value
     const completed = false
-    const companyId =1
     const data= {task,completed,cardId,companyId}
 
 
-    console.log(task)
+    console.log(data)
     axios
       .post(`http://localhost:4000/api/cardInfo//addCardInfoTask`,data)
       .then((res) => {
@@ -140,6 +151,7 @@ const [TaskId , setTaskId] = useState([]);
       .catch((err) => {
         console.error("Error adding label:", err);
       });
+   window.location.reload();
   };
   useEffect(() => {
     const fetchCardInfoTask = async () => {
@@ -147,6 +159,7 @@ const [TaskId , setTaskId] = useState([]);
         const response = await axios.get(
           `http://localhost:4000/api/cardInfo/getCardInfoTask`
         );
+        
         if (response.status === 200) {
           setTasks(response.data);
         }
@@ -176,11 +189,13 @@ const [TaskId , setTaskId] = useState([]);
         const index = updatedTasks.findIndex((item) => item.id === CardtaskId);
         updatedTasks[index].completed = completed;
         setTasks(updatedTasks);
-      })
+      }).toast.success("Task Completed")
       .catch((err) => {
         console.error("Error updating task:", err);
       }
-      );
+      ).toast.error("Error Sending Request");
+
+      window.location.reload();
     }
     const calculatePercent = () => {
 
@@ -207,6 +222,7 @@ const [TaskId , setTaskId] = useState([]);
       console.error("Error updating desc:", err);
     }
     );
+    window.location.reload();
   };
 
 
@@ -217,9 +233,34 @@ const [TaskId , setTaskId] = useState([]);
   return savedSelectedLabors ? JSON.parse(savedSelectedLabors) : [];
 });
 
+//save equipments
+const [selectedEquipments, setSelectedEquipments] = useState(() => {
+  // Load the selected employees from localStorage for the current card
+  const savedSelectedEquipments = localStorage.getItem(`card_${props.card.id}_selectedEquipments`);
+  return savedSelectedEquipments ? JSON.parse(savedSelectedEquipments) : [];
+});
+
+const [selectedMaterials, setSelectedMaterials] = useState(() => {
+  // Load the selected employees from localStorage for the current card
+  const savedSelectedMaterials = localStorage.getItem(`card_${props.card.id}_selectedMaterials`);
+  return savedSelectedMaterials ? JSON.parse(savedSelectedMaterials) : [];
+});
+
+
+
+
 useEffect(() => {
   localStorage.setItem(`card_${props.card.id}_selectedLabors`, JSON.stringify(selectedLabors));
 }, [selectedLabors, props.card.id]);
+
+useEffect(() => {
+  localStorage.setItem(`card_${props.card.id}_selectedEquipments`, JSON.stringify(selectedEquipments));
+}, [selectedEquipments, props.card.id]);
+
+
+useEffect(() => {
+  localStorage.setItem(`card_${props.card.id}_selectedMaterials`, JSON.stringify(selectedMaterials));
+}, [selectedMaterials, props.card.id]);
 
 const handleSelectChange = (value) => {
   // const selected = Array.from(event.target.selectedOptions, (option) => option.value);
@@ -240,6 +281,7 @@ const handleSelectChange = (value) => {
         console.error("Error updating equipment:", err);
       }
       );
+      window.location.reload();
 };
 
 
@@ -267,6 +309,8 @@ getEquipmentData ();
 }, []);
 
 
+
+
 const deleteEquipment = (id) => {
   axios
     .delete(`http://localhost:4000/api/equipment/deleteEquipment/${id}`)
@@ -277,6 +321,8 @@ const deleteEquipment = (id) => {
     .catch((err) => {
       console.error("Error deleting equipment:", err);
     });
+
+    window.location.reload();
 };
 
 
@@ -314,9 +360,13 @@ useEffect(() => {
       content: content,
       cardId: props.card.id,
       date: new Date().toISOString().substr(0, 10),
-      companyID:1,
-      userId:1,
+      companyID:companyId,
+      userId:SupervisorId,
     };
+
+    if(feedback !== null){
+      toast.success("Comment Pending")
+    }
 
     axios
       .post("http://localhost:4000/api/comment/addComment", feedback)
@@ -324,9 +374,14 @@ useEffect(() => {
         console.log(res);
         setContent("");
         setIsTextareaDisabled(true);
+        if(res.status === 201 ){
+        toast.success("Comment Added")
+
+      }
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Error Sending Request");
       });
 
     console.log(feedback);
@@ -343,7 +398,6 @@ useEffect(() => {
   console.log(content)
 
 
- 
   const [comments, setComments] = useState([]);
   useEffect(() => {
     const fetchComments = async () => {
@@ -444,7 +498,6 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
             <p>Title</p>
           </div>
           <Editable
-            defaultValue={props.card.title}
             text={props.card.title}
             placeholder="Enter Title"
             onSubmit={updateTitle}
@@ -520,7 +573,7 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
                 key={item.id}
                 style={{ backgroundColor: item.color , fontSize:"13.5px" , paddingLeft :"8px"}}>
                 {item.label}
-                <X onClick={removeLabel} />
+                <X onClick={() => removeLabel(item.id)} />
               </label>
             ))}
           </div>
@@ -537,9 +590,11 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
           <Editable
             text="Add Label"
             placeholder="Enter label text"
+            isDisabled={id===5}
             onSubmit={(value) =>
                  addLabel({ color: selectedColor, text: value })
             }
+
           />
         </div>
 
@@ -579,6 +634,7 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
             text={"Add a Task"}
             placeholder="Enter task"
             onSubmit={addTask}
+            isDisabled={id===4}
           />
         </div>
         <div className="cardinfo_box">
@@ -588,7 +644,9 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
           </div>
            <Drop
             cardId={props.card.id}
+            description="labour"
             selectedLabors={selectedLabors}
+            isDisabled={id===4}
             onSelect={(cardId, selected) => {
               setSelectedLabors(selected);
             }}
@@ -599,17 +657,36 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
             <Tool />
             <p>Tools</p>
           </div>
-          <label htmlFor="selectOption">Select an option:</label>
           <div className="select-container">
-      <Select
-        id="selectOption"
-        name="selectOption"
-        value={options.id}
-        onChange={handleSelectChange}
-        options={options}
-      />
+          <Drop
+            cardId={props.card.id}
+            description="equipment"
+            selectedEquipment={selectedEquipments}
+            isDisabled={id===4}
+            onSelect={(cardId, selected) => {
+              setSelectedEquipments(selected);
+            }}
+            />
 
      </div>
+     <div className="cardinfo_box">
+          <div className="cardinfo_box_title">
+            <Tool />
+            <p>Material</p>
+          </div>
+          <div className="select-container">
+          <Drop
+            cardId={props.card.id}
+            description="material"
+            selectedEquipment={selectedMaterials}
+            isDisabled={id===4}
+            onSelect={(cardId, selected) => {
+              setSelectedMaterials(selected);
+            }}
+            />
+
+     </div>
+     </div>.
       {filterEquipment.map((item) => (
           <div   key={item.id}className="cardinfo_box_task_list">
 
@@ -621,15 +698,21 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
             ))}
 
       </div>
+    {id === "5" ? (
           <div className="cardinfo_box_image">
+
             <div className="cardinfo_box_title">
             <p>Upload an image</p>
           </div>
               <ImageUpload
               cardId  = {props.card.id}
               />
+
           </div>
+    ):(<p>Image</p>)}
+
         </div>
+  
         <div className="task_image">
         {filterImage.map((item) => (
                   <>
@@ -644,10 +727,29 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
             <p>Feedback</p>
           </div>
           <div className="cardinfo_box_feedback">
+            {id === "4" ? (
         <form onSubmit={onSubmit}>
             <textarea  className ="comment-form-textarea" value={content} onChange={(e) => setContent(e.target.value)} name  = "content" />
-        <button className="comment-form-button" type="submit" disabled = {isTextareaDisabled}>Submit</button>
+            <Button
+            colorScheme="blue"
+            style={{
+              backgroundColor: "#ffcc00",
+              border: "none",
+              color: "black",
+              padding: "10px 20px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              cursor: "pointer",
+              transition: "background-color 0.3s, box-shadow 0.3s",
+              marginLeft: "78%",
+            }}
+            isDisabled={isTextareaDisabled}
+             onClick={onSubmit}
+             >Submit</Button>
         </form>
+            ):(<p><b>Feedback From site Manager</b></p>)}
+
         {/* comment show */}
         <div className="comment-section">
           <div className="cardinfo_box">
@@ -693,8 +795,10 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
         </div>
         </div>
     </div>
+    <ToastContainer />
     </Modal>
   );
+
 };
 
 export default CardInfo;

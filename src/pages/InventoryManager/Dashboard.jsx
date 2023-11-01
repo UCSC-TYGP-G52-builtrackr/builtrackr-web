@@ -73,7 +73,7 @@ const datas = [
   },
 ];
 
-const Reports1 = () => {
+const Dashboard = () => {
   const selectionsettings = { persistSelection: true };
 
   const { themeSettings, setThemeSettings } = useStateContext();
@@ -155,16 +155,16 @@ const Reports1 = () => {
 
             {/* large chart */}
             
-                {/* <div className='basis-[70%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
+                <div className='basis-[70%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
                     <div className='bg-[#F8F9FC] flex items-center justify-between py-[15px] px-[20px] border-b-[1px] border-[#EDEDED] mb-[20px]'>
                         <h2 className='text-[#4e73df] text-[16px] leading-[19px] font-bold'>Progress Overview</h2>
                         <FaEllipsisV color="gray" className='cursor-pointer' />
-                    </div> */}
+                    </div>
 
                     <div className="">
-                        {/* <canvas id="myAreaChart"></canvas> */}
+                        <canvas id="myAreaChart"></canvas>
                         {/* <Line options={options} data={data} /> */}
-                        {/* <LineChart
+                        <LineChart
                             width={950}
                             height={500}
                             data={datas}
@@ -182,8 +182,8 @@ const Reports1 = () => {
                             <Legend />
                             <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
                             <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-                        </LineChart> */}
-                    {/* </div> */}
+                        </LineChart>
+                    </div>
 
                 </div>
                 {/* <div className='basis-[30%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
@@ -202,8 +202,8 @@ const Reports1 = () => {
                 </div> */}
 
               {/* last row of charts */}
-              {/* <div className='flex mt-[22px] w-full gap-[30px]'> */}
-                {/* <div className='basis-[55%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
+              <div className='flex mt-[22px] w-full gap-[30px]'>
+                <div className='basis-[55%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
                     <div className='bg-[#F8F9FC] flex items-center justify-between py-[15px] px-[20px] border-b-[1px] border-[#EDEDED]'>
                         <h2 className='text-[#4e73df] text-[16px] leading-[19px] font-bold'>Projects Overview</h2>
                         <FaEllipsisV color="gray" className='cursor-pointer' />
@@ -230,10 +230,10 @@ const Reports1 = () => {
                             <Progress percent={50} status="exception" strokeColor="#1CC88A" />
                         </div>
                     </div>
-                </div> */}
+                </div>
 
                 {/* piechart */}
-                {/* <div className='basis-[30%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
+                <div className='basis-[30%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
                     <div className='bg-[#F8F9FC] flex items-center justify-between py-[15px] px-[20px] border-b-[1px] border-[#EDEDED]'>
                         <h2 className='text-[#4e73df] text-[16px] leading-[19px] font-bold'>Sites Resources</h2>
                         <FaEllipsisV color="gray" className='cursor-pointer' />
@@ -241,8 +241,8 @@ const Reports1 = () => {
                     <div className='items-center justify-center'>
                         <PieComponent />
                     </div>
-                </div> */}
-            {/* </div> */}
+                </div>
+            </div>
 
 
 
@@ -286,4 +286,4 @@ const Reports1 = () => {
   );
 };
 
-export default Reports1;
+export default Dashboard;

@@ -1,0 +1,149 @@
+html {
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.background{
+  padding: 0 10px 10px;
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .background {
+    padding: 0 0 20px;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  padding: 20px 0 0 0;
+  max-width: 960px;
+  width: 100%;
+}
+
+.panel {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px 25px;
+  position: relative;
+  width: 100%;
+}
+
+.pricing-table {
+  box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, 0.08),
+    0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .pricing-table {
+    flex-direction: row;
+  }
+}
+
+.pricing-table * {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.pricing-plan {
+  border-bottom: 1px solid #ffe1e1;
+  padding: 25px;
+  box-shadow: 0 8px 16px #ffcc00;
+}
+
+.pricing-plan2 {
+  border-bottom: 1px solid #ffe1e1;
+  padding: 25px;
+  box-shadow: 0 8px 16px #ff3300;
+}
+
+.pricing-plan:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 900px) {
+  .pricing-plan {
+    border-bottom: none;
+    border-right: 1px solid #e1f1ff;
+    flex-basis: 100%;
+    padding: 25px 50px;
+  }
+
+  .pricing-plan:last-child {
+    border-right: none;
+  }
+}
+
+.pricing-img {
+  max-width: 100%;
+}
+
+.pricing-header {
+  color: #888;
+  font-size: xx-large;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.pricing-features {
+  color: black;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 50px 0 25px;
+}
+
+.pricing-features-item {
+  border-top: 1px solid #e1f1ff;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 15px 0;
+}
+
+.pricing-features-item:last-child {
+  border-bottom: 1px solid #e1f1ff;
+}
+
+.pricing-price {
+  color: black;
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+}
+.pricing-button {
+  background-color: #ffcc00; /* Background color is yellow */
+  /* border: 1px solid #9dd1ff; */
+  border-radius: 10px;
+  color: #000; /* Text color is black */
+  display: inline-block;
+  margin-top: 15px;
+  padding: 15px 35px;
+  text-decoration: none;
+  transition: all 150ms ease-in-out;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pricing-button:hover,
+.pricing-button:focus {
+  background-color: #ffde26;
+  color: #000; /* Text color remains black on hover */
+}
+
+.pricing-button.is-featured {
+  background-color: #ffcc00;
+  color: black;
+}
+
+.pricing-button.is-featured:hover,
+.pricing-button.is-featured:active {
+  background-color: #ffde26;
+}

@@ -67,7 +67,20 @@ export const Sidebar = () => {
               </div>
             ))}
 
-            <div className="flex items-center gap-2 pl-2  pt -35  rounded-l-lg text-md mt-64  text-red-600 " onClick={logout}><FiLogOut/><span className="capitalize cursor-pointer">Logout</span></div>
+<div
+  className="flex items-center gap-2 pl-2 pt-35 rounded-l-lg text-md mt-64 text-white"
+  onClick={logout}
+  style={{
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+    backgroundColor: 'transparent',
+  }}
+  onMouseEnter={(e) => (e.target.style = 'red')}
+  onMouseLeave={(e) => (e.target.style = 'transparent')}
+>
+  <FiLogOut />
+  <span className="capitalize">Logout</span>
+</div>
           </div>
         </>
       )}

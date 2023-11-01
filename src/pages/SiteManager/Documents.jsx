@@ -109,7 +109,10 @@ const FileUpload = () => {
       console.error("Error fetching PDF URLs:", error);
     }
   };
-
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toISOString().split("T")[0];
+  };
   const deletePdf = async (filename) => {
     try {
       await axios.delete(

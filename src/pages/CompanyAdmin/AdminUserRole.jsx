@@ -417,11 +417,62 @@ const AdminUserRole = () => {
   const [isLoadingError, setIsLoadingError] = useState(false);
   const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
 
+  const [labourerTypesAdd, setLabourerTypesAdd] = useState(false);
+  const labourerFormHandle = () => setLabourerTypesAdd(true);
+  const [labourerTypeName, setLabourerTypeName] = useState("");
+  const [labourerTypeNameErr, setLabourerTypeNameErr] = useState("");
+  const [labourerTypes, setLabourerTypes] = useState([]);
+  const [confirmationModal3, setConfirmationModal3] = useState(false);
+  const closeConfirmationModal3 = () => {
+    setConfirmationModal3(false);
+  };
+  const displayConfirmationModal3 = async () => {
+    if (labourerTypeName === "") {
+      setLabourerTypeNameErr("Enter labourer type name");
+    } else if (labourerTypes.some((el) => el.type_name === labourerTypeName)) {
+      setLabourerTypeNameErr("Already added");
+    } else {
+      setConfirmationModal3(true);
+    }
+  };
+
+  const closeLabourerTypeAdd = () => {
+    setLabourerTypesAdd(false);
+    setLabourerTypeName("");
+    setLabourerTypeNameErr("");
+  };
+
+  const handelSubmitLabourerType = async () => {
+    try {
+      const data = await fetch(
+        "http://localhost:4000/api/employee/addLabourerTypes",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            company_id: company_id,
+            name: labourerTypeName,
+          }),
+        }
+      );
+      const jsonData = await data.json();
+      toast.success("Labourer type added successfuly");
+    } catch (err) {
+      toast.error("Internal error, please try again latter");
+    }
+    setConfirmationModal3(false);
+    setLabourerTypesAdd(false);
+    setLabourerTypeName("");
+    setLabourerTypeNameErr("");
+  };
+
   useEffect(() => {
     const isHrAdded = async () => {
       try {
         const data = await fetch(
-          "http://localhost:4000/api/employee/employeeExist",
+          "http://localhost:4000/api/employee/employeeExistsByType",
           {
             method: "POST",
             headers: {
@@ -430,8 +481,9 @@ const AdminUserRole = () => {
             body: JSON.stringify({ id: company_id, type: 1 }),
           }
         );
-        if (data.status) {
+        if (data.status === 200) {
           setHrAdded(true);
+          console.log("HR added ok");
         } else {
           console.log(data.status);
         }
@@ -441,6 +493,29 @@ const AdminUserRole = () => {
     };
     isHrAdded();
   }, []);
+
+  useEffect(() => {
+    const labourer = async () => {
+      try {
+        const data = await fetch(
+          "http://localhost:4000/api/employee/getLabourerTypes",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ company_id: company_id }),
+          }
+        );
+        const jsonData = await data.json();
+        setLabourerTypes(jsonData);
+        console.log(jsonData);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    labourer();
+  }, [labourerTypesAdd]);
 
   useEffect(() => {
     setIsLoadingRoles(true);
@@ -830,7 +905,7 @@ const AdminUserRole = () => {
                 />
                 {!hrAdded && (
                   <span className="link " onClick={handleOpenEmployeeForm}>
-                    Click here to add a HR MAnager
+                    Click here to add a HR Manager
                   </span>
                 )}
               </div>
@@ -855,7 +930,7 @@ const AdminUserRole = () => {
                   />
                 ))
               )}
-              <div className="">
+              <div className="labourer">
                 <UserRole
                   role={{
                     photo_path: "labourer.jpeg",
@@ -864,6 +939,9 @@ const AdminUserRole = () => {
                   }}
                   selectRole={displayRole}
                 />
+                <span className="link " onClick={labourerFormHandle}>
+                  Click here to add Labourer types
+                </span>
               </div>
             </div>
           )}
@@ -918,7 +996,7 @@ const AdminUserRole = () => {
                 <div>
                   <Box sx={style} style={{ width: "550px" }}>
                     <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
-                      Add user roles
+                      Add User Roles
                     </h2>
                     <form>
                       <TextField
@@ -1055,7 +1133,7 @@ const AdminUserRole = () => {
             >
               <Box sx={style} style={{ width: "550px" }}>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-                  Add employee details
+                  Add HR Manager employee details
                 </h2>
                 <form>
                   <div className="two-inputs">
@@ -1264,6 +1342,63 @@ const AdminUserRole = () => {
           submit={handelSubmitEmployyeAdd}
           loading={isLoadingError}
         />
+        {labourerTypesAdd && (
+          <div className="labourer-type-add-form">
+            <Modal
+              open={labourerTypesAdd}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style} style={{ width: "550px" }}>
+                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+                  Allready Added Labourer Types
+                </h2>
+                <div className="labour-types-container">
+                  {labourerTypes.map((el, i) => (
+                    <LabourerTypeLabel name={el.type_name} />
+                  ))}
+                </div>
+                <form>
+                  <h2 style={{ textAlign: "center" }}>Add Labourer Types</h2>
+                  <TextField
+                    error={labourerTypeNameErr !== "" && true}
+                    className="outlined-basic"
+                    label="Labourer Type Name "
+                    variant="outlined"
+                    size="small"
+                    sx={{ width: "100%", marginTop: "10px" }}
+                    value={labourerTypeName}
+                    onChange={(e) => setLabourerTypeName(e.target.value)}
+                    helperText={
+                      labourerTypeNameErr !== "" && labourerTypeNameErr
+                    }
+                  />
+                  <div className="two-btns">
+                    <Buttons
+                      type={"button"}
+                      color={"red"}
+                      text={"Cancel"}
+                      onClick={closeLabourerTypeAdd}
+                    />
+                    <Buttons
+                      type={"button"}
+                      color={"green"}
+                      text={"Create"}
+                      onClick={displayConfirmationModal3}
+                    />
+                  </div>
+                </form>
+              </Box>
+            </Modal>
+          </div>
+        )}
+        <ConfirmationdModal
+          confirmModal={confirmationModal3}
+          text={`Are you sure want add ${labourerTypeName} as a Labourer type.`}
+          closeConfirmationModal={closeConfirmationModal3}
+          submit={handelSubmitLabourerType}
+          loading={isLoadingError}
+        />
       </div>
     </>
   );
@@ -1322,6 +1457,14 @@ function Buttons({ type, color, text, onClick }) {
     >
       {text}
     </button>
+  );
+}
+
+function LabourerTypeLabel({ name }) {
+  return (
+    <>
+      <lable className="laboure-type-lable">{name}</lable>
+    </>
   );
 }
 

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Text,
-  Grid,
-  Image,
-  Card,
-  CardBody,
-} from "@chakra-ui/react";
+import { Box, Text, Grid, Image, Card, CardBody } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const SiteCard = ({ site, imagePath }) => {
@@ -24,8 +17,11 @@ const SiteCard = ({ site, imagePath }) => {
       >
         <Image src={imagePath} alt="Site Image" h="150px" objectFit="cover" />
         <CardBody>
-          <Text fontSize="xl" fontWeight="bold">
-            {site.sitename}
+          <Text fontSize="2xl" fontWeight="bold">
+            {site.site_name}
+          </Text>
+          <Text fontSize="large" fontWeight="bold">
+            {site.site_desc}
           </Text>
         </CardBody>
       </Card>

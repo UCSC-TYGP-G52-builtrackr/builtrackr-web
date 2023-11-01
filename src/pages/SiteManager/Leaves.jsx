@@ -39,7 +39,7 @@ function LaborLeaveTable() {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   };
   const getCurrentDate = () => {
     const currentDate = new Date();
@@ -76,11 +76,11 @@ function LaborLeaveTable() {
   const handleApprove = (laborId) => {
     const currentDate = getCurrentDate();
     const approvalData = {
-      approval: "approved",
+      approval: "Approved",
       laborId: laborId,
       approvalDate: currentDate, // Include the current date (YYYY-MM-DD)
     };
-  
+
     axios
       .post(`http://localhost:4000/api/labourleave/approve`, approvalData)
       .then((response) => {
@@ -100,15 +100,15 @@ function LaborLeaveTable() {
         showAlert("Error approving leave request.", "error");
       });
   };
-  
+
   const handleDecline = (laborId) => {
     const currentDate = getCurrentDate();
     const declineData = {
-      approval: "declined",
+      approval: "Declined",
       laborId: laborId,
       approvalDate: currentDate, // Include the current date (YYYY-MM-DD)
     };
-  
+
     axios
       .post(`http://localhost:4000/api/labourleave/decline`, declineData)
       .then((response) => {
@@ -129,92 +129,94 @@ function LaborLeaveTable() {
       });
   };
 
- 
-
   return (
     <ChakraProvider>
-        <>
-      <Navbar />
-      <div className="flex">
-      <Sidebar/>
-      <div style={{ display: "flex", alignItems: "center"}}>
-        
-      <Grid
-          templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-          gap={4}
-          style={{ width: "80%", marginLeft: "50%", marginTop: "10%"}}
-        >
-          
-        <Table variant="simple" size='lg'>
-        <TableCaption placement="top"><Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
-          Labour Leave Requests
-        </Text></TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Labor Name</Th>
-              <Th>Leave Start Date</Th>
-              <Th>Leave End Date</Th>
-              <Th>Description</Th>
-              <Th>Action</Th>
-              <Th>Status</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {leaveData.map((row) => (
-              <Tr key={row.labor_id}>
-                <Td>{row.labor_name}</Td>
-                <Td>{formatDate(row.leave_start_date)}</Td>
-                <Td>{formatDate(row.leave_end_date)}</Td>
-                <Td>{row.description}</Td>
-                
-                <Td>
-        <Button
-          colorScheme="green"
-          onClick={() => handleApprove(row.labor_id)}
-          isDisabled={row.approval === "approved"} // Disable the button if status is approved
-          w="120px"
-        >
-          Approve
-        </Button> <br></br><br></br>
-        <Button
-          colorScheme="red"
-          onClick={() => handleDecline(row.labor_id)}
-          isDisabled={row.approval === "approved"} // Disable the button if status is approved
-          w="120px"
-        >
-          Decline  
-        </Button>
-      </Td>
-                <Td>{row.approval}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-        </Grid>
-      </div>
-      {/* AlertDialog */}
-      <AlertDialog
-        isOpen={isAlertOpen}
-        onClose={onCloseAlert}
-        motionPreset="slideInBottom"
-      >
-        <AlertDialogOverlay />
+      <>
+        <Navbar />
+        <div className="flex">
+          <Sidebar />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Grid
+              templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+              gap={4}
+              style={{ width: "80%", marginLeft: "45%", marginTop: "10%" }}
+            >
+              <Table variant="simple" size="lg">
+                <TableCaption placement="top">
+                  <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
+                    Labour Leave Requests
+                  </Text>
+                </TableCaption>
+                <Thead>
+                  <Tr>
+                    <Th>Labor Name</Th>
+                    <Th>Leave Start Date</Th>
+                    <Th>Leave End Date</Th>
+                    <Th>Description</Th>
+                    <Th>Action</Th>
+                    <Th>Status</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {leaveData.map((row) => (
+                    <Tr key={row.labor_id}>
+                      <Td>{row.labor_name}</Td>
+                      <Td>{formatDate(row.leave_start_date)}</Td>
+                      <Td>{formatDate(row.leave_end_date)}</Td>
+                      <Td>{row.description}</Td>
 
-        <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {alertType === "success" ? "Success" : "Error"}
-          </AlertDialogHeader>
+                      <Td>
+                        <Button
+                          colorScheme="green"
+                          onClick={() => handleApprove(row.labor_id)}
+                          isDisabled={row.approval === "approved"} // Disable the button if status is approved
+                          w="120px"
+                          boxShadow="none"
+                        >
+                          Approve
+                        </Button>{" "}
+                        <br></br>
+                        <br></br>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => handleDecline(row.labor_id)}
+                          isDisabled={row.approval === "approved"} // Disable the button if status is approved
+                          w="120px"
+                          boxShadow="none"
+                        >
+                          Decline
+                        </Button>
+                      </Td>
+                      <Td>{row.approval}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Grid>
+          </div>
+          {/* AlertDialog */}
+          <AlertDialog
+            isOpen={isAlertOpen}
+            onClose={onCloseAlert}
+            motionPreset="slideInBottom"
+          >
+            <AlertDialogOverlay />
 
-          <AlertDialogBody>{alertMessage}</AlertDialogBody>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                {alertType === "success" ? "Success" : "Error"}
+              </AlertDialogHeader>
 
-          <AlertDialogFooter>
-            <Button colorScheme="red" onClick={onCloseAlert}>
-              Close
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      </div>
+              <AlertDialogBody>{alertMessage}</AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button colorScheme="red" onClick={onCloseAlert}>
+                  Close
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </>
     </ChakraProvider>
   );

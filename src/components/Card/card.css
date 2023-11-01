@@ -6,7 +6,7 @@
     flex-direction: column;
     box-shadow: 2px 2px 5px rgba(77, 71, 195, 0.40);
     box-sizing: border-box;
-    
+    margin-bottom: 5%;
     gap:10px;
 }
 
