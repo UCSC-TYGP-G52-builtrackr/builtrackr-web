@@ -4,6 +4,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+const steps = [
+  "Enter Company Details",
+  "Verify email and set Credentials",
+  "Payment",
+];
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -15,7 +24,17 @@ export const Register = () => {
   const [city, setCity] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [certificate, setCertificate] = useState({});
-  const [errors, setErrors] = useState({ name: "", contactNo: "", email: "", regNo: "", line1: "", line2:"", city:"", certificate: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    name: "",
+    contactNo: "",
+    email: "",
+    regNo: "",
+    line1: "",
+    line2: "",
+    city: "",
+    certificate: "",
+  });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -39,6 +58,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
     const formData = {
       name,
       regNo,
@@ -56,6 +76,7 @@ export const Register = () => {
         .then((res) => {
           if (res.data.status) {
             toast.error("Email Already exist");
+            setIsLoading(false);
             return;
           } else {
             let error = false;
@@ -71,81 +92,83 @@ export const Register = () => {
               certificate: "",
             }));
 
-            if(name.trim().length === 0){
-              setErrors((prevErrors) => ({
-                ...prevErrors,    
-                name: "User Name Required",   
-              }));
-              error = true;
-            }else if((/^[A-Za-z ]+$/).test(name.trim()) === false){    
+            if (name.trim().length === 0) {
               setErrors((prevErrors) => ({
                 ...prevErrors,
-                name: "Username should only contain letters",   
+                name: "User Name Required",
+              }));
+              error = true;
+            } else if (/^[A-Za-z ]+$/.test(name.trim()) === false) {
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                name: "Username should only contain letters",
               }));
               error = true;
             }
-            if(regNo.trim().length === 0){
+            if (regNo.trim().length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                regNo: "Register Number Required", 
+                ...prevErrors,
+                regNo: "Register Number Required",
               }));
               error = true;
             }
-            if(line1.trim().length === 0){
+            if (line1.trim().length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                line1: "Address Required", 
+                ...prevErrors,
+                line1: "Address Required",
               }));
               error = true;
             }
-            if(certificate.length === 0){
+            if (certificate.length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                certificate: "Certificate Required", 
+                ...prevErrors,
+                certificate: "Certificate Required",
               }));
               error = true;
             }
-            if(email.trim().length === 0){
+            if (email.trim().length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                email: "Email Required", 
+                ...prevErrors,
+                email: "Email Required",
               }));
               error = true;
-            }else if((/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/).test(email.trim()) === false){
+            } else if (
+              /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(email.trim()) === false
+            ) {
               setErrors((prevErrors) => ({
                 ...prevErrors,
                 email: "Invalid Email",
               }));
               error = true;
             }
-            if(contactNo.trim().length === 0){
+            if (contactNo.trim().length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                contactNo: "Fixed Number Required", 
-              })); 
-              error = true; 
-            }else if((/^[0-9]{10}$/).test(contactNo.trim()) === false){
+                ...prevErrors,
+                contactNo: "Fixed Number Required",
+              }));
+              error = true;
+            } else if (/^[0-9]{10}$/.test(contactNo.trim()) === false) {
               setErrors((prevErrors) => ({
                 ...prevErrors,
                 contactNo: "Invalid Number",
               }));
               error = true;
             }
-            if(line2.trim().length === 0){
+            if (line2.trim().length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                line2: "Address Required", 
+                ...prevErrors,
+                line2: "Address Required",
               }));
               error = true;
             }
-            if(city.trim().length === 0){
+            if (city.trim().length === 0) {
               setErrors((prevErrors) => ({
-                ...prevErrors,    
-                city: "City Required", 
+                ...prevErrors,
+                city: "City Required",
               }));
               error = true;
             }
-            if(error === false){
+            if (error === false) {
               navigate("/RegisterTwo", { state: formData });
               setName("");
               setRegNo("");
@@ -155,9 +178,7 @@ export const Register = () => {
               setLine2("");
               setCity("");
               setCertificate({});
-
             }
-            
 
             // if (name.trim().length !== 0 && contactNo.trim().length !== 0) {
             //   navigate("/RegisterTwo", { state: formData });
@@ -181,12 +202,13 @@ export const Register = () => {
             //     certificate: !certificate.file ? "Certificate Required" : "",
             //   });
             // }
-            }
+          }
         });
     } catch (err) {
       toast.error(err.response.data.error);
       return;
     }
+    setIsLoading(false);
   };
 
   return (
@@ -308,26 +330,48 @@ export const Register = () => {
                 type="tel"
                 name="contactNo"
                 value={contactNo}
-                onChange={(e) =>  setContactNo(e.target.value)}
+                onChange={(e) => setContactNo(e.target.value)}
               />
               {errors.contactNo && (
                 <div className="error">{errors.contactNo}</div>
               )}
               <br />
-              <button
-                className="next_button"
-                type="submit"
-                style={{
-                  backgroundColor: "#ffcc00",
-                  marginTop: "10px",
-                  fontWeight: "700",
-                }}
-              >
-                Next Page
-              </button>
+              {isLoading ? (
+                <div
+                  className="loading"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : (
+                <button
+                  className="next_button"
+                  type="submit"
+                  style={{
+                    backgroundColor: "#ffcc00",
+                    marginTop: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Next Page
+                </button>
+              )}
             </div>
           </form>
         </div>
+      </div>
+      <div style={{ paddingBottom: "20px" ,width:"50%", position:"absolute",right:"0", marginTop:"10px"}}>
+        <Stepper activeStep={0} alternativeLabel>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
       </div>
     </div>
   );

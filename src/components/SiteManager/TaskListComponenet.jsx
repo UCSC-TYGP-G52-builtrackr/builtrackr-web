@@ -69,6 +69,7 @@ const TaskListCard = ({ taskList }) => {
         // Handle errors, e.g., show an error message or handle the error in any way you want
         console.error("Error deleting task:", error);
       });
+      
   };
 
   const formatDate = (dateStr) => {
@@ -97,9 +98,12 @@ const TaskListCard = ({ taskList }) => {
   return (
     <ChakraProvider>
       <Box borderWidth="1px" borderRadius="md" p={4} mb={4}>
-        <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
+        <center>
+        <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4} 
+        style={{ marginLeft: "10%" }}>
           Task List
         </Text>
+        </center>
 {/*    
         <div style={{display:"flex",width: "80%", marginLeft: "20%"}}> 
         <Button onClick={clearSiteFilter} variant={selectedSite ? "outline" : "solid"} w="120px" style={{
@@ -165,7 +169,7 @@ const TaskListCard = ({ taskList }) => {
               <Table variant="striped" mt={4}>
                 <Thead>
                   <Tr>
-                    <Th><b> Task ID : {task.task_id}</b></Th>
+                    <Th><b>{task.sitename}</b></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -207,7 +211,7 @@ const TaskListCard = ({ taskList }) => {
                       <Th>Task Name</Th>
                       <Th>Special Information</Th>
                       <Th>Due Date</Th>
-                      <Th>Site Supervisor</Th>
+                     
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -215,16 +219,14 @@ const TaskListCard = ({ taskList }) => {
                       <Td>{selectedTask.taskname}</Td>
                       <Td>{selectedTask.specialinformation}</Td>
                       <Td>{formatDate(selectedTask.duedate)}</Td>
-                      {/* <Td>{selectedTask.sitesupervisor}</Td> */}
+                   
                     </Tr>
                   </Tbody>
                 </Table>
               )}
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" mr={3} onClick={handleCloseModal}>
-                Close
-              </Button>
+             
               <Button colorScheme="red" mr={3} onClick={handleDelete}>
                 Delete
               </Button>

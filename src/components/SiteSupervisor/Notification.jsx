@@ -6,12 +6,17 @@ import Button from "./Button";
 import { chatData } from "../../data/dummy";
 import { useStateContext } from "../../contexts/ContextProvider";
 
-const Notification = () => {
+const Notification = ({ notifications }) => {
   const { currentColor } = useStateContext();
   const { setIsClicked, initialState } = useStateContext();
+  console.log(notifications);
+  console.log("HEllll");
 
   return (
-    <div className="absolute p-5 bg-white rounded-lg shadow-2xl nav-item right-5 md:right-40 top-16 w-80">
+    <div
+      className="absolute p-5 bg-white rounded-lg shadow-2xl nav-item right-5 md:right-40 top-16 w-80"
+      style={{ zIndex: "1000" }}
+    >
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
           <p className="text-lg font-semibold dark:text-gray-200">
@@ -29,7 +34,16 @@ const Notification = () => {
         </div>
       </div>
       <div className="mt-3 ">
-        {chatData?.map((item, index) => (
+        {notifications.map((el, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-5 p-3 leading-8 cursor-pointer border-b-1 border-color hover:bg-slate-50"
+          >
+            
+              <p className="text-sm font-semibold">{el.msg}</p>
+          </div>
+        ))}
+        {/* {chatData?.map((item, index) => (
           <div
             key={index}
             className="flex items-center gap-5 p-3 leading-8 cursor-pointer border-b-1 border-color hover:bg-slate-50"
@@ -44,9 +58,8 @@ const Notification = () => {
               <p className="text-sm text-gray-500"> {item.desc} </p>
             </div>
           </div>
-        ))}
+        ))} */}
         <div className="flex items-center justify-center p-4 mt-5 bg-white rounded-lg shadow-2xl cursor-pointer hover:bg-slate-100">
-          {/* <Button color="black" text="View All" borderRadius="10px" width="full" /> */}
           View All
         </div>
       </div>

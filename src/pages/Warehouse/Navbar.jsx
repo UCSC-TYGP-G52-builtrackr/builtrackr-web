@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FiShoppingCart } from "react-icons/fi";
 import { BsChatLeft } from "react-icons/bs";
@@ -9,6 +9,8 @@ import Notification from "../../components/Notification";
 import UserProfile from "../../components/UserProfile";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { decryptData } from "../../encrypt";
+import { io } from "socket.io-client";
+
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <button
@@ -36,6 +38,10 @@ const Navbar = () => {
     screenSize,
   } = useStateContext();
 
+  const [socket,setSocket] = useState(null)
+  const [notifications, setNotifications] = useState([]);
+
+
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
 
@@ -54,10 +60,28 @@ const Navbar = () => {
     }
   }, [screenSize]);
 
+  useEffect(() => {
+    setSocket(io("http://localhost:4000"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("newUser", employeeNo);
+  }, [socket]);
+
+  useEffect(()=>{
+    socket?.on("getTaskNotification", (data) => {
+      console.log(data)
+      setNotifications((prev) => [...prev, data])
+    })
+  }, [socket]);
+  console.log(notifications)
+
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
   const name = decryptData(JSON.parse(localStorage.getItem("name")));
   const roleName = decryptData(JSON.parse(localStorage.getItem("role_name")));
   const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
+  const employeeNo = decryptData(JSON.parse(localStorage.getItem("no")));
+
 
   return (
     <div className="relative flex gap-10 justify-end p-1.5 md:ml-10 md:mr-1">
@@ -92,7 +116,7 @@ const Navbar = () => {
           />
         </div>
 
-        {isClicked.notification && <Notification />}
+        {isClicked.notification && <Notification notificatios={notifications} />}
         {isClicked.userProfile && <UserProfile />}
       </div>
     </div>
