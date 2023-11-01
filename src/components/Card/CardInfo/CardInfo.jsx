@@ -145,8 +145,11 @@ const siteId = localStorage.getItem("site_id");
         setTasks({ ...values, labels: updatedLabels });
         setTaskCheckboxes((prevState) => ({
           ...prevState,
-          [res.data.id]: false, // Initially unchecked
         }));
+        if(res.status === 201 ){
+          toast.success("Task Added")
+        }
+        
       })
       .catch((err) => {
         console.error("Error adding label:", err);
@@ -162,6 +165,7 @@ const siteId = localStorage.getItem("site_id");
         
         if (response.status === 200) {
           setTasks(response.data);
+          
         }
       } catch (error) {
         console.error("Error fetching card data:", error);
@@ -184,16 +188,25 @@ const siteId = localStorage.getItem("site_id");
     console.log("post data",data)
     axios
       .post(`http://localhost:4000/api/cardInfo/updateCardInfo`,data)
-      .then(() => {
+      .then((res) => {
         const updatedTasks = [...tasks];
         const index = updatedTasks.findIndex((item) => item.id === CardtaskId);
         updatedTasks[index].completed = completed;
         setTasks(updatedTasks);
-      }).toast.success("Task Completed")
+        if(res.status === 201 ){
+        toast.success("Task updated")
+        }
+      })
+
       .catch((err) => {
-        console.error("Error updating task:", err);
+        console.error("Error updating task:", err); 
+        if(err != null){
+           toast.error("Error Sending Request")
+        }
+        
       }
-      ).toast.error("Error Sending Request");
+
+      )
 
       window.location.reload();
     }
@@ -214,10 +227,14 @@ const siteId = localStorage.getItem("site_id");
     const data  = {desc,cardId}
     axios
     .post(`http://localhost:4000/api/cardInfo/updateDesc`,data)
-    .then(() => {
+    .then((res) => {
       const updatedDesc = [...desc];
       setDesc(updatedDesc);
+      if(res.status === 201 ){
+      toast.success("Updated description successfully")
+      }
     })
+
     .catch((err) => {
       console.error("Error updating desc:", err);
     }
@@ -311,19 +328,19 @@ getEquipmentData ();
 
 
 
-const deleteEquipment = (id) => {
-  axios
-    .delete(`http://localhost:4000/api/equipment/deleteEquipment/${id}`)
-    .then(() => {
-      const updatedEquipment = equipmentArray.filter((item) => item.id !== id);
-      setEquipmentArray(updatedEquipment);
-    })
-    .catch((err) => {
-      console.error("Error deleting equipment:", err);
-    });
+// const deleteEquipment = (id) => {
+//   axios
+//     .delete(`http://localhost:4000/api/equipment/deleteEquipment/${id}`)
+//     .then(() => {
+//       const updatedEquipment = equipmentArray.filter((item) => item.id !== id);
+//       setEquipmentArray(updatedEquipment);
+//     })
+//     .catch((err) => {
+//       console.error("Error deleting equipment:", err);
+//     });
 
-    window.location.reload();
-};
+//     window.location.reload();
+// };
 
 
 
@@ -510,8 +527,7 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
             <p>Description</p>
           </div>
           <Editable
-            defaultValue={props.card.description}
-            text={props.card.description || "Add a Description"}
+            text={props.card.description}
             placeholder="Enter description"
             onSubmit ={updateDescription}
 
@@ -626,7 +642,6 @@ const filterComment =comments.filter((card) => card.cardId === props.card?.id);
                   onChange={() => handleTaskCheckboxChange(item.id)}
                 />
                 <p className={(item.completed)}>{item.task}</p>
-                <Trash  />
               </div>
               </div>
             ))}

@@ -20,6 +20,8 @@ import {
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import { Document, Page, pdfjs } from 'react-pdf';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const FileUpload = () => {
@@ -36,13 +38,12 @@ const FileUpload = () => {
 
   const [pdfUrls, setPdfUrls] = useState([]);
 
-  const toast = useToast();
+  
   const cancelRef = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [toDelete, setToDelete] = useState(null);
   const viewPdf = async (pdfUrl) => {
-    const response = await axios.post(
-      "http://localhost:4000/api/fileupload/downloadpdfs",
+    const response = await axios.post(`http://localhost:4000/api/fileupload/uploads/Documents`,
       {
         filename: pdfUrl.name,
       }
@@ -61,13 +62,14 @@ const FileUpload = () => {
     window.open(url);
   };
 
+  console.log(pdfUrls)
 
 
   useEffect(() => { 
   const fetchPdfUrls = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/fileupload/getpdfs"
+        "http://localhost:4000/api/fileupload/uploads/Documents"
       );
       console.log(response);
       setPdfUrls(response.data);
@@ -86,36 +88,44 @@ const onDrop = useCallback(async (acceptedFiles) => {
     formData.append("document", acceptedFiles[0]);
      console.log(acceptedFiles[0]);
 
-    await axios.post("http://localhost:4000/api/fileupload", formData, {
+    const res=await axios.post("http://localhost:4000/api/fileupload/uploads3", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
 
     console.log("File uploaded successfully.");
+    console.log(res)
+    if(res.status === 200){
+      toast.success("Uploaded Successfully")
+    }
+    
+     window.location.reload()
+
+    
   } catch (error) {
     console.error("Error uploading file:", error);
+    toast.error("Error in uploading file") 
   }
-  fetchPdfUrls();
 }, []);
 
-const fetchPdfUrls = async () => {
-  try {
-    const response = await axios.get(
-      "http://localhost:4000/api/fileupload/getpdfs"
-    );
-    console.log(response);
-    setPdfUrls(response.data);
-    console.log(pdfUrls);
-  } catch (error) {
-    console.error("Error fetching PDF URLs:", error);
-  }
-};
+// const fetchPdfUrls = async () => {
+//   try {
+//     const response = await axios.get(
+//       "http://localhost:4000/api/fileupload/getpdfs"
+//     );
+//     console.log(response);
+//     setPdfUrls(response.data);
+//     console.log(pdfUrls);
+//   } catch (error) {
+//     console.error("Error fetching PDF URLs:", error);
+//   }
+//};
 
 const deletePdf = async (filename) => {
   try {
     await axios.delete(
-      `http://localhost:4000/api/fileupload/deletepdf/${toDelete.name}`
+      `http://localhost:4000/api/fileupload/uploads/Documents/${toDelete.name}`
     );
     // After successful deletion, update the PDF URLs in state
     setPdfUrls((prevUrls) =>
@@ -124,25 +134,17 @@ const deletePdf = async (filename) => {
     console.log(`PDF ${filename} deleted.`);
     onClose()
 
-    // Show a Chakra UI success alert
-    toast({
-      title: "PDF Deleted",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
+    if(pdfUrls != null){
+     toast.success("Deleted Successfully") 
+    }
+    window.location.reload();
+    
   } catch (error) {
     console.error(`Error deleting PDF ${filename}:`, error);
-
+    toast.error("Error in deleting file") 
     // Show a Chakra UI error alert
-    toast({
-      title: "Error Deleting PDF",
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
+    
   }
-  fetchPdfUrls();
 };
 
 const openDeleteModal = ({ index }) => {
@@ -190,23 +192,25 @@ const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 <div
   className={
     activeMenu
-      ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  "
-      : "bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 "
+      ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-90  "
+      : "bg-main-bg dark:bg-main-dark-bg  w-90 min-h-screen flex-2 "
   }
 >
 <div className=" w-full flex items-center justify-center">
               <div
-                className="flex  w-full flex-col mt-40 ml-60"
+                className="flex  w-full flex-col mt-40 ml-80"
               >
                 <Box {...getRootProps()} cursor="pointer" className="max-w-lg ">
                   <input {...getInputProps()} />
 
                   <VStack
                     p={10}
-                    spacing={4}
+                    spacing={10}
                     borderWidth={8}
                     borderRadius="md"
                     borderStyle="dashed"
+                    ml={40}
+                    
                   >
                     {isDragActive ? (
                       <Text>Drop the file here ...</Text>
@@ -235,8 +239,8 @@ const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
                   </VStack>
                 </Box>
 
-                <div className="p-4 mt-10">
-                  <SimpleGrid columns={4} spacing={1}>
+                <div className="p-4 mt-10 ml- -40">
+                  <SimpleGrid columns={3} spacing={1} ml={-40}>
                     {pdfUrls.map((pdfUrl, index) => (
                       <Card
                         key={index}
@@ -331,6 +335,7 @@ const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
               </div>
 </div>
 </div>
+<ToastContainer />
 </> 
 </ChakraProvider>
  );

@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image ,ChakraProvider} from '@chakra-ui/react';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
  export const  ImageUpload = (props) => {
@@ -21,6 +22,7 @@ import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image ,ChakraProvid
         const res= axios.post(`http://localhost:4000/api/imageUpload/uploads2`, formData)
         if (res.status === 200) {
             setFile(res.data);
+            toast.success("Image upload successfully")
           }
 
           console.log(file.name)
@@ -72,6 +74,7 @@ import { Box, Button, Text, VStack,Card, Center, SimpleGrid, Image ,ChakraProvid
              onClick={handleUpload}>Upload</Button>
              </Box>
         </div>
+        <ToastContainer />
        </>
     )
 

@@ -143,9 +143,11 @@ function LaborLeaveTable() {
             >
               <Table variant="simple" size="lg">
                 <TableCaption placement="top">
-                  <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}>
+                  
+                  <Text as="h2" fontSize="4xl" fontWeight="bold" mb={4}  ml={40}>
                     Labour Leave Requests
                   </Text>
+                 
                 </TableCaption>
                 <Thead>
                   <Tr>
