@@ -67,6 +67,10 @@ export function Login() {
                 JSON.stringify(encryptData(res.data.type.toString()))
               );
               localStorage.setItem(
+                "photo",
+                JSON.stringify(encryptData(res.data.type.toString()))
+              );
+              localStorage.setItem(
                 "name",
                 JSON.stringify(encryptData(res.data.name))
               );

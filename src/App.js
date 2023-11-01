@@ -48,6 +48,13 @@ import ImageUpload from "./pages/Supervisor/imageUpload";
 
 
 
+
+
+import Equipments1 from "./pages/InventoryManager/Equipments1";
+import Materials1 from "./pages/InventoryManager/Materials1";
+import Reports1 from "./pages/InventoryManager/Reports1";
+import Analytics1 from "./pages/InventoryManager/Analytics1";
+
 function App() {
   const {
     setCurrentColor,
@@ -108,7 +115,14 @@ function App() {
           <Route path="InventoryManger/Materials/List" element={<ItemList />} />
           <Route path="/inventorymanager/Materials" element={<Material />} />
           <Route path="/inventorymanager/documents" element={<FileUpload />} />
-          <Route path="/inventorymanager/Reports" element={<Analytics />} />
+          <Route path="/inventorymanager/Reports" element={<Analytics />} /> 
+          <Route path="/inventorymanager/Equipments" element={<Equipments1/>} />
+        <Route path="/inventorymanager/Materials" element={<Materials1 />} />
+        <Route path="/inventorymanager/Reports" element={<Reports1 />} />
+        <Route path="/inventorymanager/Analytics" element={<Analytics1 />} />
+
+
+
 
         </Route>
 
