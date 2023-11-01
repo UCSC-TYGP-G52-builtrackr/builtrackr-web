@@ -11,7 +11,7 @@ import { BsChatDots } from "react-icons/bs";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { decryptData } from "../../../encrypt";
-import { WiHail } from "weather-icons-react";
+import { WiCloudy } from "weather-icons-react";
 
 // import Weather from "./Weather";
 
@@ -69,51 +69,79 @@ export const Board = () => {
     getBoards();
   }, [siteId]);
 
+  //get site address
+  const [siteAddress, setSiteAddress] = useState("");
+  useEffect(() => {
+    const getSiteAddress = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/site/getSiteAddress?siteId=${siteId}`
+        );
+        console.log(response.data);
+        if (response.status === 200) {
+          setSiteAddress(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+        console.error("Error fetching board data:", error);
+      }
+    };
+    getSiteAddress();
+  }, [siteId]);
+
+ 
+
+// const siteAddress1 = Array.isArray(siteAddress)&&siteAddress.map((item) => {
+//   return item.site_addr;
+// });
+
+
+
+
+
 
   const [weatherDetails, setWeatherDetails] = useState({
-    city_name: "",
-    temp: null,
-    desc: ""
+    temp: "",
+    desc: "",
+    city_name: "Colombo"
   });
+  
 
-  const onChangeHandler = event => {
-    let name = event.target.name;
-    let value = event.target.value;
-    setWeatherDetails(weatherDetails => ({
-      ...weatherDetails,
-      [name]: value
-    }));
+
+
+  const fetchData = () => {
+    console.log(weatherDetails.city_name);
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?q=Colombo&APPID=434451575183f934e916a37a098cd8c4`
+    )
+      .then(response => {
+        console.log(response.status);
+        if (response.status === 404) {
+          setWeatherDetails({
+            ...weatherDetails,
+            temp: "",
+            desc: ""
+          });
+        } else if (response.status === 400) {
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setWeatherDetails({
+          ...weatherDetails,
+          temp: Math.round(data.main.temp - 273.15),
+          desc: data.weather[0].description
+        });
+      })
+      .catch(error => console.log(error));
   };
 
-  // const fetchData = () => {
-  //   console.log(weatherDetails.city_name);
-  //   fetch(
-  //     `https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={640d92cefdea3417233d5da4d8c455b1}`
-  //   )
-  //     .then(response => {
-  //       console.log(response.status);
-  //       if (response.status === 404) {
-  //         alert("No city found!");
-  //         setWeatherDetails({
-  //           ...weatherDetails,
-  //           temp: "",
-  //           desc: ""
-  //         });
-  //       } else if (response.status === 400) {
-  //         alert("City name is required!");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       console.log(data);
-  //       setWeatherDetails({
-  //         ...weatherDetails,
-  //         temp: Math.round(data.main.temp - 273.15),
-  //         desc: data.weather[0].description
-  //       });
-  //     })
-  //     .catch(error => console.log(error));
-  // };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log("weather",weatherDetails.desc);
 
 
   return (
@@ -161,7 +189,7 @@ export const Board = () => {
           <div className="owner_info">
             <div className="name">
               
-           <span>Today Weather: 83 °F Heavy rain</span><WiHail  size={35}/>
+           <span>Today Weather:  {weatherDetails.temp} °C  {weatherDetails.desc}</span><WiCloudy  size={40}/>
             </div>
           </div>
 
