@@ -11,6 +11,9 @@ import { BsChatDots } from "react-icons/bs";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { decryptData } from "../../../encrypt";
+import { WiHail } from "weather-icons-react";
+
+// import Weather from "./Weather";
 
 export const Board = () => {
   const { activeMenu, themeSettings, setThemeSettings } = useStateContext();
@@ -66,6 +69,53 @@ export const Board = () => {
     getBoards();
   }, [siteId]);
 
+
+  const [weatherDetails, setWeatherDetails] = useState({
+    city_name: "",
+    temp: null,
+    desc: ""
+  });
+
+  const onChangeHandler = event => {
+    let name = event.target.name;
+    let value = event.target.value;
+    setWeatherDetails(weatherDetails => ({
+      ...weatherDetails,
+      [name]: value
+    }));
+  };
+
+  // const fetchData = () => {
+  //   console.log(weatherDetails.city_name);
+  //   fetch(
+  //     `https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={640d92cefdea3417233d5da4d8c455b1}`
+  //   )
+  //     .then(response => {
+  //       console.log(response.status);
+  //       if (response.status === 404) {
+  //         alert("No city found!");
+  //         setWeatherDetails({
+  //           ...weatherDetails,
+  //           temp: "",
+  //           desc: ""
+  //         });
+  //       } else if (response.status === 400) {
+  //         alert("City name is required!");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       console.log(data);
+  //       setWeatherDetails({
+  //         ...weatherDetails,
+  //         temp: Math.round(data.main.temp - 273.15),
+  //         desc: data.weather[0].description
+  //       });
+  //     })
+  //     .catch(error => console.log(error));
+  // };
+
+
   return (
     <>
       <div className="relative flex dark:bg-main-dark-bg w:100">
@@ -109,7 +159,10 @@ export const Board = () => {
 
         <div className="kanban">
           <div className="owner_info">
-            <div className="name"></div>
+            <div className="name">
+              
+           <span>Today Weather: 83 °F Heavy rain</span><WiHail  size={35}/>
+            </div>
           </div>
 
           <div className="board_outer">

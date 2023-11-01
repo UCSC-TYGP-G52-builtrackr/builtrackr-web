@@ -144,7 +144,7 @@ background-color: #faf7f7;
 .name{
     display: flex;
     width: fit-content;
-    margin-left: 84%;
+    margin-left: 60%;
     background-color: transparent;
     padding: 5px;
     gap: 20px;
