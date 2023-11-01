@@ -252,7 +252,7 @@ const FileUpload = () => {
                           <Button
                             colorScheme="red"
                             mr={4}
-                            mt={2}
+                            mt={4}
                            
                             onClick={() => openDeleteModal({ index })}
 

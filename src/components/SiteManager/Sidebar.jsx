@@ -43,7 +43,7 @@ export const Sidebar = () => {
                 <MdOutlineCancel />
               </button>
           </div>
-          <div className="mt-16 text-center ml-10 mb-10 ">
+          <div className="mt-16 text-center ml-10 mb-5 h-[70%] ">
             {Links.map((item) => (
               <div key={item.title}  >
                 {/* <p className="m-3 mt-4 text-gray-400 uppercase dark:text-gray-400">
@@ -66,9 +66,10 @@ export const Sidebar = () => {
                 ))}
               </div>
             ))}
+            </div>
 
 <div
-  className="flex items-center gap-2 pl-2 pt-35 rounded-l-lg text-md mt-64 text-white"
+  className="flex items-center gap-2 px-2 justify-center py-2 rounded-l-lg text-md text-white"
   onClick={logout}
   style={{
     cursor: 'pointer',
@@ -79,9 +80,8 @@ export const Sidebar = () => {
   onMouseLeave={(e) => (e.target.style = 'transparent')}
 >
   <FiLogOut />
-  <span className="capitalize">Logout</span>
+  <span className="capitalize px-3 py-2">Logout</span>
 </div>
-          </div>
         </>
       )}
     </div>

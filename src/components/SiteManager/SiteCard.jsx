@@ -14,6 +14,7 @@ const SiteCard = ({ site, imagePath }) => {
         p="4"
         cursor="pointer"
         _hover={{ bg: "gray.100" }}
+        className="max-h-[400px] min-h-[400px]"
       >
         <Image src={imagePath} alt="Site Image" h="150px" objectFit="cover" />
         <CardBody>
