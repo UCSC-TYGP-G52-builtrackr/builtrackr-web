@@ -176,7 +176,7 @@ export default function PopoverCE({ siteId }) {
         console.log("handlesubmit");
         const requestData = {
           siteId: siteId,
-          // companyID: companyID, // Assuming compID is defined in your component
+          // companyID: companyID, 
           selectedPersonNo: selectedPerson.no, // Replace 'no' with the actual property name of the selected person's identifier
           // Add other data as needed
         };
@@ -251,7 +251,7 @@ export default function PopoverCE({ siteId }) {
           /> */}
           <div className="inline-block text-4xl cursor-pointer" onClick={handleClick}>
             {/* <AccountCircleIcon fontSize="inherit" /> */}
-            <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={selectedPerson.photo_path ? `http://localhost:4000/employees/${selectedPerson.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />
+            <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={selectedPerson?.photo_path ? `http://localhost:4000/employees/${selectedPerson.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />
           </div>
           </Tooltip>
         ) : (

@@ -165,7 +165,7 @@ const Warehouses = () => {
             <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
               <div className="flex mb-8">
                 <Header title="Warehouses" category="gdfcgf"/>
-                <Dropdown/>
+                {/* <Dropdown/> */}
               </div>
 
             {/* sites grid */}

@@ -37,43 +37,36 @@ const datas = [
       name: 'Page A',
       uv: 4000,
       pv: 2400,
-      amt: 2400,
   },
   {
       name: 'Page B',
       uv: 3000,
       pv: 1398,
-      amt: 2210,
   },
   {
       name: 'Page C',
       uv: 2000,
       pv: 9800,
-      amt: 2290,
   },
   {
       name: 'Page D',
       uv: 2780,
       pv: 3908,
-      amt: 2000,
   },
   {
       name: 'Page E',
       uv: 1890,
       pv: 4800,
-      amt: 2181,
   },
   {
       name: 'Page F',
       uv: 2390,
       pv: 3800,
-      amt: 2500,
   },
   {
       name: 'Page G',
       uv: 3490,
       pv: 4300,
-      amt: 2100,
   },
 ];
 
@@ -84,6 +77,17 @@ const CEAnalytics = () => {
   const navigate = useNavigate();
   const { themeSettings, setThemeSettings } = useStateContext();
   const [siteData, setSiteData] = useState([]);
+  const [openSiteIndex, setOpenSiteIndex] = useState(null);
+
+  const handleDivClick = (index) => {
+    if (openSiteIndex === index) {
+      // If the clicked div is already open, close it
+      setOpenSiteIndex(null);
+    } else {
+      // If a different div is clicked, open it
+      setOpenSiteIndex(index);
+    }
+  };
 
   const storedCompId = localStorage.getItem("company_id");
   const decryptedValue = decryptData(JSON.parse(storedCompId));
@@ -121,6 +125,38 @@ const CEAnalytics = () => {
       }
     };
     viewSitesAll();
+  }, []);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+
+        const formData = {
+          companyID: companyID,
+        };
+
+        const data = await fetch(
+          "http://localhost:4000/api/site/getSiteAnalytics",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+        if (data.status === 200) {
+          const jsonData = await data.json();
+          console.log("Got data",jsonData);
+          setSiteData(jsonData);
+        } else {
+          console.log(data.status);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    fetchAnalytics();
   }, []);
 
   console.log("here's analytics site data", siteData);
@@ -201,7 +237,7 @@ const CEAnalytics = () => {
             
                 <div className='basis-[70%] border bg-white shadow-md cursor-pointer rounded-[4px]'>
                     <div className='bg-[#F8F9FC] flex items-center justify-between py-[15px] px-[20px] border-b-[1px] border-[#EDEDED] mb-[20px]'>
-                        <h2 className='text-[#4e73df] text-[16px] leading-[19px] font-bold'>Progress Overview</h2>
+                        <h2 className='text-[#4e73df] text-[16px] leading-[19px] font-light'>Progress Overview</h2>
                         <FaEllipsisV color="gray" className='cursor-pointer' />
                     </div>
 
@@ -253,29 +289,20 @@ const CEAnalytics = () => {
                         <FaEllipsisV color="gray" className='cursor-pointer' />
                     </div>
                     <div className='px-[25px] space-y-[15px] py-[15px]'>
-                    {siteData.map((site) => {
-                        return(<div>
-                            <h2 className="text-start cursor-pointer">{site.site_name}</h2>
+                    {siteData.map((site, index) => {
+                        return(
+                        <div key={index}>
+                            <h2 className="text-start cursor-pointer" onClick={() => handleDivClick(index)}>{site.site_name}</h2>
                             <Progress percent={30} strokeColor="#E74A3B" />
+                            {openSiteIndex === index && (
+                                <div className={`max-h-0 overflow-hidden transition-max-h duration-300 ${
+                                    openSiteIndex === index ? 'max-h-full' : ''
+                                  }`}>
+                                <Progress percent={10} strokeColor="#E74A3B" />
+                                </div>
+                            )}
                         </div>)    
                     })}
-                       
-                        {/* <div>
-                            <h2 className="text-start">Task 2</h2>
-                            <Progress percent={50} status="active" strokeColor="#F6C23E" />
-                        </div>
-                        <div>
-                            <h2 className="text-start">Task 3</h2>
-                            <Progress percent={70} status="active" strokeColor="#4E73DF" />
-                        </div>
-                        <div>
-                            <h2 className="text-start">Task 4</h2>
-                            <Progress percent={100} strokeColor="#36B9CC" />
-                        </div>
-                        <div>
-                            <h2 className="text-start">Task 5</h2>
-                            <Progress percent={50} status="exception" strokeColor="#1CC88A" />
-                        </div> */}
                     </div>
                 </div>
 

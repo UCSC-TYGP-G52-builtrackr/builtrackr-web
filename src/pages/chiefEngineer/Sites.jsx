@@ -154,6 +154,7 @@ const Sites = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
+        console.log("This is sending comp id to customer")
 
         const formData = {
           companyID: companyID,
@@ -165,11 +166,12 @@ const Sites = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            body: JSON.stringify(formData),
           }
         );
         if (data.status === 200) {
           const jsonData = await data.json();
-          console.log(jsonData);
+          console.log("Customers Details here", jsonData);
           setCustomerData(jsonData);
         } else {
           console.log(data.status);
@@ -207,7 +209,7 @@ const Sites = () => {
             <div className="md:pb-5 md:m-10 md:px-5 rounded-3xl">
               <div className="flex mb-8">
                 <Header title="Sites" category="gdfcgf"/>
-                <Dropdown/>
+                {/* <Dropdown/> */}
               </div>
 
             {/* sites grid */}

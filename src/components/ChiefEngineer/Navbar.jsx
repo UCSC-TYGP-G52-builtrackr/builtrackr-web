@@ -32,10 +32,11 @@ const Navbar = () => {
   //parsing a number from local storage
   const storedEmployeeNo = localStorage.getItem("no");
   const decryptedNo = decryptData(JSON.parse(storedEmployeeNo));
-  // const employeeNo = parseInt(decryptedNo, 10);
+  const employeeNo = parseInt(decryptedNo, 10);
+  console.log("This is employeeeeeeee: ", employeeNo);
   // const photo = decryptData(JSON.parse(localStorage.getItem("photo")));
   const photo = "aaaaa";
-  const employeeNo = "2"
+  // const employeeNo = "2"
 
 
   useEffect(() => {
@@ -137,8 +138,8 @@ const Navbar = () => {
           onClick={() => handleClick("userProfile")}
         >
           <p>
-            <div><span className="ml-1 text-[16px] font-bold text-black">
-            {decryptedValue}
+            <div><span className="ml-1 text-[16px] font-bold text-red">
+            Chamodi De Silva
             </span></div>
             {/* <span className='float-right text-sm'>{navbarDetails[0].company_name}</span> */}
             <span className='float-right text-sm'>{navbarDetails.length > 0 ? navbarDetails[0].company_name : ''}</span>
@@ -177,7 +178,7 @@ const Navbar = () => {
         >
           <p>
             <div><span className="ml-1 text-[16px] font-bold text-black">
-            {decryptedValue}
+            Chamodi De Silva
             </span></div>
             {/* <span className='float-right text-sm'>{navbarDetails[0].company_name}</span> */}
             <span className='float-right text-sm'>{navbarDetails.length > 0 ? navbarDetails[0].company_name : ''}</span>
@@ -185,7 +186,8 @@ const Navbar = () => {
           <MdKeyboardArrowDown className="text-gray-400 text-14" />
           <img
             className="w-10 h-10 rounded-full"
-            src={`http://localhost:4000/employees/${photo}`}
+            src={`http://localhost:4000/employees/${navbarDetails.length > 0 ? navbarDetails[0].photo_path : ''}`}
+            // src={`http://localhost:4000/employees/${photo}`}
             alt="user-profile"
           />
         </div>

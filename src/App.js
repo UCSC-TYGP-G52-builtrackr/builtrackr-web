@@ -37,7 +37,6 @@ import Performance from "./pages/HrManager/Performance";
 import SiteManagers from "./pages/chiefEngineer/SiteManagers";
 import OneSite from "./pages/chiefEngineer/OneSite";
 import CEAnalytics from "./pages/chiefEngineer/CEAnalytics";
-import DocumentsCE from './pages/chiefEngineer/DocumentsCE'
 import SitesCommon from './pages/chiefEngineer/SitesCommon'
 import Warehouses from './pages/chiefEngineer/Warehouses'
 import OneWarehouse from "./pages/chiefEngineer/OneWarehouse";
@@ -128,7 +127,6 @@ function App() {
         <Route path="/chiefEngineer/sites/:id" element={<OneSite />} />
         <Route path="/chiefEngineer/warehouses/:id" element={<OneWarehouse />} />
         <Route path="/chiefEngineer/Analytics" element={<CEAnalytics/>}/>
-        <Route path="/chiefEngineer/documents" element={<DocumentsCE/>}/>
         <Route path="/chiefEngineer/warehouses" element={<Warehouses/>}/>
 
         {/* Site Manager */}

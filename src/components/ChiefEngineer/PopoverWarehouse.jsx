@@ -101,7 +101,7 @@ export default function PopoverWarehouse({ warehouseId }) {
           warehouseId: warehouseId,
         };
         const data = await fetch(
-          "http://localhost:4000/api/site/checkWhetherAssignedWarehouse",
+          "http://localhost:4000/api/warehouseCE/checkWhetherAssignedWarehouse",
           {
             method: "POST",
             headers: {
@@ -112,7 +112,7 @@ export default function PopoverWarehouse({ warehouseId }) {
         );
         if (data.status === 200) {
           const jsonData = await data.json();
-          console.log("results of the checkassigned function: ",jsonData[0].full_name);
+          console.log("results of the warehouse checkassigned function: ",jsonData[0].full_name);
           setAssignedManagerW(jsonData);
           if (jsonData.length > 0) {
             // If someone is assigned, update the tooltip and selected icon
@@ -252,7 +252,7 @@ export default function PopoverWarehouse({ warehouseId }) {
           /> */}
           <div className="inline-block text-4xl cursor-pointer" onClick={handleClick}>
             {/* <AccountCircleIcon fontSize="inherit" /> */}
-            <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={selectedPerson.photo_path ? `http://localhost:4000/employees/${selectedPerson.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />
+            <img className="flex-none w-12 h-12 rounded-full bg-gray-50" src={selectedPerson?.photo_path ? `http://localhost:4000/employees/${selectedPerson.photo_path}` : 'http://localhost:4000/employees/no-profile-picture0020.jpg'} />
           </div>
           </Tooltip>
         ) : (

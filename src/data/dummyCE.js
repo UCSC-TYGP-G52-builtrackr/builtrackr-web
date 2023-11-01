@@ -549,10 +549,6 @@ export const linksCE = [
         icon: <PeopleIcon />,
       },
       {
-        name: 'documents',
-        icon: <ArticleIcon />,
-      },
-      {
         name: 'analytics',
         icon: <AutoGraphIcon />,
       },
